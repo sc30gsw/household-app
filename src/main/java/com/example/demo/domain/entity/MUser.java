@@ -36,6 +36,9 @@ public class MUser implements Serializable {
 	/**性別*/
 	private String sex;
 	
+	/**ロール*/
+	private String role;
+	
 	/**作成日時*/
 	@DateTimeFormat(pattern = "yyyy_MM_dd HH:mm:ss")
 	private LocalDateTime createDate;
