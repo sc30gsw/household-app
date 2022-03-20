@@ -14,11 +14,17 @@
  		<result column="password_confirm" property="passwordConfirm" jdbcType="VARCHAR" />
  		<result column="age" property="age" jdbcType="INTEGER" />
  		<result column="sex" property="sex" jdbcType="VARCHAR" />
+ 		<result column="role" property="role" jdbcType="VARCHAR" />
  		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
  		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
  		<result column="delete_date" property="deleteDate" jdbcType="TIMESTAMP" />
  		<result column="delete_flg" property="deleteFlg" jdbcType="VARCHAR" />
  	</resultMap>
+ 	
+ 	<sql id="BaseColumnList">
+ 		user_id, username, email, password, password_confirm, age, sex,
+ 		create_date, update_date, delete_date, delete_flg
+ 	</sql>
  
 	<!-- ユーザー登録 -->
 	<insert id="insertMUser">
@@ -32,6 +38,7 @@
 					password_confirm,
 					age,
 					sex,
+					role,
 					create_date,
 					update_date,
 					delete_date,
@@ -46,10 +53,20 @@
 					#{passwordConfirm,jdbcType=VARCHAR},
 					#{age,jdbcType=INTEGER},
 					#{sex,jdbcType=VARCHAR},
+					#{role,jdbcType=VARCHAR},
 					#{createDate,jdbcType=TIMESTAMP},
 					#{updateDate,jdbcType=TIMESTAMP},
 					#{deleteDate,jdbcType=TIMESTAMP},
 					#{deleteFlg,jdbcType=VARCHAR}
 				)
 	</insert>
+	
+	<select id="findByEmail" resultMap="BaseResultMap">
+		select
+				<include refid="BaseColumnList"></include>
+			from
+				M_USER
+			where
+				email = #{email,jdbcType=VARCHAR}
+	</select>
  </mapper>
