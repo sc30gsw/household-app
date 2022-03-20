@@ -69,6 +69,26 @@ public class MUserController {
 
 		return "redirect:/household/index";
 	}
+	
+	/**
+	 * ログイン画面に遷移する処理
+	 * 
+	 * @return user/login
+	 */
+	@GetMapping("/login")
+	public String getLogin() {
+		return "user/login";
+	}
+	
+	/**
+	 * ログイン処理をし、トップページに遷移する処理
+	 * 
+	 * @return household/index
+	 */
+	@PostMapping("/login")
+	public String postLogin() {
+		return "redirect:/household/index";
+	}
 
 	/**
 	 * 性別用のラジオボタンの初期値設定
