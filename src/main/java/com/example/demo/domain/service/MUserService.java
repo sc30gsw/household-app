@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.entity.MUser;
 import com.example.demo.domain.form.SignupForm;
@@ -29,6 +30,7 @@ public class MUserService {
 	 * 
 	 * @param form ユーザー登録用フォームクラス
 	 */
+	@Transactional
 	public void registMUserOne(SignupForm form) {
 		MUser user = new MUser();
 		
