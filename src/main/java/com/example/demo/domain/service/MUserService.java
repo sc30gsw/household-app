@@ -1,6 +1,7 @@
 package com.example.demo.domain.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ public class MUserService {
 	/**ユーザーマスタリポジトリクラス*/
 	@Autowired
 	MUserRepository repository;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
-	
+
 	/**
 	 * ユーザー登録処理
 	 * 
@@ -33,14 +34,16 @@ public class MUserService {
 	@Transactional
 	public void registMUserOne(SignupForm form) {
 		MUser user = new MUser();
-		
+
 		// フォームをユーザーマスタにコピー
 		BeanUtils.copyProperties(form, user);
-		
+
 		// パスワードの暗号化
 		user.setPassword(encoder.encode(form.getPassword()));
 		user.setPasswordConfirm(encoder.encode(form.getPasswordConfirm()));
-		
+
+		// ロールに"ROLE_GENERAL"を設定
+		user.setRole("ROLE_GENERAL");
 		// 現在日時を取得
 		LocalDateTime now = LocalDateTime.now();
 		// 現在日時を設定
@@ -48,8 +51,23 @@ public class MUserService {
 		user.setUpdateDate(now);
 		// 削除フラグ"0"を設定
 		user.setDeleteFlg("0");
-		
+
 		// ユーザー登録
 		repository.registMUser(user);
+	}
+
+	/**
+	 * ユーザーマスタに登録済みのデータを取得する
+	 * 
+	 * @param email メールアドレス
+	 * @return ユーザーマスタに登録済みのユーザー1件
+	 */
+	public MUser getAuthenticableUser(String email) {
+		// メールアドレスでユーザーを検索
+		Optional<MUser> option = repository.getAuthUserOne(email);
+		// OptionalをMUserに変換
+		MUser user = option.orElse(null);
+		
+		return user;
 	}
 }
