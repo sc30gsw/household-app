@@ -10,6 +10,8 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.example.demo.domain.validate.Unique;
+
 import lombok.Data;
 
 /**
@@ -28,6 +30,7 @@ public class SignupForm implements Serializable {
 	/**メールアドレス*/
 	@NotBlank
 	@Email
+	@Unique
 	private String email;
 	
 	/**パスワード*/
