@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>SignUp</title>
+<link rel="stylesheet" th:href="@{/css/user/sign.css}">
+</head>
+<body>
+	<main class="signup main">
+		<div class="signup wrapper">
+			<div th:replace="~{layout/userHeader::userHeader}"></div>
+			<div class="signup content-wrapper">
+				<div class="signup content">
+					<div class="signup main-content">
+						<h1>ユーザー登録</h1>
+						<p>
+							サービスのご利用には,<br>ユーザー登録が必要です
+						</p>
+						<div class="signup form-content">
+							<div class="signup block-inner">
+								<form th:action="@{/signup}" method="post" th:object="${form}">
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="username" th:text="#{username}"></label>
+										</div>
+										<div class="signup field-input">
+											<input type="text" autofocus="autofocus"
+												th:field="*{username}" th:errorclass="is-invalid">
+										</div>
+										<div class="invalid-feedback" th:errors="*{username}"></div>
+									</div>
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="email" th:text="#{email}"></label>
+										</div>
+										<div class="signup field-input">
+											<input type="email" th:field="*{email}"
+												placeholder="example@houshold.com"
+												th:errorclass="is-invalid">
+										</div>
+										<div class="invalid-feedback" th:errors="*{email}"></div>
+									</div>
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="password" th:text="#{password}"></label> <i
+												class="password-caution">(8~24文字の半角英数字)</i>
+										</div>
+										<div class="signup field-input">
+											<input type="password" th:field="*{password}"
+												th:errorclass="is-invalid">
+										</div>
+										<div class="invalid-feedback" th:errors="*{password}"></div>
+									</div>
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="passwordConfirm" th:text="#{passwordConfirm}"></label>
+										</div>
+										<div class="signup field-input">
+											<input type="password" th:field="*{passwordConfirm}"
+												th:errorclass="is-invalid">
+										</div>
+										<div class="invalid-feedback" th:errors="*{passwordConfirm}"></div>
+									</div>
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="age" th:text="#{age}"></label>
+										</div>
+										<div class="signup field-input">
+											<input type="text" th:field="*{age}"
+												th:errorclass="is-invalid">
+										</div>
+										<div class="invalid-feedback" th:errors="*{age}"></div>
+									</div>
+									<div class="signup field">
+										<div class="signup field-label">
+											<label for="sex" th:text="#{sex}"></label>
+										</div>
+										<div class="items-field">
+											<div class="signup sex-field" th:each="item: ${radioSex}">
+												<input type="radio" th:value="${item.value}"
+													th:field="*{sex}" th:errorclass="is-invalid"> <label
+													for="sex" th:text="${item.key}"></label>
+											</div>
+										</div>
+										<div class="invalid-feedback"
+											th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></div>
+									</div>
+									<div class="signup button-wrapper">
+										<input type="submit" class="signup submit-btn" value="登録する">
+									</div>
+								</form>
+							</div>
+							<div class="signup start-wrapper">
+								<a class="signuup start-link" href="#">既にアカウントをお持ちの方</a>
+							</div>
+							<div class="signup more-option-wrapper">
+								<a href="#">登録にお困りの方はこちら</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="~{layout/userFooter::userFooter}"></div>
+		</div>
+	</main>
+</body>
+</html>
