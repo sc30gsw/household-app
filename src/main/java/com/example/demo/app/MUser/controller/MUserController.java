@@ -61,11 +61,9 @@ public class MUserController {
 			return getSignup(form, model);
 		}
 
-		log.info("ユーザー登録処理を開始");
 		// ユーザー登録処理の呼び出し
 		service.registMUserOne(form);
 		log.info(form.toString());
-		log.info("ユーザー登録の完了");
 
 		return "redirect:/household/index";
 	}
