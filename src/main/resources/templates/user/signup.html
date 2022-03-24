@@ -50,6 +50,7 @@
 												th:errorclass="is-invalid">
 										</div>
 										<div class="invalid-feedback" th:errors="*{password}"></div>
+										<div class="invalid-feedback" th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div>
 									</div>
 									<div class="signup field">
 										<div class="signup field-label">
