@@ -68,5 +68,6 @@
 				M_USER
 			where
 				email = #{email,jdbcType=VARCHAR}
+				and delete_flg = '0'
 	</select>
  </mapper>
