@@ -110,6 +110,24 @@
 	width: 100%;
 }
 
+.field-check input {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	font-size: 16px;
+	margin-top: 8px;
+	outline: none;
+	padding-left: 7px;
+	cursor: pointer;
+}
+
+.field-check span {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
 .items-field {
 	display: flex;
 }
