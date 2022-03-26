@@ -50,7 +50,9 @@
 												th:errorclass="is-invalid">
 										</div>
 										<div class="invalid-feedback" th:errors="*{password}"></div>
-										<div class="invalid-feedback" th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div>
+										<div class="invalid-feedback"
+											th:if="${#fields.hasErrors('passwordValid')}"
+											th:errors="*{passwordValid}"></div>
 									</div>
 									<div class="signup field">
 										<div class="signup field-label">
@@ -93,6 +95,9 @@
 							</div>
 							<div class="signup start-wrapper">
 								<a class="signuup start-link" th:href="@{/login}">既にアカウントをお持ちの方</a>
+							</div>
+							<div class="signup start-guest-wrapper">
+								<a class="signup start-link" th:href="@{/guest}">お試しはこちらから</a>
 							</div>
 							<div class="signup more-option-wrapper">
 								<a href="#">登録にお困りの方はこちら</a>

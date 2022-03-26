@@ -56,10 +56,12 @@ public class MUserController {
 	@PostMapping("/signup")
 	public String postSignup(@ModelAttribute("form") @Validated SignupForm form, BindingResult result, Model model) {
 		// 入力チェック
+		log.info("バリデーションチェック開始");
 		if (result.hasErrors()) {
 			// false:登録画面に遷移
 			return getSignup(form, model);
 		}
+		log.info("バリデーションチェックが完了しました");
 
 		// ユーザー登録処理の呼び出し
 		service.registMUserOne(form);
@@ -86,6 +88,16 @@ public class MUserController {
 	@PostMapping("/login")
 	public String postLogin() {
 		return "redirect:/household/index";
+	}
+	
+	/**
+	 * ゲストログイン処理の画面に遷移する処理
+	 * 
+	 * @return user/guestLogin
+	 */
+	@GetMapping("/guest")
+	public String getGuestLogn() {
+		return "user/guestLogin";
 	}
 
 	/**
