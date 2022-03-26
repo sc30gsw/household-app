@@ -36,7 +36,7 @@ public class MUserService {
 	 */
 	@Transactional
 	public void registMUserOne(SignupForm form) {
-		log.info("ユーザー登録処理を開始します");
+		log.trace("{}", "ユーザー登録処理を開始します");
 		
 		MUser user = new MUser();
 
@@ -60,7 +60,7 @@ public class MUserService {
 		// ユーザー登録
 		repository.registMUser(user);
 		
-		log.info("ユーザー登録処理が完了しました");
+		log.trace("{}", "ユーザー登録処理が完了しました");
 	}
 
 	/**
