@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * ユーザーマスービスクラス
  */
 @Service
+@Transactional
 @Slf4j
 public class MUserService {
 
@@ -34,7 +35,6 @@ public class MUserService {
 	 * 
 	 * @param form ユーザー登録用フォームクラス
 	 */
-	@Transactional
 	public void registMUserOne(SignupForm form) {
 		log.trace("{}", "ユーザー登録処理を開始します");
 		
