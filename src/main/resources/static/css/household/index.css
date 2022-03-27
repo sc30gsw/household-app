@@ -285,6 +285,7 @@ li {
 	display: block;
 	top: 0;
 	margin-left: 150px;
+	padding-left: 0;
 	width: 100%;
 	position: absolute;
 	color: #212529;
@@ -296,9 +297,9 @@ li {
 }
 
 .open>li>a {
-	width: 100%;
+	width: 90%;
 	display: block;
-	padding: 3px 0;
+	padding: 3px 0 3px 20px;
 	clear: both;
 	font-weight: normal;
 	line-height: 18px;
