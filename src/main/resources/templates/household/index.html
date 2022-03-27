@@ -2,10 +2,314 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HouseHold</title>
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/household/index.css}">
+<script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"></script>
+<script
+	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
 <script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js"></script>
+<script th:src="@{/js/household/index.js}"></script>
 </head>
 <body>
-
+	<div class="wrapper">
+		<header class="header">
+			<div class="upper-contents">
+				<h1 class="logo">
+					<a th:href="@{/household/index}"> House Hold App </a>
+				</h1>
+				<nav class="right-nav">
+					<ul class="menu-items">
+						<li class="menu-item">
+							<form method="post" th:action="@{/logout}">
+								<button type="submit" class="logout-btn">ログアウト</button>
+							</form>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<div class="global-menu">
+				<ul class="nav-horizontal">
+					<li class="global-menu-item"><a class="active" href="#"> <i
+							class="active-icon fas fa-home"></i>ホーム
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-chart-pie"></i>家計
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-chart-bar"></i>予算
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-coins"></i>資産
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-cog"></i>設定
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-ellipsis-h"></i>
+					</a></li>
+				</ul>
+			</div>
+		</header>
+		<div class="container-large">
+			<div class="home">
+				<div class="home-col-assets">
+					<section class="user-info">
+						<section class="total-assets">
+							<h1 class="heading-normal">2022年3月の状況</h1>
+							<div class="money-label">
+								<span class="money-label">収入</span> - <span class="money-label">支出</span>
+								= <span class="money-label">合計:〇〇円</span>
+							</div>
+							<div class="pie-size">
+								<canvas id="assetPie">
+								</canvas>
+							</div>
+						</section>
+					</section>
+					<div class="home-manual-info">
+						<section class="manual-entry">
+							<h2 class="heading-normal">カンタン入力</h2>
+							<div class="manual-payment-entry">
+								<form>
+									<div class="category-contents">
+										<div class="btn-group btn_l_ctg">
+											<a class="btn btn-danger dropdown-toggle" href="#"
+												role="button" id="dropdownMenuLink" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false"> 未分類</a>
+											<ul class="dropdown-menu main_menu minus">
+												<li class="dropdown-submenu"><a class="c_name" href="#">食費</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">食費</a></li>
+														<li><a class="m_c_name" href="#">食料品</a></li>
+														<li><a class="m_c_name" href="#">外食</a></li>
+														<li><a class="m_c_name" href="#">カフェ</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">日用品</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">日用品</a></li>
+														<li><a class="m_c_name" href="#">ドラッグストア</a></li>
+														<li><a class="m_c_name" href="#">おこづかい</a></li>
+														<li><a class="m_c_name" href="#">ペット用品</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">趣味・娯楽</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">アウトドア</a></li>
+														<li><a class="m_c_name" href="#">スポーツ</a></li>
+														<li><a class="m_c_name" href="#">映画・音楽・ゲーム</a></li>
+														<li><a class="m_c_name" href="#">旅行</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">交際費</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">交際費</a></li>
+														<li><a class="m_c_name" href="#">飲み代</a></li>
+														<li><a class="m_c_name" href="#">プレゼント代</a></li>
+														<li><a class="m_c_name" href="#">冠婚葬祭</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">交通費</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">交通費</a></li>
+														<li><a class="m_c_name" href="#">電車</a></li>
+														<li><a class="m_c_name" href="#">バス</a></li>
+														<li><a class="m_c_name" href="#">タクシー</a></li>
+														<li><a class="m_c_name" href="#">飛行機</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">衣服・美容</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">衣服</a></li>
+														<li><a class="m_c_name" href="#">クリーニング</a></li>
+														<li><a class="m_c_name" href="#">美容院・理髪</a></li>
+														<li><a class="m_c_name" href="#">化粧品</a></li>
+														<li><a class="m_c_name" href="#">アクセサリー</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">自動車</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">自動車ローン</a></li>
+														<li><a class="m_c_name" href="#">道路料金</a></li>
+														<li><a class="m_c_name" href="#">ガソリン</a></li>
+														<li><a class="m_c_name" href="#">駐車場</a></li>
+														<li><a class="m_c_name" href="#">車検・整備</a></li>
+														<li><a class="m_c_name" href="#">自動車保険</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">健康・医療</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">フィットネス</a></li>
+														<li><a class="m_c_name" href="#">ボディケア</a></li>
+														<li><a class="m_c_name" href="#">医療費</a></li>
+														<li><a class="m_c_name" href="#">薬</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">教養・教育</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">書籍</a></li>
+														<li><a class="m_c_name" href="#">新聞・雑誌</a></li>
+														<li><a class="m_c_name" href="#">習い事</a></li>
+														<li><a class="m_c_name" href="#">学費</a></li>
+														<li><a class="m_c_name" href="#">塾</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">特別な支出</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">家具・家電</a></li>
+														<li><a class="m_c_name" href="#">住宅・リフォーム</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">水道・光熱費</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">光熱費</a></li>
+														<li><a class="m_c_name" href="#">電気代</a></li>
+														<li><a class="m_c_name" href="#">ガス・灯油代</a></li>
+														<li><a class="m_c_name" href="#">水道代</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">通信費</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">携帯電話</a></li>
+														<li><a class="m_c_name" href="#">固定電話</a></li>
+														<li><a class="m_c_name" href="#">インターネット</a></li>
+														<li><a class="m_c_name" href="#">放送視聴料</a></li>
+														<li><a class="m_c_name" href="#">情報サービス</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">住宅</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">住宅</a></li>
+														<li><a class="m_c_name" href="#">家賃・地代</a></li>
+														<li><a class="m_c_name" href="#">ローン返済</a></li>
+														<li><a class="m_c_name" href="#">管理費・積立金</a></li>
+														<li><a class="m_c_name" href="#">地震・火災保険</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">その他</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">仕送り</a></li>
+														<li><a class="m_c_name" href="#">寄付金</a></li>
+														<li><a class="m_c_name" href="#">雑費</a></li>
+													</ul></li>
+												<li class="dropdown-submenu"><a class="c_name" href="#">未分類</a>
+													<ul class="sub_menu">
+														<li><a class="m_c_name" href="#">未分類</a></li>
+													</ul></li>
+											</ul>
+										</div>
+										<div class="btn-group btn_m_ctg">
+											<a class="btn btn-secondary dropdown-toggle v_m_ctg"
+												data-toggle="dropdown" id="js-middle-category-selected">
+												未分類 </a>
+										</div>
+									</div>
+									<div class="right-column">
+										<input type="text" class="payment-amount"
+											placeholder="金額を入力してください"> <span class="payment-unit">円</span>
+									</div>
+									<input type="hidden" name="created_at">
+									<div class="input-date">
+										<p data-date-format="yyyy/mm/dd">
+											日付 <span>yyyy/mm/dd</span> <i
+												class="icon-calendar fas fa-calendar-alt"></i>
+										</p>
+									</div>
+									<div class="left-column">
+										<input type="text" class="align-left"
+											placeholder="内容を入力してください(任意)">
+									</div>
+									<div class="submit-box">
+										<input type="submit" name="commit" value="保存する">
+									</div>
+								</form>
+							</div>
+						</section>
+					</div>
+				</div>
+				<div class="custom-col-home">
+					<div class="home-latest">
+						<div class="cf-latest">
+							<h2 class="heading-normal">最近の入出金</h2>
+							<section class="recent-transactions">
+								<div class="recent-transactions-table">
+									<div class="recent-transactions-row">
+										<div class="recent-transactions-row-left">
+											<div class="recent-transactions-date">yyyy/mm/dd</div>
+											<div class="recent-transactions-category">未分類＞未分類</div>
+											<div class="recent-transactions-content">メモ</div>
+										</div>
+										<div class="recent-transactions-amount">1,000円</div>
+									</div>
+								</div>
+							</section>
+							<a class="pull-right more-link" href="#"> <i
+								class="fas fa-arrow-circle-right"></i>履歴の詳細を見る
+							</a>
+						</div>
+					</div>
+					<div class="headline">
+						<div class="headline-contents">
+							<h2 class="heading-normal">
+								◯月の収支<span>(yyyy-mm-dd - yyyy-mm-dd)</span>
+							</h2>
+							<table cellpadding="10px" data-placement="right"
+								class="monthly-total-table">
+								<tbody>
+									<tr class="monthly-total">
+										<th class="monthly-total-head">当月収入</th>
+										<td>1,000円</td>
+									</tr>
+									<tr class="monthly-total">
+										<th class="monthly-total-head">当月支出</th>
+										<td>10,000円</td>
+									</tr>
+									<tr class="monthly-total">
+										<th class="monthly-total-head">当月収支</th>
+										<td class="minus-color">-9,000円</td>
+									</tr>
+								</tbody>
+							</table>
+							<a class="pull-right more-link" href="#"> <i
+								class="fas fa-arrow-circle-right"></i>詳細(家計簿)を見る
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer>
+			<div class="footer-contents-container">
+				<div class="footer-contents-wrapper">
+					<nav>
+						<p>サービスについて</p>
+						<ul>
+							<li><a href="#">運営会社</a></li>
+							<li><a href="#">公式Twitter</a></li>
+							<li><a href="#">公式note</a></li>
+						</ul>
+					</nav>
+					<nav>
+						<p>サポート</p>
+						<ul>
+							<li><a href="#">ヘルプ・サポート</a></li>
+							<li><a href="#">お問合せ</a></li>
+						</ul>
+					</nav>
+					<nav>
+						<p>規約</p>
+						<ul>
+							<li><a href="#">利用規約</a></li>
+							<li><a href="#">個人情報保護方針</a></li>
+							<li><a href="#">情報セキュリティ基本方針</a></li>
+							<li><a href="#">特定商取引法に基づく表記</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="footer-logo">
+					<h4>House Hold App</h4>
+				</div>
+				<p class="copyright">© House Hold, Inc.</p>
+			</div>
+		</footer>
+	</div>
+	<script>
+		pieChart();
+		subMenu();
+	</script>
 </body>
 </html>
