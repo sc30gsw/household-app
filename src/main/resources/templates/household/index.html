@@ -16,6 +16,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js"></script>
 <script th:src="@{/js/household/index.js}"></script>
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}" defer></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -202,11 +203,13 @@
 										<input type="text" class="payment-amount"
 											placeholder="金額を入力してください"> <span class="payment-unit">円</span>
 									</div>
-									<input type="hidden" name="created_at">
+									<input type="hidden" class="datepicker" name="created_at">
 									<div class="input-date">
 										<p data-date-format="yyyy/mm/dd">
-											日付 <span>yyyy/mm/dd</span> <i
+											日付 <span>yyyy/mm/dd</span><i
 												class="icon-calendar fas fa-calendar-alt"></i>
+											<button id="prev" type="button">前の月</button>
+											<button id="next" type="button">次の月</button>
 										</p>
 									</div>
 									<div class="left-column">
