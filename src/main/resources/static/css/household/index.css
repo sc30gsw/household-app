@@ -351,6 +351,89 @@ li {
 	cursor: pointer;
 }
 
+.draw-cal {
+	display: block;
+	top: 297.75px;
+	float: left;
+	padding: 4px;
+	margin-top: 1px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, .15);
+	background-color: transparent;
+	border: none;
+}
+
+.datepicker {
+	display: block;
+	background-color: #fff;
+}
+
+.draw-cal table {
+	width: 100%;
+	margin: 0;
+}
+
+.draw-cal thead {
+	display: table-header-group;
+	vertical-align: middle;
+}
+
+.switch {
+	width: 145px;
+}
+
+.draw-cal th {
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	padding: 4px 5px;
+}
+
+#prev {
+	cursor: pointer;
+	font-size: 21px;
+}
+
+#prev:hover {
+	background-color: #ccc;
+}
+
+#next {
+	cursor: pointer;
+	font-size: 21px;
+}
+
+#next:hover {
+	background-color: #ccc;
+}
+
+.is-disabled {
+	color: #999999;
+}
+
+.draw-cal td {
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	padding: 4px 5px;
+	border: 1px solid transparent;
+}
+
+.calendar_td {
+	cursor: pointer;
+}
+
+.calendar_td:hover {
+	background-color: #ccc;
+}
+
+.calendar_td:focus {
+	background-color: #0044cc;
+	color: #FFFFFF;
+}
+
 .left-column input {
 	width: 100%;
 	height: 28px;
@@ -504,60 +587,60 @@ tr {
 }
 
 td {
-    border-bottom: none;
-    border: 1px solid #DDD;
-    padding: 10px;
-    text-align: right;
+	border-bottom: none;
+	border: 1px solid #DDD;
+	padding: 10px;
+	text-align: right;
 }
 
 .minus-color {
-    color: #AA4643;
+	color: #AA4643;
 }
 
 footer {
-    margin-top: 50px;
-    text-align: center;
+	margin-top: 50px;
+	text-align: center;
 }
 
 .footer-contents-container {
-    padding: 32px 0 41px;
-    border-top: solid 1px #c8c7cc;
+	padding: 32px 0 41px;
+	border-top: solid 1px #c8c7cc;
 }
 
 .footer-contents-wrapper {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
 }
 
 .footer-contents-wrapper nav {
-    text-align: left;
-    width: 20%;
+	text-align: left;
+	width: 20%;
 }
 
 .footer-contents-wrapper p {
-    font-size: 14px;
-    line-height: 1.6;
-    font-weight: bold;
+	font-size: 14px;
+	line-height: 1.6;
+	font-weight: bold;
 }
 
 .footer-contents-wrapper ul {
-    padding-left: 0;
+	padding-left: 0;
 }
 
 .footer-contents-wrapper li {
-    list-style: none;
-    margin: 12px 0;
+	list-style: none;
+	margin: 12px 0;
 }
 
 .footer-contents-wrapper a {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #666;
-    text-decoration: none;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #666;
+	text-decoration: none;
 }
 
 .footer-contents-wrapper a:hover {
@@ -571,6 +654,6 @@ footer {
 
 .copyright {
 	font-size: 12px;
-    line-height: 1.6;
-    color: #666;
+	line-height: 1.6;
+	color: #666;
 }

@@ -203,13 +203,12 @@
 										<input type="text" class="payment-amount"
 											placeholder="金額を入力してください"> <span class="payment-unit">円</span>
 									</div>
-									<input type="hidden" class="datepicker" name="created_at">
+									<input type="hidden" id="cal-date-input" name="created_at">
 									<div class="input-date">
-										<p data-date-format="yyyy/mm/dd">
-											日付 <span>yyyy/mm/dd</span><i
+										<p class="text-and-icon" id="cal-text" data-date-format="yyyy/mm/dd">
+											日付 <span id="date-span"></span><i
 												class="icon-calendar fas fa-calendar-alt"></i>
-											<button id="prev" type="button">前の月</button>
-											<button id="next" type="button">次の月</button>
+											<div id="calendar" class="draw-cal dropdown-menu"></div>
 										</p>
 									</div>
 									<div class="left-column">
@@ -314,5 +313,6 @@
 		pieChart();
 		subMenu();
 	</script>
+	<script th:src="@{/js/household/calendar.js}"></script>
 </body>
 </html>
