@@ -66,6 +66,7 @@ public class MUserController {
 		// ユーザー登録処理の呼び出し
 		service.registMUserOne(form);
 		log.info(form.toString());
+		log.trace("{}", "ユーザー登録処理の呼び出し");
 
 		return "redirect:/household/index";
 	}

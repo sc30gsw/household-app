@@ -59,6 +59,7 @@ public class MUserService {
 
 		// ユーザー登録
 		repository.registMUser(user);
+		log.info("{}", "ユーザー登録処理を呼び出し");
 		
 		log.trace("{}", "ユーザー登録処理が完了しました");
 	}
@@ -70,13 +71,15 @@ public class MUserService {
 	 * @return ユーザーマスタに登録済みのユーザー1件
 	 */
 	public MUser getAuthenticableUser(String email) {
-		log.info(email + "に合致するユーザーの検索を開始します");
+		log.trace("{}", email + "に合致するユーザーの検索を開始します");
 		// メールアドレスでユーザーを検索
 		Optional<MUser> option = repository.getAuthUserOne(email);
+		log.info("{}", "メールアドレスによるユーザー検索処理の呼び出し");
+		
 		// OptionalをMUserに変換
 		MUser user = option.orElse(null);
 		
-		log.info(email + "に合致するユーザーの検索が完了しました");
+		log.trace("{}", email + "に合致するユーザーの検索が完了しました");
 		
 		return user;
 	}
