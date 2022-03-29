@@ -105,19 +105,24 @@ text.addEventListener('click', function() {
 		const span = document.getElementById('date-span');
 		// イベントのターゲットに"calendar_td"というクラス名が含まれていれば処理を実行
 		if (e.target.classList.contains("calendar_td")) {
-			calInput.value = e.target.dataset.date
-			span.textContent = calInput.value
+			const value = e.target.dataset.date
+			span.textContent = value
+			calInput.value = value.split('/').join('-')
 		}
 		// 前後の月に移動するイベント
 		document.querySelector('#prev').addEventListener('click', moveCalendar)
 		document.querySelector('#next').addEventListener('click', moveCalendar)
 	})
 
+	document.addEventListener('click', function(e) {
+		if (!e.target.closest('.input-date') && !e.target.closest('#prev') && !e.target.closest('#next')) {
+			//カレンダー要素の外をクリックした時、カレンダーを非表示にする
+			document.querySelector('.cal-table').style.display = "none"
+		} else {
+			//カレンダー要素ないの場合は、表示する
+			document.querySelector('.cal-table').style.display = "block"
+		}
+	})
+
 	showCalendar(year, month)
 }, { once: true })
-
-const icon = document.querySelector('.icon-calendar')
-icon.addEventListener('click', function() {
-	const cal = document.querySelector('.cal-table')
-	cal.style.display = "none"
-})
