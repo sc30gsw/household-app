@@ -347,6 +347,11 @@ li {
 	width: 170px;
 }
 
+.icon-calendar {
+	margin-left: 10px;
+	color: #AAAAAA;
+}
+
 .input-date p {
 	cursor: pointer;
 }
