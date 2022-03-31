@@ -76,8 +76,9 @@ function getAnchorValue() {
 				
 				// 各大カテゴリーのリンクが押された時イベント発火
 				links[i].addEventListener('click', function() {
-					// 大カテゴリーのドロップダウンのテキストを、クリックされた大カテゴリーのテキストに置き換える
+					// ドロップダウンのテキストを、クリックされた大カテゴリーのテキストに置き換える
 					dropdownMenuLink.text = links[i].textContent
+					dropdownSecondary.text = links[i].textContent
 					// 大カテゴリーとサブカテゴリーにクラスを追加
 					dropdownMenuLink.classList.add("menu-onclick")
 					dropdownSecondary.classList.add("menu-onclick")
