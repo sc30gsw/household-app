@@ -226,6 +226,20 @@ li {
 	font-size: 13px;
 }
 
+.btn-red {
+	color: #fff;
+	background-color:#ca3f34;
+}
+
+.btn-red:hover {
+	color: #fff;
+	opacity: 0.7;
+}
+
+.btn-secondary:hover {
+	opacity: 0.7;
+}
+
 .dropdown-menu>li>a {
 	width: 150px;
 	display: block;
@@ -314,6 +328,19 @@ li {
 	color: white;
 }
 
+.menu-onclick {
+	color: #333;
+	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+	background-color: #f7f7f7;
+}
+
+.menu-onclick:hover {
+	color: #333;
+	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+	background-color: #f7f7f7;
+	opacity: 0.7;
+}
+
 .right-column {
 	display: flex;
 }
@@ -338,6 +365,7 @@ li {
 	display: inline-block;
 	vertical-align: middle;
 	padding: 2px 0 0 10px;
+	margin-right: 5px;
 }
 
 .input-date {
