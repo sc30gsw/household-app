@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.domain.form.EasyHouseholdForm;
 import com.example.demo.domain.service.LoginUser;
@@ -47,7 +48,7 @@ public class MHouseholdController {
 
 	@PostMapping("/payment")
 	public String postPayment(@ModelAttribute("form") @Validated EasyHouseholdForm form, BindingResult result,
-			@AuthenticationPrincipal LoginUser loginUser, Model model) {
+			@AuthenticationPrincipal LoginUser loginUser, Model model, RedirectAttributes redirectAttributes) {
 
 		log.info("バリデーションチェック開始");
 		// 入力チェック
@@ -61,7 +62,10 @@ public class MHouseholdController {
 		service.easyInputMHousehold(form, loginUser);
 		log.info(form.toString());
 		log.trace("{}", "家計簿カンタン入力処理の呼び出し");
-
+		
+		// フラッシュメッセージをリダイレクト先(/index)に渡す
+		redirectAttributes.addFlashAttribute("message", "投稿に成功しました");
+		
 		return "redirect:/household/index";
 	}
 }

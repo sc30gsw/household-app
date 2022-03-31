@@ -500,6 +500,26 @@ li {
 	cursor: pointer;
 }
 
+.easy-flash-message {
+	display: block;
+	animation: fadeOut 4s;
+	animation-fill-mode: both;
+	background-color: #7fcc72;
+	margin-top: 5px;
+	color: #fff;
+	border-radius: 5px;
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 0.8;
+	} 
+	
+	to {
+		opacity: 0;
+	}
+}
+
 .home-latest {
 	width: 80%;
 	margin: 0 auto;
