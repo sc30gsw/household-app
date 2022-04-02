@@ -1,33 +1,67 @@
 // トップページの円グラフ(月の収支計算用)
 function pieChart() {
-	// 円グラフを描画する要素を取得
-	const ctx = document.getElementById("assetPie");
-	// 円グラフを描画する処理
-	const myPieChart = new Chart(ctx, {
-		type: 'pie',
-		data: {
-			labels: ["収入", "支出"],
-			datasets: [{
-				backgroundColor: [
-					// 収入
-					"#136FFF",
-					// 支出
-					"#FF9872"
-				],
-				data: [45, 55]
-			}]
-		},
-		options: {
-			responsive: true,
+	// data-labels-pluginの登録
+	Chart.register(ChartDataLabels);
+
+	const type = 'pie';
+
+	const data = {
+		labels: ["収入", "支出"],
+		datasets: [{
+			backgroundColor: [
+				// 収入
+				"#136FFF",
+				// 支出
+				"#FF9872"
+			],
+			data: [45000, 55000]
+		}]
+	};
+	
+	const depositRatio = data.datasets.filter(function(d) {
+		const sum = d.data[0] + d.data[1];
+		return d.data[0] / sum * 100;
+	});
+
+	const options = {
+		responsive: true,
+		plugins: {
 			legend: {
 				display: false
 			},
-			ttitle: {
+			title: {
 				display: true,
 				text: '支出内訳',
-				fontSize: 20
+				font: {
+					size: 20
+				}
+			},
+			datalabels: {
+				color: "#fff",
+				formatter: function(value, ctx) {
+					const label = ctx.chart.data.labels[ctx.dataIndex];
+					return label;
+				}
+			},
+			tooltip: {
+				callbacks: {
+					label: function(tooltipItem) {
+						const sum = tooltipItem.dataset.data[0] + tooltipItem.dataset.data[1];
+						const payRatio = Math.floor(tooltipItem.dataset.data[tooltipItem.dataIndex] / sum * 100);
+						const parsed = tooltipItem.parsed .toLocaleString();
+						return  `${tooltipItem.label} : ${parsed} 円 | 収支割合 :  ${payRatio}%`;
+					}
+				}
 			}
 		}
+	};
+	// 円グラフを描画する要素を取得
+	const ctx = document.getElementById("assetPie").getContext('2d');
+	// 円グラフを描画する処理
+	const pieChart = new Chart(ctx, {
+		type: type,
+		data: data,
+		options: options
 	})
 };
 
@@ -67,13 +101,13 @@ function getAnchorValue() {
 		const links = document.querySelectorAll('.c_name')
 		// hiddenタイプのカテゴリーID入力要素を取得
 		const categoryInput = document.getElementById('categoryId')
-		
+
 		// 大カテゴリーのみ選択された時のドロップダウンの動作と入力欄の値の設定
-		for(let i =0; i < links.length; i++) {
-			
+		for (let i = 0; i < links.length; i++) {
+
 			// 大カテゴリークリック時にドロップダウンのテキストをクリックした大カテゴリーのものにする
 			if (e.target.closest('#dropdownMenuLink')) {
-				
+
 				// 各大カテゴリーのリンクが押された時イベント発火
 				links[i].addEventListener('click', function() {
 					// ドロップダウンのテキストを、クリックされた大カテゴリーのテキストに置き換える
@@ -87,31 +121,31 @@ function getAnchorValue() {
 				})
 			}
 		}
-		
+
 		// クリックされた要素がサブカテゴリーのリンクだった場合の処理
-		if(e.target.closest('.m_c_name')) {
-			
+		if (e.target.closest('.m_c_name')) {
+
 			// 大カテゴリーとサブカテゴリーにクラスを追加
 			dropdownMenuLink.classList.add("menu-onclick")
 			dropdownSecondary.classList.add("menu-onclick")
-			
+
 			// サブカテゴリーの選択により、大カテゴリーのテキストを変化させる
 			switch (e.target.closest('.m_c_name').textContent) {
-				
+
 				case '食費':
 				case '食料品':
 				case '外食':
 				case 'カフェ':
 					dropdownMenuLink.textContent = '食費'
 					break
-				
+
 				case '日用品':
 				case 'ドラッグストア':
 				case 'おこづかい':
 				case 'ペット用品':
 					dropdownMenuLink.textContent = '日用品'
 					break
-					
+
 				case '趣味・娯楽':
 				case 'アウトドア':
 				case 'スポーツ':
@@ -119,14 +153,14 @@ function getAnchorValue() {
 				case '旅行':
 					dropdownMenuLink.textContent = '趣味・娯楽'
 					break
-					
+
 				case '交際費':
 				case '飲み代':
 				case 'プレゼント代':
 				case '冠婚葬祭':
 					dropdownMenuLink.textContent = '交際費'
 					break
-				
+
 				case '交通費':
 				case '電車':
 				case 'バス':
@@ -134,7 +168,7 @@ function getAnchorValue() {
 				case '飛行機':
 					dropdownMenuLink.textContent = '交通費'
 					break
-					
+
 				case '衣服':
 				case 'クリーニング':
 				case '美容院・理髪':
@@ -142,7 +176,7 @@ function getAnchorValue() {
 				case 'アクセサリー':
 					dropdownMenuLink.textContent = '衣服・美容'
 					break
-					
+
 				case '自動車ローン':
 				case '道路料金':
 				case 'ガソリン':
@@ -151,14 +185,14 @@ function getAnchorValue() {
 				case '自動車保険':
 					dropdownMenuLink.textContent = '自動車'
 					break
-					
+
 				case 'フィットネス':
 				case 'ボディケア':
 				case '医療費':
 				case '薬':
 					dropdownMenuLink.textContent = '健康・医療'
 					break
-					
+
 				case '書籍':
 				case '新聞・雑誌':
 				case '習い事':
@@ -166,19 +200,19 @@ function getAnchorValue() {
 				case '塾':
 					dropdownMenuLink.textContent = '教養・教育'
 					break
-				
+
 				case '家具・家電':
 				case '住宅・リフォーム':
 					dropdownMenuLink.textContent = '特別な支出'
 					break
-				
+
 				case '光熱費':
 				case '電気代':
 				case 'ガス・灯油代':
 				case '水道代':
 					dropdownMenuLink.textContent = '水道・光熱費'
 					break
-					
+
 				case '携帯電話':
 				case '固定電話':
 				case 'インターネット':
@@ -186,7 +220,7 @@ function getAnchorValue() {
 				case '情報サービス':
 					dropdownMenuLink.textContent = '通信費'
 					break
-					
+
 				case '住宅':
 				case '家賃・地代':
 				case 'ローン返済':
@@ -194,28 +228,28 @@ function getAnchorValue() {
 				case '地震・火災保険':
 					dropdownMenuLink.textContent = '住宅'
 					break
-				
+
 				case 'その他':
 				case '仕送り':
 				case '寄付金':
 				case '雑費':
 					dropdownMenuLink.textContent = 'その他'
 					break
-				
+
 				case '未分類':
 					dropdownMenuLink.textContent = '未分類'
 					break
-					
+
 				default:
 					dropdownMenuLink.textContent = '未分類'
 			}
-			
+
 			// サブカテゴリーのボタンのテキストをクリックされたサブカテゴリーのものにする
 			dropdownSecondary.textContent = e.target.closest('.m_c_name').textContent
-			
+
 			// クリックされたサブカテゴリーのdata-value属性を入力欄の値に設定する
 			categoryInput.value = e.target.closest('.m_c_name').dataset.value
-			
+
 		}
 	})
 }
