@@ -1,53 +1,68 @@
-// トップページの円グラフ(月の収支計算用)
+// トップページの円グラフを描画する関数(月の収支計算用)
 function pieChart() {
 	// data-labels-pluginの登録
 	Chart.register(ChartDataLabels);
-
+	// チャートのタイプで円グラフを指定
 	const type = 'pie';
-
+	// データの設定
 	const data = {
+		// ラベルの設定
 		labels: ["収入", "支出"],
+		// データをセット
 		datasets: [{
+			// 円グラフの背景色を設定
 			backgroundColor: [
 				// 収入
 				"#136FFF",
 				// 支出
 				"#FF9872"
 			],
+			// 値の設定
 			data: [45000, 55000]
 		}]
 	};
-	
-	const depositRatio = data.datasets.filter(function(d) {
-		const sum = d.data[0] + d.data[1];
-		return d.data[0] / sum * 100;
-	});
 
+	// オプションの設定
 	const options = {
+		// レスポンシブwebデザインの自動補正を設定
 		responsive: true,
 		plugins: {
+			// 凡例の設定
 			legend: {
+				// 凡例の除去
 				display: false
 			},
+			// タイトル部の設定
 			title: {
 				display: true,
+				// タイトル名の設定
 				text: '支出内訳',
+				// タイトルフォントの設定
 				font: {
+					// フォントサイズを設定
 					size: 20
 				}
 			},
+			// data-labels(チャート内のラベル)の設定
 			datalabels: {
+				// 色の設定
 				color: "#fff",
+				// 円グラフからラベルのみ取得する
 				formatter: function(value, ctx) {
 					const label = ctx.chart.data.labels[ctx.dataIndex];
 					return label;
 				}
 			},
+			// チャートhover時に表示する文字列等の設定
 			tooltip: {
 				callbacks: {
+					// ラベルをカスタマイズする
 					label: function(tooltipItem) {
+						// 収支合計
 						const sum = tooltipItem.dataset.data[0] + tooltipItem.dataset.data[1];
+						// 各値が全体に占める割合を算出する(小数点以下切り捨て)
 						const payRatio = Math.floor(tooltipItem.dataset.data[tooltipItem.dataIndex] / sum * 100);
+						// 金額をカンマ区切りに変換
 						const parsed = tooltipItem.parsed .toLocaleString();
 						return  `${tooltipItem.label} : ${parsed} 円 | 収支割合 :  ${payRatio}%`;
 					}
