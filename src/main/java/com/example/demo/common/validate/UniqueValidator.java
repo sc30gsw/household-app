@@ -1,4 +1,4 @@
-package com.example.demo.domain.validate;
+package com.example.demo.common.validate;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
