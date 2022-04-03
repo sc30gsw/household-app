@@ -192,7 +192,18 @@ li {
 	padding: 7px;
 }
 
+.money-label-minus {
+	color: #AA4643;
+}
+
 .pie-size {
+	width: 300px;
+	height: 300px;
+	margin: 0 auto;
+	height: 300px;
+}
+
+.pie-size-default {
 	width: 300px;
 	height: 300px;
 	margin: 0 auto;
