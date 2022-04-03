@@ -49,4 +49,7 @@ public class MHousehold implements Serializable {
 	/**削除日時*/
 	@DateTimeFormat(pattern = "yyyy_MM_dd HH:mm:ss")
 	private LocalDateTime deleteDate;
+	
+	/**カテゴリートラン*/
+	private TCategory category;
 }
