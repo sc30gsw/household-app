@@ -34,7 +34,7 @@ public class MHousehold implements Serializable {
 	/**備考(メモ)*/
 	private String note;
 	
-	/**入出金日*/
+	/**出金日*/
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date activeDate;
 	
