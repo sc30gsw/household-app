@@ -18,7 +18,7 @@ function pieChart() {
 				"#FF9872"
 			],
 			// 値の設定
-			data: [45000, 55000]
+			data: [cDeposit, cPayment]
 		}]
 	};
 
@@ -72,6 +72,76 @@ function pieChart() {
 	};
 	// 円グラフを描画する要素を取得
 	const ctx = document.getElementById("assetPie").getContext('2d');
+	// 円グラフを描画する処理
+	const pieChart = new Chart(ctx, {
+		type: type,
+		data: data,
+		options: options
+	})
+};
+
+// トップページの円グラフを描画する関数(デフォルト)
+function pieChartDefault() {
+	// data-labels-pluginの登録
+	Chart.register(ChartDataLabels);
+	// チャートのタイプで円グラフを指定
+	const type = 'pie';
+	// データの設定
+	const data = {
+		// ラベルの設定
+		labels: ["収支記録をつけてみよう"],
+		// データをセット
+		datasets: [{
+			// 円グラフの背景色を設定
+			backgroundColor: '#c0c0c0',
+			// 値の設定
+			data: [100]
+		}]
+	};
+
+	// オプションの設定
+	const options = {
+		// レスポンシブwebデザインの自動補正を設定
+		responsive: true,
+		plugins: {
+			// 凡例の設定
+			legend: {
+				// 凡例の除去
+				display: false
+			},
+			// タイトル部の設定
+			title: {
+				display: true,
+				// タイトル名の設定
+				text: '支出内訳を開始しよう',
+				// タイトルフォントの設定
+				font: {
+					// フォントサイズを設定
+					size: 20
+				}
+			},
+			// data-labels(チャート内のラベル)の設定
+			datalabels: {
+				color: '#000',
+				// 円グラフからラベルのみ取得する
+				formatter: function(value, ctx) {
+					const label = ctx.chart.data.labels[ctx.dataIndex];
+					return label;
+				}
+			},
+			// チャートhover時に表示する文字列等の設定
+			tooltip: {
+				callbacks: {
+					// ラベルをカスタマイズする
+					label: function(tooltipItem) {
+						return  `収支割合が表示されます`;
+					}
+				}
+			}
+		}
+	};
+	// 円グラフを描画する要素を取得
+	const ctx = document.getElementById("assetPieDefault").getContext('2d');
 	// 円グラフを描画する処理
 	const pieChart = new Chart(ctx, {
 		type: type,
