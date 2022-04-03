@@ -13,15 +13,15 @@
  		<result column="deposit" property="deposit" jdbcType="INTEGER" />
  		<result column="payment" property="payment" jdbcType="INTEGER" />
  		<result column="note" property="note" jdbcType="VARCHAR" />
- 		<result column="active_date" property="avtiveDate" jdbcType="DATE" />
+ 		<result column="active_date" property="activeDate" jdbcType="DATE" />
  		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
  		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
  		<result column="delete_date" property="deleteDate" jdbcType="TIMESTAMP" />
  	</resultMap>
  	
  	<sql id="BaseColumnList">
- 		household_id, user_id, expense, deposit,
- 		payment, note, create_date, update_date, delete_date
+ 		household_id, user_id, category_id, deposit,
+ 		payment, note, active_date, create_date, update_date, delete_date
  	</sql>
  	
  	<!-- 家計簿登録 -->
@@ -54,5 +54,28 @@
             		#{deleteDate, jdbcType=TIMESTAMP}
         		)
  	</insert>
+ 	
+ 	<!-- 月次家計簿取得 -->
+ 	<select id="monthlyHousehold" resultMap="BaseResultMap">
+ 		select
+ 				<include refid="BaseColumnList"/>
+ 			from
+ 				M_HOUSEHOLD
+ 			where
+ 				user_id = #{userId, jdbcType=INTEGER}
+ 				and active_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 月次家計簿集計取得 -->
+ 	<select id="monthlySumHousehold" resultMap="BaseResultMap">
+ 		select
+ 				sum(deposit) as deposit,
+ 				sum(payment) as payment
+ 			from
+ 				M_HOUSEHOLD
+ 			where
+ 				user_id = #{userId, jdbcType=INTEGER}
+ 				and active_date between #{startDate} and #{endDate}
+ 	</select>
  	
  </mapper>
