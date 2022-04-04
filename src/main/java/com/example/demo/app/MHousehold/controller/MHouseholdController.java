@@ -50,6 +50,7 @@ public class MHouseholdController {
 		log.trace("{}", "月次家計簿集計取得処理の呼び出しを開始します");
 		val monthlySumHousehold = service.getSumMonthlyHousehold(condition, loginUser);
 		log.trace("{}", "月次家計簿集計取得処理の呼び出しが完了しました");
+		
 
 		// 家計簿集計がnullでない場合
 		if (monthlySumHousehold != null) {
@@ -89,7 +90,14 @@ public class MHouseholdController {
 		
 		// カンタン入力用フォームをModelに登録
 		model.addAttribute("form", form);
-
+		
+		log.trace("{}", "最近の家計簿リスト検索の呼び出しを開始します");
+		val latestHouseholdResult = service.searchLatestHouseholdList(loginUser);
+		log.trace("{}", "最近の家計簿リスト検索の呼び出しが完了しました");
+		
+		// 最近の家計簿リストをModelに登録
+		model.addAttribute("latestHouseholdList", latestHouseholdResult);
+		
 		return "household/index";
 	}
 
