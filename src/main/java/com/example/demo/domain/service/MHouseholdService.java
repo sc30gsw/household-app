@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.app.MHousehold.controller.MHouseholdCondition;
+import com.example.demo.common.constants.CategoryConstants;
 import com.example.demo.domain.entity.MHousehold;
 import com.example.demo.domain.form.EasyHouseholdForm;
 import com.example.demo.domain.repository.MHouseholdRepository;
@@ -75,44 +76,44 @@ public class MHouseholdService {
 	}
 
 	/**
-	 * 月次家計簿検索処理
-	 * 
-	 * @param condition 家計簿検索条件
-	 * @param loginUser ログインユーザー
-	 * @return 家計簿マスタリスト
-	 */
-	public List<MHousehold> searchMonthlyHousehold(MHouseholdCondition condition,
-			@AuthenticationPrincipal LoginUser loginUser) {
-		log.trace("{}", "月次家計簿検索処理を開始ます");
-
-		// ユーザーIDの取得
-		val userId = loginUser.getUser().getUserId(); 
-		// 検索条件を設定する
-		conditionSetting(condition, userId);
-		
-		log.trace("{}", "月次家計簿検索処理が完了しました");
-
-		return repository.monthlyGetHousehold(condition);
-	}
-	
-	/**
 	 * 家計簿集計取得処理
 	 * 
 	 * @param condition 家計簿検索条件
 	 * @param loginUser ログインユーザー
 	 * @return 家計簿マスタ
 	 */
-	public MHousehold getSumMonthlyHousehold(MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser) {
+	public MHousehold getSumMonthlyHousehold(MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
 		log.trace("{}", "月次家計簿集計取得処理を開始ます");
 
 		//ユーザーIDの取得
-		val userId = loginUser.getUser().getUserId(); 
+		val userId = loginUser.getUser().getUserId();
 		// 検索条件を設定する
 		conditionSetting(condition, userId);
-		
+
 		log.trace("{}", "月次家計簿集計取得処理が完了しました");
-		
+
 		return repository.monthlyGetSumHousehold(condition);
+	}
+
+	/**
+	 * 最近の家計簿リスト検索
+	 * 
+	 * @param loginUser
+	 * @return　最近の家計簿リスト
+	 */
+	public List<MHousehold> searchLatestHouseholdList(@AuthenticationPrincipal LoginUser loginUser) {
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		
+		log.trace("{}", "最近の家計簿リストの検索を開始ます");
+		val latestHouseholdList = repository.getManyLatestHousehold(userId);
+		
+		// カテゴリーコード値の設定を行う
+		settingCategoryCode(latestHouseholdList);
+		log.trace("{}", "最近の家計簿リストの検索が完了しました");
+		
+		return latestHouseholdList;
 	}
 
 	/**
@@ -170,5 +171,85 @@ public class MHouseholdService {
 		cl.set(Calendar.MILLISECOND, 00);
 
 		return cl.getTime();
+	}
+
+	/**
+	 * カテゴリーコード値の設定を行う処理
+	 * 
+	 * @param latestList 最近の家計簿リスト
+	 */
+	private void settingCategoryCode(List<MHousehold> latestList) {
+		
+		latestList.stream().forEach(list -> {
+			// カテゴリーコードを取得
+			val category = list.getCategory();
+			
+			// カテゴリーコードに応じてカテゴリーの共通定数を設定する
+			switch (category.getCategoryCode()) {
+			case "1":
+				category.setCategoryCode(CategoryConstants.FOOD_EXPENSE);
+				break;
+
+			case "2":
+				category.setCategoryCode(CategoryConstants.COMMODITY);
+				break;
+
+			case "3":
+				category.setCategoryCode(CategoryConstants.HOBBIES);
+				break;
+
+			case "4":
+				category.setCategoryCode(CategoryConstants.SOCIAL_EXPENSE);
+				break;
+
+			case "5":
+				category.setCategoryCode(CategoryConstants.TRANSPORTATION_EXPENSE);
+				break;
+
+			case "6":
+				category.setCategoryCode(CategoryConstants.FASSHON);
+				break;
+
+			case "7":
+				category.setCategoryCode(CategoryConstants.CAR);
+				break;
+
+			case "8":
+				category.setCategoryCode(CategoryConstants.HEALTH_CARE);
+				break;
+
+			case "9":
+				category.setCategoryCode(CategoryConstants.LIBERAL_ARTS);
+				break;
+
+			case "10":
+				category.setCategoryCode(CategoryConstants.SPECIAL_EXPENSE);
+				break;
+
+			case "11":
+				category.setCategoryCode(CategoryConstants.UTILITIES_BILLS);
+				break;
+
+			case "12":
+				category.setCategoryCode(CategoryConstants.COMMUNICATION_COST);
+				break;
+
+			case "13":
+				category.setCategoryCode(CategoryConstants.HOUSEING_COST);
+				break;
+
+			case "14":
+				category.setCategoryCode(CategoryConstants.OTHERS_COST);
+				break;
+
+			case "15":
+				category.setCategoryCode(CategoryConstants.UNSORTED);
+				break;
+
+			default:
+				category.setCategoryCode(CategoryConstants.UNSORTED);
+				break;
+			}
+		});
 	}
 }
