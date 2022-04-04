@@ -29,16 +29,6 @@ public class MHouseholdRepository {
 	}
 	
 	/**
-	 * 月次家計簿取得処理
-	 * 
-	 * @param condition 家計簿検索条件
-	 * @return 家計簿マスタリスト
-	 */
-	public List<MHousehold> monthlyGetHousehold(MHouseholdCondition condition) {
-		return mapper.monthlyHousehold(condition);
-	}
-	
-	/**
 	 * 月次家計簿集計取得処理
 	 * 
 	 * @param condition 家計簿検索条件
@@ -46,5 +36,15 @@ public class MHouseholdRepository {
 	 */
 	public MHousehold monthlyGetSumHousehold(MHouseholdCondition condition) {
 		return mapper.monthlySumHousehold(condition);
+	}
+	
+	/**
+	 * 最近の家計簿履歴を取得する処理
+	 * 
+	 * @param userId ユーザーID
+	 * @return 家計簿マスタのリスト
+	 */
+	public List<MHousehold> getManyLatestHousehold(Integer userId) {
+		return mapper.getLatestHouseholdList(userId);
 	}
 }
