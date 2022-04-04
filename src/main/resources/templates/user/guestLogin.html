@@ -5,7 +5,7 @@
 <title>Login</title>
 <link rel="stylesheet" th:href="@{/css/user/sign.css}">
 </head>
-<body>
+<body onLoad="document.guestForm.submit();">
 	<main class="login main">
 		<div class="login wrapper">
 			<div th:replace="~{layout/userHeader::userHeader}"></div>
@@ -18,7 +18,7 @@
 						</p>
 						<div class="login form-content">
 							<div class="login block-inner">
-								<form th:action="@{/login}" method="post">
+								<form th:action="@{/login}" method="post" name="guestForm">
 									<p th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
 										th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"
 										class="text-danger"></p>
@@ -29,17 +29,17 @@
 										<div class="login field-input">
 											<input class="login input-item" type="email"
 												autofocus="autofocus" name="email"
-												placeholder="example@household.com">
+												value="test@co.com" readonly>
 										</div>
 										<div class="login field-label">
 											<label class="login label-name" for="password">パスワード</label>
 										</div>
 										<div class="login field-input">
 											<input class="login input-item" type="password"
-												name="password">
+												name="password" value="password" readonly>
 										</div>
 										<div class="login field-check">
-											<input type="checkbox" name="remember-me" id="remember-me" value="on">
+											<input type="checkbox" name="remember-me" id="remember-me" value="on" checked>
 											<span>Remember me</span>
 										</div>
 										<div class="login button-wrapper">
@@ -52,9 +52,6 @@
 						</div>
 						<div class="login start-wrapper">
 							<a class="login start-link" th:href="@{/signup}">アカウントをお持ちでない方はこちら</a>
-						</div>
-						<div class="login start-guest-wrapper">
-							<a class="login start-link" th:href="@{/guest}">お試しはこちらから</a>
 						</div>
 						<div class="login more-option-wrapper">
 							<a href="#">お困りの方はこちら</a>

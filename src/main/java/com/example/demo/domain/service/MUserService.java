@@ -13,10 +13,14 @@ import com.example.demo.domain.entity.MUser;
 import com.example.demo.domain.form.SignupForm;
 import com.example.demo.domain.repository.MUserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * ユーザーマスービスクラス
  */
 @Service
+@Transactional
+@Slf4j
 public class MUserService {
 
 	/**ユーザーマスタリポジトリクラス*/
@@ -31,8 +35,9 @@ public class MUserService {
 	 * 
 	 * @param form ユーザー登録用フォームクラス
 	 */
-	@Transactional
 	public void registMUserOne(SignupForm form) {
+		log.trace("{}", "ユーザー登録処理を開始します");
+		
 		MUser user = new MUser();
 
 		// フォームをユーザーマスタにコピー
@@ -54,6 +59,9 @@ public class MUserService {
 
 		// ユーザー登録
 		repository.registMUser(user);
+		log.info("{}", "ユーザー登録処理を呼び出し");
+		
+		log.trace("{}", "ユーザー登録処理が完了しました");
 	}
 
 	/**
@@ -63,10 +71,15 @@ public class MUserService {
 	 * @return ユーザーマスタに登録済みのユーザー1件
 	 */
 	public MUser getAuthenticableUser(String email) {
+		log.trace("{}", email + "に合致するユーザーの検索を開始します");
 		// メールアドレスでユーザーを検索
 		Optional<MUser> option = repository.getAuthUserOne(email);
+		log.info("{}", "メールアドレスによるユーザー検索処理の呼び出し");
+		
 		// OptionalをMUserに変換
 		MUser user = option.orElse(null);
+		
+		log.trace("{}", email + "に合致するユーザーの検索が完了しました");
 		
 		return user;
 	}

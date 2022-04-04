@@ -11,9 +11,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.example.demo.domain.entity.MUser;
 
 /**
- * ユーザー認証サービスクラス
+ * 認証したユーザーをインスタンス化して扱えるサービスクラス
  */
-public class UserDetailServiceImpll extends org.springframework.security.core.userdetails.User {
+public class LoginUser extends org.springframework.security.core.userdetails.User {
 
 	// ユーザーマスタエンティティ
 	private MUser user;
@@ -23,7 +23,7 @@ public class UserDetailServiceImpll extends org.springframework.security.core.us
 	 * 
 	 * @param user ユーザーマスタエンティティ
 	 */
-	public UserDetailServiceImpll(MUser user) {
+	public LoginUser(MUser user) {
 		// org.springframework.security.core.userdetails.Userのコンストラクタ
 		super(user.getEmail(), user.getPassword(), convertGrantedAuthorities(user.getRole()));
 		this.user = user;

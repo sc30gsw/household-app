@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.example.demo.domain.mapper.MHouseholdMapper">
+ 
+ 	<!-- マッピング定義(M_HOUSEHOLD) -->
+ 	<resultMap id="BaseResultMap" type="com.example.demo.domain.entity.MHousehold">
+ 		<id column="household_id" property="householdId" jdbcType="INTEGER" />
+ 		<result column="user_id" property="userId" jdbcType="INTEGER" />
+ 		<result column="category_id" property="categoryId" jdbcType="INTEGER" />
+ 		<result column="deposit" property="deposit" jdbcType="INTEGER" />
+ 		<result column="payment" property="payment" jdbcType="INTEGER" />
+ 		<result column="note" property="note" jdbcType="VARCHAR" />
+ 		<result column="active_date" property="activeDate" jdbcType="DATE" />
+ 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+ 		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+ 		<result column="delete_date" property="deleteDate" jdbcType="TIMESTAMP" />
+ 		<collection property="category" resultMap="BaseCategoryResultMap" columnPrefix="category_" />
+ 	</resultMap>
+ 	
+ 	<resultMap id="BaseCategoryResultMap" type="com.example.demo.domain.entity.TCategory">
+ 		<id column="category_id" property="categoryId" jdbcType="INTEGER" />
+ 		<result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+ 		<result column="subcategory_name" property="subCategoryName" jdbcType="VARCHAR" />
+ 	</resultMap>
+ 	
+ 	<sql id="BaseColumnList">
+ 		household_id, user_id, category_id, deposit,
+ 		payment, note, active_date, create_date, update_date, delete_date
+ 	</sql>
+ 	
+ 	<!-- 家計簿登録 -->
+ 	<insert id="insertMHousehold">
+ 		insert
+    		into
+        		M_HOUSEHOLD(
+            		household_id,
+            		user_id,
+            		category_id,
+            		deposit,
+            		payment,
+            		note,
+            		active_date,
+            		create_date,
+            		update_date,
+            		delete_date
+        		)
+			values
+        		(
+            		#{householdId, jdbcType=INTEGER},
+            		#{userId, jdbcType=INTEGER},
+            		#{categoryId, jdbcType=INTEGER},
+            		#{deposit, jdbcType=INTEGER},
+            		#{payment, jdbcType=INTEGER},
+            		#{note, jdbcType=VARCHAR},
+            		#{activeDate, jdbcType=DATE},
+            		#{createDate, jdbcType=TIMESTAMP},
+            		#{updateDate, jdbcType=TIMESTAMP},
+            		#{deleteDate, jdbcType=TIMESTAMP}
+        		)
+ 	</insert>
+ 	
+ 	<!-- 月次家計簿集計取得 -->
+ 	<select id="monthlySumHousehold" resultMap="BaseResultMap">
+ 		select
+ 				sum(deposit) as deposit,
+ 				sum(payment) as payment
+ 			from
+ 				M_HOUSEHOLD
+ 			where
+ 				user_id = #{userId, jdbcType=INTEGER}
+ 				and active_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 最近の家計簿履歴を取得 -->
+ 	<select id="getLatestHouseholdList" resultMap="BaseResultMap">
+ 		select
+ 				mh.household_id,
+ 				mh.user_id,
+ 				mh.category_id,
+ 				mh.deposit,
+ 				mh.payment,
+ 				mh.note,
+ 				mh.active_date,
+ 				tc.category_code as category_category_code,
+ 				tc.subcategory_name as category_subcategory_name
+ 			from
+ 				M_HOUSEHOLD mh INNER JOIN T_CATEGORY tc
+ 					ON mh.CATEGORY_ID = tc.CATEGORY_ID
+ 			where
+ 				mh.user_id = #{userId, jdbcType=INTEGER}
+ 			ORDER BY
+ 				mh.ACTIVE_DATE DESC LIMIT 8;
+ 	</select>
+ 	
+ </mapper>

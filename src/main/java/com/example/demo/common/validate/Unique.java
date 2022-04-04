@@ -1,4 +1,4 @@
-package com.example.demo.domain.validate;
+package com.example.demo.common.validate;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;

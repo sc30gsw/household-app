@@ -33,7 +33,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		log.debug("loadByUsername(email):[{}]", email);
 		return mapper.findByEmail(email)
 						// SimpleLoginUserクラスのインスタンスに変換
-						.map(UserDetailServiceImpll::new)
+						.map(LoginUser::new)
 						// 変換できなければ例外をスロー
 						.orElseThrow(() -> new UsernameNotFoundException("User not found by email:[" + email + "]"));
 	}

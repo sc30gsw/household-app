@@ -51,11 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 直リンク可
 				.antMatchers("/login").permitAll()
 				.antMatchers("/signup").permitAll()
+				.antMatchers("/guest").permitAll()
 				// 上記以外は直リンク不可
-				.anyRequest().authenticated();
-		
+				.anyRequest().authenticated()
+				.and()
 		// ログイン処理の設定
-		http.formLogin()
+		.formLogin()
 				// ログイン処理のパス
 				.loginProcessingUrl("/login")
 				// ログインページのリンク先設定
@@ -67,14 +68,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// ログインページのパスワード
 				.passwordParameter("password")
 				// ログイン成功時の遷移先
-				.defaultSuccessUrl("/household/index", true);
-		
+				.defaultSuccessUrl("/household/index", true)
+				.and()
 		// ログアウト処理の設定
-		http.logout()
+		.logout()
 				// ログアウトのリクエスト先URL
 				.logoutUrl("/logout")
 				// ログアウト成功時の遷移先
-				.logoutSuccessUrl("/login?logout");
+				.logoutSuccessUrl("/login?logout")
+				.and()
+				// Remember-Me認証を許可
+				.rememberMe();
 			
 	}
 	
