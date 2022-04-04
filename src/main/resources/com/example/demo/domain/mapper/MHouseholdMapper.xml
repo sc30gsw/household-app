@@ -17,6 +17,13 @@
  		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
  		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
  		<result column="delete_date" property="deleteDate" jdbcType="TIMESTAMP" />
+ 		<collection property="category" resultMap="BaseCategoryResultMap" columnPrefix="category_" />
+ 	</resultMap>
+ 	
+ 	<resultMap id="BaseCategoryResultMap" type="com.example.demo.domain.entity.TCategory">
+ 		<id column="category_id" property="categoryId" jdbcType="INTEGER" />
+ 		<result column="category_code" property="categoryCode" jdbcType="VARCHAR" />
+ 		<result column="subcategory_name" property="subCategoryName" jdbcType="VARCHAR" />
  	</resultMap>
  	
  	<sql id="BaseColumnList">
@@ -55,17 +62,6 @@
         		)
  	</insert>
  	
- 	<!-- 月次家計簿取得 -->
- 	<select id="monthlyHousehold" resultMap="BaseResultMap">
- 		select
- 				<include refid="BaseColumnList"/>
- 			from
- 				M_HOUSEHOLD
- 			where
- 				user_id = #{userId, jdbcType=INTEGER}
- 				and active_date between #{startDate} and #{endDate}
- 	</select>
- 	
  	<!-- 月次家計簿集計取得 -->
  	<select id="monthlySumHousehold" resultMap="BaseResultMap">
  		select
@@ -76,6 +72,27 @@
  			where
  				user_id = #{userId, jdbcType=INTEGER}
  				and active_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 最近の家計簿履歴を取得 -->
+ 	<select id="getLatestHouseholdList" resultMap="BaseResultMap">
+ 		select
+ 				mh.household_id,
+ 				mh.user_id,
+ 				mh.category_id,
+ 				mh.deposit,
+ 				mh.payment,
+ 				mh.note,
+ 				mh.active_date,
+ 				tc.category_code as category_category_code,
+ 				tc.subcategory_name as category_subcategory_name
+ 			from
+ 				M_HOUSEHOLD mh INNER JOIN T_CATEGORY tc
+ 					ON mh.CATEGORY_ID = tc.CATEGORY_ID
+ 			where
+ 				mh.user_id = #{userId, jdbcType=INTEGER}
+ 			ORDER BY
+ 				mh.ACTIVE_DATE DESC LIMIT 8;
  	</select>
  	
  </mapper>
