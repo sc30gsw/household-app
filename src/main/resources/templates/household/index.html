@@ -271,16 +271,22 @@
 							<h2 class="heading-normal">最近の入出金</h2>
 							<section class="recent-transactions">
 								<div class="recent-transactions-table">
-									<div class="recent-transactions-row">
+									<div th:if="${latestHouseholdList != null}" class="recent-transactions-row" th:each="item: ${latestHouseholdList}">
 										<div class="recent-transactions-row-left">
-											<div class="recent-transactions-date">yyyy/mm/dd</div>
-											<div class="recent-transactions-category">未分類＞未分類</div>
-											<div class="recent-transactions-content">メモ</div>
+											<div class="recent-transactions-date" th:text="${#dates.format(item.activeDate, 'yyyy/MM/dd')}"></div>
+											<div class="recent-transactions-category" th:text="${item.category.categoryCode} + '＞' + ${item.category.subCategoryName}">未分類＞未分類</div>
+											<div class="recent-transactions-content" th:text="${item.note}"></div>
+											<div th:if="${item.note == null || item.note == ''}" class="recent-trancastions-content">備考はありません</div>
 										</div>
-										<div class="recent-transactions-amount">1,000円</div>
+										<div th:if="${item.payment != null && item.payment > 0}" class="recent-transactions-amount" th:text="'-' + ${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></div>
+										<div th:if="${item.deposit != null && item.deposit > 0}" class="recent-transactions-amount" th:text="${#numbers.formatInteger(item.deposit, 3, 'COMMA')} + '円'"></div>
+									</div>
+									<div th:if="${latestHouseholdList == null}" class="recent-transactions-row">
+										<h2 class="money-label">最近の入出金はありません</h2>
 									</div>
 								</div>
 							</section>
+							<div th:text="${latestFormatDeposit}"></div>
 							<a class="pull-right more-link" href="#"> <i
 								class="fas fa-arrow-circle-right"></i>履歴の詳細を見る
 							</a>
@@ -290,7 +296,7 @@
 						<div class="headline-contents">
 							<h2 class="heading-normal" th:inline="text">
 								[[${#calendars.format(#calendars.createNowForTimeZone('Asia/Tokyo'),
-								'MM月')} + 'の収支']] <span
+								'M月')} + 'の収支']] <span
 									th:text="'(' + ${startDate} + '-' + ${endDate} + ')'"></span>
 							</h2>
 							<table cellpadding="10px" data-placement="right"
