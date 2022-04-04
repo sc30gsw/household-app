@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="upper-contents" th:fragment="householdHeader">
+		<h1 class="logo">
+			<a th:href="@{/household/index}"> House Hold App </a>
+		</h1>
+		<nav class="right-nav">
+			<ul class="menu-items">
+				<li class="menu-item">
+					<form method="post" th:action="@{/logout}">
+						<button type="submit" class="logout-btn">ログアウト</button>
+					</form>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</body>
+</html>
