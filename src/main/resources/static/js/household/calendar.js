@@ -83,15 +83,29 @@ text.addEventListener('click', function() {
 			for (let d = 0; d < 7; d++) {
 				if (w == 0 && d < startDay) {
 					// 1行目で1日の曜日の前の日付を取得
-					let num = lastMonthendDayCount - startDay + d + 1
-					calendarHtml += '<td class="is-disabled">' + num + '</td>'
+					let num = lastMonthendDayCount - startDay + d + 1;
+					// 1日の前の日付と符号する年を取得
+					const endYear = lastMonthEndDate.getFullYear();
+					// 1日の前の日付と符号する月を取得
+					const endMonth = lastMonthEndDate.getMonth() + 2;
+					calendarHtml += `<td class="is-disabled" data-date="${endYear}-${endMonth}-${num}">${num}</td>`
 				} else if (dayCount > endDayCount) {
 					// 末尾の日数を超えた場合の日付を取得
 					let num = dayCount - endDayCount
-					calendarHtml += '<td class="is-disabled">' + num + '</td>'
+					// 末尾の日数を超えた場合の日の情報を取得
+					const nextMonthStartDate = new Date(year, month + 2, 0);
+					// 末尾の日数を超えた場合の日と符号する年を取得
+					const nextYear = nextMonthStartDate.getFullYear();
+					// 末尾の日数を超えた場合の日と符号する月を取得
+					let nextMonth = nextMonthStartDate.getMonth();
+					// 11月の場合のみ、末尾の日数を超えた場合の日と符号する月に12月を格納する
+					if (month === 11) {
+						nextMonth = 12;
+					}
+					calendarHtml += `<td class="is-disabled" data-date="${nextYear}-${nextMonth}-${num}">${num}</td>`
 					dayCount++
 				} else {
-					calendarHtml += `<td class="calendar_td" tabindex="-1" data-date="${year}/${month}/${dayCount}">${dayCount}</td>`
+					calendarHtml += `<td class="calendar_td" tabindex="-1" data-date="${year}-${month}-${dayCount}">${dayCount}</td>`
 					dayCount++
 				}
 			}
@@ -164,7 +178,6 @@ text.addEventListener('click', function() {
 			document.querySelector('.cal-table').style.display = "block"
 		}
 	})
-
 	showCalendar(year, month)
 	
 	// once: trueでカレンダーを1つだけ生成するようにする
