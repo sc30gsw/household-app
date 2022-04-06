@@ -53,10 +53,7 @@ function drawCalendar() {
 		// HTMLを組み立てる変数
 		let calendarHtml = ''
 
-		// HTMLを組み立てる
-		calendarHtml += `<div class="cal-span-field"><span class="prev">` + '＜' + '</span>'
 		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
-		calendarHtml += `<span class="next">` + '＞' + '</span></div>'
 		calendarHtml += `<table class="cal-detail-table">`
 		calendarHtml += '<thead>'
 
@@ -107,70 +104,8 @@ function drawCalendar() {
 		return calendarHtml
 	}
 
-	// 「次へ」ボタンと「前に」ボタンでカレンダーを動かす(来月・先月の表示)処理
-	function moveCalendar(e) {
-		// <div id="calendar"></div>内のHTMLを空にする
-		document.querySelector('#detail-calendar').innerHTML = ''
-
-		// イベントのターゲットが「前に」ボタンの場合、1月分の値を引く
-		if (e.target.className === 'prev') {
-			month--
-
-			// 月が1月より下の場合、年から1を引いて、月を12にする
-			if (month < 1) {
-				year--
-				month = 12
-			}
-		}
-
-		// イベントのターゲットが「次へ」ボタンの場合、1月分の値を加える
-		if (e.target.className === 'next') {
-			month++
-
-			// 月が12月より上の場合、年に1を加え、月を1にする
-			if (month > 12) {
-				year++
-				month = 1
-			}
-		}
-
-		// カレンダーを表示する関数の呼び出し
-		showCalendar(year, month)
-	}
-
-	// 前後の月にカレンダーを動かす処理
-	document.addEventListener("mouseover", function() {
-
-		// 「次へ」「前に」ボタンがクリックされた時、カレンダーを前後に動かす関数を呼び出す
-		document.querySelectorAll('.prev').forEach(function(prev) {
-			prev.addEventListener('click', moveCalendar)
-		})
-		document.querySelectorAll('.next').forEach(function(next) {
-			next.addEventListener('click', moveCalendar)
-		})
-
-		const startDateInput = document.getElementById('detail-start-date')
-		const endDateInput = document.getElementById('detail-end-date');
-		const inputValue = document.getElementById('cal-detail-title');
-		// 当月の初日を設定
-		startDateInput.value = inputValue.dataset.startdate
-		// 当月の末日を設定
-		endDateInput.value = inputValue.dataset.enddate
-	})
-
 	showCalendar(year, month)
 }
-
-// ページを読み込んだときにinputタグに値を入れる
-window.addEventListener("load", function() {
-	const startDateInput = document.getElementById('detail-start-date')
-	const endDateInput = document.getElementById('detail-end-date');
-	const inputValue = document.getElementById('cal-detail-title');
-	// 当月の初日を設定
-	startDateInput.value = inputValue.dataset.startdate
-	// 当月の末日を設定
-	endDateInput.value = inputValue.dataset.enddate
-})
 
 // 年月日を描画する関数
 function drawDetailDate() {
@@ -218,63 +153,10 @@ function drawDetailDate() {
 		let drawDateHtml = ''
 
 		// HTMLを組み立てる
-		drawDateHtml += `<div class="date-span-field"><span class="prev">` + '＜' + '</span>'
 		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
-		drawDateHtml += `<span class="next">` + '＞' + '</span></div>'
 
 		return drawDateHtml
 	}
-
-	// 「次へ」ボタンと「前に」ボタンでカレンダーを動かす(来月・先月の表示)処理
-	function moveCalendar(e) {
-		// <div id="draw-date-range"></div>内のHTMLを空にする
-		document.querySelector('#draw-date-range').innerHTML = ''
-
-		// イベントのターゲットが「前に」ボタンの場合、1月分の値を引く
-		if (e.target.className === 'prev') {
-			month--
-
-			// 月が1月より下の場合、年から1を引いて、月を12にする
-			if (month < 1) {
-				year--
-				month = 12
-			}
-		}
-
-		// イベントのターゲットが「次へ」ボタンの場合、1月分の値を加える
-		if (e.target.className === 'next') {
-			month++
-
-			// 月が12月より上の場合、年に1を加え、月を1にする
-			if (month > 12) {
-				year++
-				month = 1
-			}
-		}
-
-		// カレンダーを表示する関数の呼び出し
-		showDetailDate(year, month)
-	}
-
-	// 前後の月にカレンダーを動かす処理
-	document.addEventListener("mouseover", function() {
-
-		// 「次へ」「前に」ボタンがクリックされた時、カレンダーを前後に動かす関数を呼び出す
-		document.querySelectorAll('.prev').forEach(function(prev) {
-			prev.addEventListener('click', moveCalendar)
-		})
-		document.querySelectorAll('.next').forEach(function(next) {
-			next.addEventListener('click', moveCalendar)
-		})
-		
-		const startDateInput = document.getElementById('detail-start-date')
-		const endDateInput = document.getElementById('detail-end-date');
-		const inputValue = document.getElementById('detail-draw-title');
-		// 当月の初日を設定
-		startDateInput.value = inputValue.dataset.startdate
-		// 当月の末日を設定
-		endDateInput.value = inputValue.dataset.enddate
-	})
 
 	showDetailDate(year, month)
 }
