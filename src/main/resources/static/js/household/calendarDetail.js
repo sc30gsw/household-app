@@ -10,7 +10,10 @@ function drawCalendar() {
 	// 年の取得
 	let year = startDate.substr(0, 4);
 	// 月の取得
-	let month = startDate.substr(5, 2).replace(/-/g, '');
+	let month = startDate.substr(5, 2);
+	if(month.includes('-')) {
+		month = '0' + month.replace(/-/g, '');
+	}
 
 	// カレンダーを表示する処理
 	function showCalendar(year, month) {
@@ -56,14 +59,20 @@ function drawCalendar() {
 		// HTMLを組み立てる変数
 		let calendarHtml = ''
 
-		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month.replace('0','') + '/' + startDayCount + '-' + year + '/' + month.replace('0','') + '/' + endDayCount + '</h2></span>'
+		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
 		calendarHtml += `<table class="cal-detail-table">`
 		calendarHtml += '<thead>'
 
 		calendarHtml += '<tr>'
 		// 曜日の行を作成
 		for (let i = 0; i < weeks.length; i++) {
-			calendarHtml += `<th class="detaildow">` + weeks[i] + '</th>'
+			if(i === 0) {
+				calendarHtml += `<th class="detaildow-sunday">` + weeks[i] + '</th>'
+			} else if(i === 6) {
+				calendarHtml += `<th class="detaildow-saturday">` + weeks[i] + '</th>'
+			} else {
+				calendarHtml += `<th class="detaildow">` + weeks[i] + '</th>'	
+			}
 		}
 		calendarHtml += '</tr>'
 		calendarHtml += '</thead>'
@@ -79,7 +88,18 @@ function drawCalendar() {
 					const endYear = lastMonthEndDate.getFullYear();
 					// 1日の前の日付と符号する月を取得
 					const endMonth = lastMonthEndDate.getMonth() + 2;
-					calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}">${num}</td>`
+					
+					// 曜日が日曜の場合
+					if(d === 0) {
+						calendarHtml += `<td class="is-detail-disabled-sunday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						// 曜日が土曜の場合
+					} else if(d === 6) {
+						calendarHtml += `<td class="is-detail-disabled-saturday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						// 土日以外の曜日の場合
+					}  else {
+						calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`	
+					}
+					
 				} else if (dayCount > endDayCount) {
 					// 末尾の日数を超えた場合の日付を取得
 					let num = dayCount - endDayCount
@@ -89,14 +109,34 @@ function drawCalendar() {
 					const nextYear = nextMonthStartDate.getFullYear();
 					// 末尾の日数を超えた場合の日と符号する月を取得
 					let nextMonth = nextMonthStartDate.getMonth();
+					
 					// 11月の場合のみ、末尾の日数を超えた場合の日と符号する月に12月を格納する
 					if (month === 11) {
 						nextMonth = 12;
 					}
-					calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}">${num}</td>`
+					// 曜日が日曜の場合
+					if(d === 0) {
+						calendarHtml += `<td class="is-detail-disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						// 曜日が土曜の場合
+					} else if(d === 6) {
+						calendarHtml += `<td class="is-detail-disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						// 土日以外の曜日の場合
+					} else {
+						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					}
+					
 					dayCount++
+					
 				} else {
-					calendarHtml += `<td class="calendar_tdetail_d" tabindex="-1" data-date="${year}-${month}-${dayCount}">${dayCount}</td>`
+					
+					if(d === 0) {
+						calendarHtml += `<td class="calendar_detail_td_sunday" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					} else if (d === 6) {
+						calendarHtml += `<td class="calendar_detail_td_saturday" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					} else {
+						calendarHtml += `<td class="calendar_detail_td" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					}
+					
 					dayCount++
 				}
 			}
@@ -134,7 +174,10 @@ function drawDetailDate() {
 	// 年の取得
 	let year = startDate.substr(0, 4);
 	// 月の取得
-	let month = startDate.substr(5, 2).replace(/-/g, '');
+	let month = startDate.substr(5, 2);
+	if(month.includes('-')) {
+		month = '0' + month.replace(/-/g, '');
+	}
 
 	// カレンダーを表示する処理
 	function showDetailDate(year, month) {
@@ -173,7 +216,7 @@ function drawDetailDate() {
 		let drawDateHtml = ''
 
 		// HTMLを組み立てる
-		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month.replace('0','') + '/' + startDayCount + '-' + year + '/' + month.replace('0','') + '/' + endDayCount + '</h2></span>'
+		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
 
 		return drawDateHtml
 	}
