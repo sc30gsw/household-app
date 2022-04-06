@@ -1,13 +1,16 @@
 // カレンダーを描画する関数
 function drawCalendar() {
+	startDate.replace(/-/g, '0');
+	// 年を選択するselectボックスの取得
+	const selectYear = document.querySelector('.search-year-filter');
+	// 月を取得するselectボックスの取得
+	const selectMonth = document.querySelector('.search-month-filter');
 	// 曜日を配列に格納する
 	const weeks = ['日', '月', '火', '水', '木', '金', '土']
-	// 日付を取得する
-	const date = new Date()
 	// 年の取得
-	let year = date.getFullYear()
+	let year = startDate.substr(0, 4);
 	// 月の取得
-	let month = date.getMonth() + 1
+	let month = startDate.substr(5, 2).replace(/-/g, '');
 
 	// カレンダーを表示する処理
 	function showCalendar(year, month) {
@@ -53,7 +56,7 @@ function drawCalendar() {
 		// HTMLを組み立てる変数
 		let calendarHtml = ''
 
-		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month.replace('0','') + '/' + startDayCount + '-' + year + '/' + month.replace('0','') + '/' + endDayCount + '</h2></span>'
 		calendarHtml += `<table class="cal-detail-table">`
 		calendarHtml += '<thead>'
 
@@ -104,17 +107,34 @@ function drawCalendar() {
 		return calendarHtml
 	}
 
+	// 検索ボタンの取得
+	const submit = document.getElementById('search-date-btn');
+
+	submit.addEventListener('click', function() {
+		// <div id="calendar"></div>内のHTMLを空にする
+		document.querySelector('#detail-calendar').innerHTML = ''
+		// 年・月を数値に変換する
+		year = Number(selectYear.value);
+		month = Number(selectMonth.value);
+
+		// カレンダーを表示する関数の呼び出し
+		showCalendar(year, month)
+	})
+
 	showCalendar(year, month)
 }
 
 // 年月日を描画する関数
 function drawDetailDate() {
-	// 日付を取得する
-	const date = new Date()
+	startDate.replace(/-/g, '0');
+	// 年を選択するselectボックスの取得
+	const selectYear = document.querySelector('.search-year-filter');
+	// 月を取得するselectボックスの取得
+	const selectMonth = document.querySelector('.search-month-filter');
 	// 年の取得
-	let year = date.getFullYear()
+	let year = startDate.substr(0, 4);
 	// 月の取得
-	let month = date.getMonth() + 1
+	let month = startDate.substr(5, 2).replace(/-/g, '');
 
 	// カレンダーを表示する処理
 	function showDetailDate(year, month) {
@@ -153,10 +173,24 @@ function drawDetailDate() {
 		let drawDateHtml = ''
 
 		// HTMLを組み立てる
-		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month.replace('0','') + '/' + startDayCount + '-' + year + '/' + month.replace('0','') + '/' + endDayCount + '</h2></span>'
 
 		return drawDateHtml
 	}
+	
+	// 検索ボタンの取得
+	const submit = document.getElementById('search-date-btn');
+
+	submit.addEventListener('click', function() {
+		// <div id="calendar"></div>内のHTMLを空にする
+		document.querySelector('#draw-date-range').innerHTML = ''
+		// 月が1月より下の場合、年から1を引いて、月を12にする
+		year = Number(selectYear.value);
+		month = Number(selectMonth.value);
+
+		// カレンダーを表示する関数の呼び出し
+		showDetailDate(year, month)
+	})
 
 	showDetailDate(year, month)
 }
