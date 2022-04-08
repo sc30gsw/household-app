@@ -46,10 +46,13 @@ public class MHouseholdService {
 		val user = loginUser.getUser();
 		// 現在日時を取得
 		LocalDateTime now = LocalDateTime.now();
-
+		
 		// フォームを家計簿マスタにコピー
 		BeanUtils.copyProperties(form, household);
-
+		
+		// フォームの値を数値に変換して設定
+		household.setPayment(Integer.parseInt(form.getPayment()));
+		
 		// 出金日がnullの場合、今日の日付を設定する
 		if (household.getActiveDate() == null) {
 			long miliseconds = System.currentTimeMillis();
