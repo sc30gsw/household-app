@@ -47,4 +47,14 @@ public class MHouseholdRepository {
 	public List<MHousehold> getManyLatestHousehold(Integer userId) {
 		return mapper.getLatestHouseholdList(userId);
 	}
+	
+	/**
+	 * 月次家計簿集計リスト取得処理
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> monthlyGetHouseholdList(MHouseholdCondition condition) {
+		return mapper.monthlyHouseholdList(condition);
+	}
 }
