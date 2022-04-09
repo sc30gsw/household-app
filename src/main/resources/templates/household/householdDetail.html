@@ -103,13 +103,19 @@
 												<th>当月収支</th>
 											</tr>
 										</thead>
-										<tbody>
+										<tbody th:if="${monthlySumHousehold != null}">
 											<tr>
-												<td>200円</td>
+												<td th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
 												<td>ー</td>
-												<td>3,000円</td>
+												<td th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
 												<td>＝</td>
-												<td class="minus-color">-2,700円</td>
+												<td th:if="${monthlyHouseholdCalculated < 0}" class="minus-color" th:text="'-' + ${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated > 0}" class="plus-color" th:text = "${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+											</tr>
+										</tbody>
+										<tbody th:if="${monthlySumHousehold == null}">
+											<tr>
+												<td>当月の家計簿が登録されていません。</td>
 											</tr>
 										</tbody>
 									</table>
@@ -132,7 +138,7 @@
 					<div id="draw-date-range" class="date-range"></div>
 					<div class="clearfix daily-info-contents">
 						<div class="break-contents">
-							<table
+							<table th:if="${householdList != null}"
 								class="detail-table table-hover table-autosort:1 table-autosort table-autofilter">
 								<thead>
 									<tr>
@@ -144,75 +150,53 @@
 											style="vertical-align: top;">内容</th>
 										<th
 											class="sortable-amount table-sortable:string table-sortable table-sorted-desc"
-											style="vertical-align: top;">支出</th>
+											style="vertical-align: top;">金額（円）</th>
 										<th class="sortable-lctg table-filterable">大項目<br> <select
 											id="table-lctg-filter" class="table-autofilter"
 											style="width: 80%;">
 												<option value>全て</option>
-												<!-- <option th:each="item: ${}" th:value="${item.cateogoryCode}" th:text="${item.categoryCode}" -->
+												<option th:each="item: ${categoryCodeList}" th:value="${item}" th:text="${item}">
 										</select>
 										</th>
 										<th class="sortable-mctg table-filterable">中項目<br> <select
 											id="table-mctg-filter" class="table-autofilter"
 											style="width: 80%;">
 												<option value>全て</option>
-												<!-- <option th:each="item: ${}" th:value="${item.subCategoryName}" th:text="${item.subCategoryName}" -->
+												<option th:each="item: ${subCategoryNameList}" th:value="${item}" th:text="${item}">
 										</select>
 										</th>
 									</tr>
 								</thead>
-								<tbody class="list_body">
+								<tbody class="list_body" th:each="item: ${householdList}">
 									<tr class="transaction_list">
 										<td class="transaction-date">
 											<div>
-												<span>04/04(月)</span>
+												<span th:text="${#dates.format(item.activeDate, 'MM/dd (E)')}"></span>
 											</div>
 										</td>
 										<td class="transaction-content">
 											<div>
-												<span>メモ</span>
+												<span th:text="${item.note}"></span>
 											</div>
 										</td>
-										<td class="transaction-amount-minus">
+										<td th:if="${item.payment != null && item.payment > 0}" class="transaction-amount-minus">
 											<div>
-												<span>-1,000</span>
+												<span th:text="'-' + ${item.payment}"></span>
+											</div>
+										</td>
+										<td th:if="${item.deposit != null && item.deposit > 0}" class="transaction-amount-deposit">
+											<div>
+												<span th:text="${item.deposit}"></span>
 											</div>
 										</td>
 										<td class="transaction-lctg">
 											<div>
-												<span>未分類</span>
+												<span class="lctg-text" th:text="${item.category.categoryCode}"></span>
 											</div>
 										</td>
 										<td class="transaction-mctg">
 											<div>
-												<span>未分類</span>
-											</div>
-										</td>
-									</tr>
-									<tr class="transaction_list">
-										<td class="transaction-date">
-											<div>
-												<span>04/05(火)</span>
-											</div>
-										</td>
-										<td class="transactioncontent">
-											<div>
-												<span>メモ</span>
-											</div>
-										</td>
-										<td class="transaction-amount-minus">
-											<div>
-												<span>-4,000</span>
-											</div>
-										</td>
-										<td class="transactionlctg">
-											<div>
-												<span>食費</span>
-											</div>
-										</td>
-										<td class="transaction-mctg">
-											<div>
-												<span>食料品</span>
+												<span class="mctg-text" th:text="${item.category.subCategoryName}"></span>
 											</div>
 										</td>
 									</tr>
@@ -227,6 +211,7 @@
 	</div>
 	<script th:inline="javascript">
 		const startDate = /*[[${startDate}]]*/"startDate";
+		const householdList = /*[[${householdList}]]*/"householdList";
 		toTop();
 		drawCalendar();
 		drawDetailDate();
