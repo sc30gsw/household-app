@@ -1,13 +1,16 @@
 // ページの最上部に戻る関数
 function toTop() {
+	// 「最上部に戻る」ボタンの取得
 	const toTopBtn = document.querySelector('.cf-btn-to-top');
+	// 「最上部に戻る」ボタンが押されたときイベント発火
 	toTopBtn.addEventListener('click', function() {
+		// 最上部に戻る(topから0の位置まで戻る)
 		window.scrollTo({
 			top: 0, behavior: "smooth"
 		});
 	});
 
-	// 縦スクロールが10の位置に来たときに要素を追加する
+	// 縦スクロールが10の位置に来たときに要素の表示・非表示を行う
 	window.addEventListener('scroll', function() {
 		if (window.pageYOffset > 10) {
 			toTopBtn.style.opacity = '1';
