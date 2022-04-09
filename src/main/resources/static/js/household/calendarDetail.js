@@ -11,7 +11,7 @@ function drawCalendar() {
 	let year = startDate.substr(0, 4);
 	// 月の取得
 	let month = startDate.substr(5, 2);
-	if(month.includes('-')) {
+	if (month.includes('-')) {
 		month = '0' + month.replace(/-/g, '');
 	}
 
@@ -66,12 +66,12 @@ function drawCalendar() {
 		calendarHtml += '<tr>'
 		// 曜日の行を作成
 		for (let i = 0; i < weeks.length; i++) {
-			if(i === 0) {
+			if (i === 0) {
 				calendarHtml += `<th class="detaildow-sunday">` + weeks[i] + '</th>'
-			} else if(i === 6) {
+			} else if (i === 6) {
 				calendarHtml += `<th class="detaildow-saturday">` + weeks[i] + '</th>'
 			} else {
-				calendarHtml += `<th class="detaildow">` + weeks[i] + '</th>'	
+				calendarHtml += `<th class="detaildow">` + weeks[i] + '</th>'
 			}
 		}
 		calendarHtml += '</tr>'
@@ -88,18 +88,18 @@ function drawCalendar() {
 					const endYear = lastMonthEndDate.getFullYear();
 					// 1日の前の日付と符号する月を取得
 					const endMonth = lastMonthEndDate.getMonth() + 2;
-					
+
 					// 曜日が日曜の場合
-					if(d === 0) {
-						calendarHtml += `<td class="is-detail-disabled-sunday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					if (d === 0) {
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 						// 曜日が土曜の場合
-					} else if(d === 6) {
-						calendarHtml += `<td class="is-detail-disabled-saturday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					} else if (d === 6) {
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 						// 土日以外の曜日の場合
-					}  else {
-						calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`	
+					} else {
+						calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 					}
-					
+
 				} else if (dayCount > endDayCount) {
 					// 末尾の日数を超えた場合の日付を取得
 					let num = dayCount - endDayCount
@@ -109,34 +109,34 @@ function drawCalendar() {
 					const nextYear = nextMonthStartDate.getFullYear();
 					// 末尾の日数を超えた場合の日と符号する月を取得
 					let nextMonth = nextMonthStartDate.getMonth();
-					
+
 					// 11月の場合のみ、末尾の日数を超えた場合の日と符号する月に12月を格納する
 					if (month === 11) {
 						nextMonth = 12;
 					}
 					// 曜日が日曜の場合
-					if(d === 0) {
-						calendarHtml += `<td class="is-detail-disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					if (d === 0) {
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 						// 曜日が土曜の場合
-					} else if(d === 6) {
-						calendarHtml += `<td class="is-detail-disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+					} else if (d === 6) {
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 						// 土日以外の曜日の場合
 					} else {
 						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
 					}
-					
+
 					dayCount++
-					
+
 				} else {
-					
-					if(d === 0) {
-						calendarHtml += `<td class="calendar_detail_td_sunday" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
-					} else if (d === 6) {
-						calendarHtml += `<td class="calendar_detail_td_saturday" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
-					} else {
-						calendarHtml += `<td class="calendar_detail_td" tabindex="-1" data-date="${year}-${month}-${dayCount}"><div>${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
-					}
-					
+
+						if (d === 0) {
+							calendarHtml += `<td class="calendar_detail_td td_sunday" tabindex="-1"><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						} else if (d === 6) {
+							calendarHtml += `<td class="calendar_detail_td td_saturday" tabindex="-1"><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						} else {
+							calendarHtml += `<td class="calendar_detail_td" tabindex="-1" ><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						}
+
 					dayCount++
 				}
 			}
@@ -162,6 +162,43 @@ function drawCalendar() {
 	})
 
 	showCalendar(year, month)
+
+	// 日付を表示している要素を取得
+	const calendarTd = document.querySelectorAll('.calendar-detail-daycount');
+	// カレンダーの日付と入出金日が重なっている日に支出と収入のデータを表示する要素を追加する処理
+	calendarTd.forEach(function(date) {
+		householdList.forEach(function(list) {
+			// 日付のデータが格納されているカスタムdata属性を取得
+			let tdDate = date.dataset.date;
+			// 「yyyy-MM-dd」部分のみ切り出す
+			let formattedActiveDate = list.activeDate.substr(0, 10);
+			
+			// カレンダーの日付と月次家計簿リストの日付が同じデータに対して収支を表示する要素を追加
+			// カレンダーの日付と月次家計簿リストの日付が同じ場合
+			if (tdDate === formattedActiveDate) {
+				// 収支表示用要素を作成
+				const payElement = document.createElement('div');
+				payElement.classList.add('add-pay-field');
+				
+				// 支出が0以外の場合
+				if(list.payment !== 0) {
+					// 要素にテキストとクラス属性を追加
+					payElement.innerText = `-${list.payment}`;
+					payElement.classList.add('add-minus');
+					
+					// 収入が0以外の場合
+				} else if(list.deposit !== 0) {
+					// 要素にテキストとクラス属性を追加
+					payElement.innerText = `+${list.deposit}`;
+					payElement.classList.add('add-plus');
+				}
+				
+				// 子要素として要素を追加する
+				date.appendChild(payElement);
+			}
+		})
+	});
+
 }
 
 // 年月日を描画する関数
@@ -175,7 +212,7 @@ function drawDetailDate() {
 	let year = startDate.substr(0, 4);
 	// 月の取得
 	let month = startDate.substr(5, 2);
-	if(month.includes('-')) {
+	if (month.includes('-')) {
 		month = '0' + month.replace(/-/g, '');
 	}
 
@@ -220,7 +257,7 @@ function drawDetailDate() {
 
 		return drawDateHtml
 	}
-	
+
 	// 検索ボタンの取得
 	const submit = document.getElementById('search-date-btn');
 
