@@ -211,7 +211,7 @@ public class MHouseholdService {
 	private void settingCategoryCode(List<MHousehold> householdList) {
 
 		householdList.stream().forEach(list -> {
-			// カテゴリーコードを取得
+			// カテゴリーを取得
 			val category = list.getCategory();
 
 			// カテゴリーコードに応じてカテゴリーの共通定数を設定する
