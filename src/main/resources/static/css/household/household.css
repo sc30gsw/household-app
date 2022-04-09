@@ -661,6 +661,10 @@ td {
 	color: #AA4643;
 }
 
+.plus-color {
+	color: #4572A7;
+}
+
 footer {
 	margin-top: 50px;
 	text-align: center;
@@ -1063,4 +1067,8 @@ footer {
 
 .transaction-amount-minus {
 	color: #AA4643;
+}
+
+.transaction-amount-deposit {
+	color: #4572A7;
 }
