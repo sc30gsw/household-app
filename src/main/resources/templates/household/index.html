@@ -4,47 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HouseHold</title>
+<!-- bootstarpのcss読み込み -->
 <link rel="stylesheet"
 	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
-<link rel="stylesheet" th:href="@{/css/household/index.css}">
+<!-- css読み込み -->
+<link rel="stylesheet" th:href="@{/css/household/household.css}">
+<!-- bootstrapのjs読み込み -->
 <script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
 <script
 	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"></script>
 <script
 	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
+<!-- fontawesome読み込み -->
 <script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
+<!-- Chart.js読み込み -->
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<!-- Chart.jsのdatalabelsの読み込み -->
 <script
 	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<!-- jsの読み込み -->
 <script th:src="@{/js/household/index.js}"></script>
-<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
 </head>
 <body>
 	<div class="wrapper">
 		<header class="header">
-			<div class="upper-contents">
-				<h1 class="logo">
-					<a th:href="@{/household/index}"> House Hold App </a>
-				</h1>
-				<nav class="right-nav">
-					<ul class="menu-items">
-						<li class="menu-item">
-							<form method="post" th:action="@{/logout}">
-								<button type="submit" class="logout-btn">ログアウト</button>
-							</form>
-						</li>
-					</ul>
-				</nav>
-			</div>
+			<div th:replace="~{layout/householdHeader::householdHeader}"></div>
 			<div class="global-menu">
 				<ul class="nav-horizontal">
-					<li class="global-menu-item"><a class="active" href="#"> <i
+					<li class="global-menu-item"><a class="active" th:href="@{/household/index}"> <i
 							class="active-icon fas fa-home"></i>ホーム
 					</a></li>
-					<li class="global-menu-item"><a class="unactive" href="#">
+					<li class="global-menu-item"><a class="unactive" th:href="@{/household/detail}">
 							<i class="unactive-icon fas fa-chart-pie"></i>家計
 					</a></li>
 					<li class="global-menu-item"><a class="unactive" href="#">
@@ -344,40 +335,7 @@
 				</div>
 			</div>
 		</div>
-		<footer>
-			<div class="footer-contents-container">
-				<div class="footer-contents-wrapper">
-					<nav>
-						<p>サービスについて</p>
-						<ul>
-							<li><a href="#">運営会社</a></li>
-							<li><a href="#">公式Twitter</a></li>
-							<li><a href="#">公式note</a></li>
-						</ul>
-					</nav>
-					<nav>
-						<p>サポート</p>
-						<ul>
-							<li><a href="#">ヘルプ・サポート</a></li>
-							<li><a href="#">お問合せ</a></li>
-						</ul>
-					</nav>
-					<nav>
-						<p>規約</p>
-						<ul>
-							<li><a href="#">利用規約</a></li>
-							<li><a href="#">個人情報保護方針</a></li>
-							<li><a href="#">情報セキュリティ基本方針</a></li>
-							<li><a href="#">特定商取引法に基づく表記</a></li>
-						</ul>
-					</nav>
-				</div>
-				<div class="footer-logo">
-					<h4>House Hold App</h4>
-				</div>
-				<p class="copyright">© House Hold, Inc.</p>
-			</div>
-		</footer>
+		<footer th:replace="~{layout/householdFooter::householdFooter}"></footer>
 	</div>
 	<script th:if="${deposit != null && payment != null}"
 		th:inline="javascript">

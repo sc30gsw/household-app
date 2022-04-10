@@ -87,12 +87,33 @@
  				tc.category_code as category_category_code,
  				tc.subcategory_name as category_subcategory_name
  			from
- 				M_HOUSEHOLD mh INNER JOIN T_CATEGORY tc
- 					ON mh.CATEGORY_ID = tc.CATEGORY_ID
+ 				M_HOUSEHOLD mh inner join T_CATEGORY tc
+ 					on mh.category_id = tc.category_id
  			where
  				mh.user_id = #{userId, jdbcType=INTEGER}
- 			ORDER BY
- 				mh.ACTIVE_DATE DESC LIMIT 8;
+ 			order by
+ 				mh.active_date desc limit 8;
+ 	</select>
+ 	
+ 	<!-- 月次家計簿リスト取得 -->
+ 	<select id="monthlyHouseholdList" resultMap="BaseResultMap">
+ 		select
+ 				mh.household_id,
+ 				mh.user_id,
+ 				mh.deposit,
+ 				mh.payment,
+ 				mh.note,
+ 				mh.active_date,
+ 				mh.category_id,
+ 				tc.category_code as category_category_code,
+ 				tc.subcategory_name as category_subcategory_name
+ 			from
+ 				M_HOUSEHOLD mh inner join T_CATEGORY tc
+ 					on mh.category_id = tc.category_id
+ 			where
+ 				mh.user_id = #{userId, jdbcType=INTEGER}
+ 				and mh.active_date between #{startDate} and #{endDate}
+ 			order by mh.active_date desc;
  	</select>
  	
  </mapper>

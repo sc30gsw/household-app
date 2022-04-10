@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.app.MHousehold.controller.MHouseholdCondition;
 import com.example.demo.common.constants.CategoryConstants;
 import com.example.demo.domain.entity.MHousehold;
+import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
 import com.example.demo.domain.repository.MHouseholdRepository;
 
@@ -50,6 +51,9 @@ public class MHouseholdService {
 		// フォームを家計簿マスタにコピー
 		BeanUtils.copyProperties(form, household);
 
+		// フォームの値を数値に変換して設定
+		household.setPayment(Integer.parseInt(form.getPayment()));
+
 		// 出金日がnullの場合、今日の日付を設定する
 		if (household.getActiveDate() == null) {
 			long miliseconds = System.currentTimeMillis();
@@ -76,7 +80,7 @@ public class MHouseholdService {
 	}
 
 	/**
-	 * 家計簿集計取得処理
+	 * 月次家計簿集計取得処理
 	 * 
 	 * @param condition 家計簿検索条件
 	 * @param loginUser ログインユーザー
@@ -99,21 +103,110 @@ public class MHouseholdService {
 	/**
 	 * 最近の家計簿リスト検索
 	 * 
-	 * @param loginUser
+	 * @param loginUser ログインユーザー
 	 * @return　最近の家計簿リスト
 	 */
 	public List<MHousehold> searchLatestHouseholdList(@AuthenticationPrincipal LoginUser loginUser) {
 		// ユーザーIDの取得
 		val userId = loginUser.getUser().getUserId();
-		
+
 		log.trace("{}", "最近の家計簿リストの検索を開始ます");
 		val latestHouseholdList = repository.getManyLatestHousehold(userId);
-		
+
 		// カテゴリーコード値の設定を行う
 		settingCategoryCode(latestHouseholdList);
 		log.trace("{}", "最近の家計簿リストの検索が完了しました");
-		
+
 		return latestHouseholdList;
+	}
+
+	/**
+	 * 月次家計簿リスト取得処理
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 月次家計簿マスタリスト
+	 */
+	public List<MHousehold> getMonthlyHouseholdList(MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+		log.trace("{}", "月次家計簿リスト取得処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		// 検索条件を設定する
+		conditionSetting(condition, userId);
+
+		// 月次家計簿リストを取得
+		val monthlyHouseholdList = repository.monthlyGetHouseholdList(condition);
+
+		// カテゴリーコードを設定する
+		settingCategoryCode(monthlyHouseholdList);
+
+		log.trace("{}", "月次家計簿リスト取得処理が完了しました");
+
+		return monthlyHouseholdList;
+	}
+
+	/**
+	 * 月次家計簿集計検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタ
+	 */
+	public MHousehold getSearchMonthlySumHousehold(DetailHouseholdConditionForm form, MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次家計簿集計検索処理を開始します");
+		
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+		
+		// 月次家計簿集計を取得
+		val monthlySearchSumHousehold = repository.monthlyGetSumHousehold(condition);
+		
+		log.trace("{}", "月次家計簿集計検索処理が完了しました");
+		
+		return monthlySearchSumHousehold;
+	}
+
+	/**
+	 * 月次家計簿リスト検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 月次家計簿マスタリスト
+	 */
+	public List<MHousehold> getSearchMonthlyHouseholdList(DetailHouseholdConditionForm form,
+			MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次家計簿リスト検索処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+
+		// 月次家計簿リストを取得
+		val monthlySearchHouseholdList = repository.monthlyGetHouseholdList(condition);
+
+		// カテゴリーコードを設定する
+		settingCategoryCode(monthlySearchHouseholdList);
+
+		log.trace("{}", "月次家計簿リスト検索処理が完了しました");
+
+		return monthlySearchHouseholdList;
+
 	}
 
 	/**
@@ -178,12 +271,12 @@ public class MHouseholdService {
 	 * 
 	 * @param latestList 最近の家計簿リスト
 	 */
-	private void settingCategoryCode(List<MHousehold> latestList) {
-		
-		latestList.stream().forEach(list -> {
-			// カテゴリーコードを取得
+	private void settingCategoryCode(List<MHousehold> householdList) {
+
+		householdList.stream().forEach(list -> {
+			// カテゴリーを取得
 			val category = list.getCategory();
-			
+
 			// カテゴリーコードに応じてカテゴリーの共通定数を設定する
 			switch (category.getCategoryCode()) {
 			case "1":

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HouseHold</title>
+<!-- css読み込み -->
+<link rel="stylesheet" th:href="@{/css/household/household.css}">
+<!-- fontawesome読み込み -->
+<script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
+<!-- JavaScript読み込み -->
+<script th:src="@{/js/household/calendarDetail.js}"></script>
+<script th:src="@{/js/household/householdDetail.js}"></script>
+</head>
+<body>
+	<div class="wrapper" id="wrap">
+		<header class="header">
+			<div th:replace="~{layout/householdHeader::householdHeader}"></div>
+			<div class="global-menu">
+				<ul class="nav-horizontal">
+					<li class="global-menu-item"><a class="unactive"
+						th:href="@{/household/index}"> <i
+							class="unactive-icon fas fa-home"></i>ホーム
+					</a></li>
+					<li class="global-menu-item"><a class="active"
+						th:href="@{/household/detail}"> <i
+							class="active-icon fas fa-chart-pie"></i>家計
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-chart-bar"></i>予算
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-coins"></i>資産
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-cog"></i>設定
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-ellipsis-h"></i>
+					</a></li>
+				</ul>
+			</div>
+			<div class="pfm-subnav">
+				<ul class="subnav-horizontal">
+					<li class="subnav-item"><a class="subnav-active" href="#">家計簿</a>
+					</li>
+					<li class="subnav-item"><a class="subnav-unactive" href="#">収支内訳</a></li>
+				</ul>
+			</div>
+		</header>
+		<div class="container-large">
+			<div class="main-container">
+				<button class="cf-btn-to-top">
+					<i class="fas fa-sort-up icon-chevron-up"></i>
+				</button>
+				<div class="col-custom-wrapper">
+					<section class="col-custome-content-body">
+						<section>
+							<h1 class="heading-normal">月次収支</h1>
+							<div class="clearfix">
+								<div class="calc-field">
+									<button class="cf-new-btn" style="padding: 5px 20px; width: 140px;">
+										<i class="fas fa-pen"></i>手入力
+									</button>
+								</div>
+								<p class="search-explain">検索したい年月を選択すると、その年月の家計簿の履歴を表示します。</p>
+								<div class="col-custome-content-body">
+									<div class="pull-right">
+										<form id="monthly-form" method="post" th:object="${form}"
+											th:action="@{/household/detail/search}">
+											<input type="hidden" th:field="*{startDate}"> <input
+												type="hidden" th:field="*{endDate}"> <select
+												class="search-year-filter">
+												<option
+													th:text="${#calendars.format(#calendars.createNow(), 'yyyy年')}"
+													th:value="${#calendars.format(#calendars.createNow(), 'yyyy')}"></option>
+												<option th:each="i : ${#numbers.sequence(2018, 2027)}"
+													th:value="${i}" th:text="${i} + '年'"></option>
+											</select> <select class="search-month-filter">
+												<option
+													th:text="${#calendars.format(#calendars.createNow(), 'M月')}"
+													th:value="${#calendars.format(#calendars.createNow(), 'M')}"></option>
+												<option th:each="i : ${#numbers.sequence(1, 12)}"
+													th:value="${i}" th:text="${i} + '月'"></option>
+											</select>
+											<button id="search-date-btn" type="submit">検索する</button>
+										</form>
+									</div>
+									<p class="explain" style="margin-bottom: 16px; clear: both;">
+										登録されたデータから、月々の収入、支出を自動的に計算します。<br> カレンダーの<i
+											class="fas fa-pen" style="color: #08C;"></i>ボタンからも手入力できます。
+									</p>
+								</div>
+								<div class="col-custome-content-body">
+									<table cellpadding="10px" class="monthly-total-detail-table"
+										title="当月の合計金額です">
+										<thead>
+											<tr>
+												<th>当月収入</th>
+												<th></th>
+												<th>当月支出</th>
+												<th></th>
+												<th>当月収支</th>
+											</tr>
+										</thead>
+										<tbody th:if="${monthlySumHousehold != null}">
+											<tr>
+												<td th:if="${monthlySumHousehold.deposit != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
+												<td th:if="${monthlySumHousehold.deposit == 0}">0円</td>
+												<td>ー</td>
+												<td th:if="${monthlySumHousehold.payment != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlySumHousehold.payment == 0}">0円</td>
+												<td>＝</td>
+												<td th:if="${monthlyHouseholdCalculated < 0 && monthlyHouseholdCalculated != 0}" class="minus-color" th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated > 0 && monthlyHouseholdCalculated != 0}" class="plus-color" th:text = "${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated == 0}">0円</td>
+											</tr>
+										</tbody>
+										<tbody th:if="${monthlySumHousehold == null}">
+											<tr>
+												<td>当月の家計簿が登録されていません。</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-custome-body">
+								<div id="detail-calendar"></div>
+							</div>
+						</section>
+					</section>
+				</div>
+				<section class="in_out">
+					<h1 class="heading-normal">収入・支出詳細</h1>
+					<div class="calc-field">
+						<button class="cf-new-btn"
+							style="padding: 5px 20px; width: 140px;">
+							<i class="fas fa-pen"></i>手入力
+						</button>
+					</div>
+					<div id="draw-date-range" class="date-range"></div>
+					<div class="clearfix daily-info-contents">
+						<div class="break-contents">
+							<table th:if="${householdList != null}"
+								class="detail-table table-hover table-autosort:1 table-autosort table-autofilter">
+								<thead>
+									<tr>
+										<th
+											class="sortable-date table-sortable:string table-sortable table-sorted-desc"
+											style="vertical-align: -30px;">日付</th>
+										<th
+											class="sortable-note table-sortable:string table-sortable table-sorted-desc"
+											style="vertical-align: top;">内容</th>
+										<th
+											class="sortable-amount table-sortable:string table-sortable table-sorted-desc"
+											style="vertical-align: top;">金額（円）</th>
+										<th class="sortable-lctg table-filterable">大項目<br> <select
+											id="table-lctg-filter" class="table-autofilter"
+											style="width: 80%;">
+												<option value>全て</option>
+												<option th:each="item: ${categoryCodeList}" th:value="${item}" th:text="${item}">
+										</select>
+										</th>
+										<th class="sortable-mctg table-filterable">中項目<br> <select
+											id="table-mctg-filter" class="table-autofilter"
+											style="width: 80%;">
+												<option value>全て</option>
+												<option th:each="item: ${subCategoryNameList}" th:value="${item}" th:text="${item}">
+										</select>
+										</th>
+									</tr>
+								</thead>
+								<tbody class="list_body" th:each="item: ${householdList}">
+									<tr class="transaction_list">
+										<td class="transaction-date">
+											<div>
+												<span th:text="${#dates.format(item.activeDate, 'MM/dd (E)')}"></span>
+											</div>
+										</td>
+										<td class="transaction-content">
+											<div>
+												<span th:text="${item.note}"></span>
+											</div>
+										</td>
+										<td th:if="${item.payment != null && item.payment > 0}" class="transaction-amount-minus">
+											<div>
+												<span th:text="'-' + ${item.payment}"></span>
+											</div>
+										</td>
+										<td th:if="${item.deposit != null && item.deposit > 0}" class="transaction-amount-deposit">
+											<div>
+												<span th:text="${item.deposit}"></span>
+											</div>
+										</td>
+										<td class="transaction-lctg">
+											<div>
+												<span class="lctg-text" th:text="${item.category.categoryCode}"></span>
+											</div>
+										</td>
+										<td class="transaction-mctg">
+											<div>
+												<span class="mctg-text" th:text="${item.category.subCategoryName}"></span>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<footer th:replace="~{layout/householdFooter::householdFooter}"></footer>
+	</div>
+	<script th:inline="javascript">
+		const startDate = /*[[${startDate}]]*/"startDate";
+		const householdList = /*[[${householdList}]]*/"householdList";
+		toTop();
+		drawCalendar();
+		drawDetailDate();
+		inputDate();
+	</script>
+</body>
+</html>

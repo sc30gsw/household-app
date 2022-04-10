@@ -3,7 +3,9 @@ package com.example.demo.domain.form;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,8 +24,9 @@ public class EasyHouseholdForm implements Serializable {
 	private Integer categoryId;
 	
 	/**出金*/
-	@NotNull
-	private Integer payment;
+	@NotBlank
+	@Pattern(regexp = "^[0-9]+$")
+	private String payment;
 	
 	/**備考(メモ)*/
 	private String note;

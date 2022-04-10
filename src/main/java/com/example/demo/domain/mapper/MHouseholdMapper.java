@@ -36,4 +36,12 @@ public interface MHouseholdMapper {
 	 * @return 家計簿マスタリスト
 	 */
 	public List<MHousehold> getLatestHouseholdList(Integer userId);
+	
+	/**
+	 * 月次家計簿集計リスト取得
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> monthlyHouseholdList(MHouseholdCondition condition);
 }
