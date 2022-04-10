@@ -59,7 +59,14 @@ function drawCalendar() {
 		// HTMLを組み立てる変数
 		let calendarHtml = ''
 
-		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		calendarHtml += `<span class="fc-header-title">
+							<h2 id="cal-detail-title" class="cal-detail-title"
+								data-startdate="${year}-${month}-${startDayCount}"
+								data-enddate="${year}-${month}-${endDayCount}">` 
+									+ year + '/' + month + '/' + startDayCount + '-' + 
+									year + '/' + month + '/' + endDayCount + 
+							'</h2>' +
+						'</span>'
 		calendarHtml += `<table class="cal-detail-table">`
 		calendarHtml += '<thead>'
 
@@ -375,7 +382,14 @@ function drawDetailDate() {
 		let drawDateHtml = ''
 
 		// HTMLを組み立てる
-		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		drawDateHtml += `<span class="draw-date-header-title">
+							<h2 id="detail-draw-title" class="draw-date-detail-title" 
+								data-startdate="${year}-${month}-${startDayCount}" 
+								data-enddate="${year}-${month}-${endDayCount}">` 
+									+ year + '/' + month + '/' + startDayCount + 
+									'-' + year + '/' + month + '/' + endDayCount + 
+							'</h2>' + 
+						'</span>'
 
 		return drawDateHtml
 	}
