@@ -91,13 +91,54 @@ function drawCalendar() {
 
 					// 曜日が日曜の場合
 					if (d === 0) {
-						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${endYear}-${endMonth}-${num}">
+						 					<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
+										
 						// 曜日が土曜の場合
 					} else if (d === 6) {
-						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${endYear}-${endMonth}-${num}">
+											<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
+										
 						// 土日以外の曜日の場合
 					} else {
-						calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled" data-date="${endYear}-${endMonth}-${num}">
+											<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
 					}
 
 				} else if (dayCount > endDayCount) {
@@ -116,13 +157,54 @@ function drawCalendar() {
 					}
 					// 曜日が日曜の場合
 					if (d === 0) {
-						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}">
+											<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
+										
 						// 曜日が土曜の場合
 					} else if (d === 6) {
-						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}">
+											<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
+										
 						// 土日以外の曜日の場合
 					} else {
-						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}"><div>${num}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}">
+											<div class="day-num">
+												<div>
+													${num}
+												</div>
+											</div>
+											<div class="calendar-amount">
+											</div>
+											<div class="day-num-link-pen">
+												<a class="detail-cal-icon-link" href="#">
+													<i class="fas fa-pen"></i>
+												</a>
+											</div>
+										</td>`
 					}
 
 					dayCount++
@@ -130,11 +212,51 @@ function drawCalendar() {
 				} else {
 
 						if (d === 0) {
-							calendarHtml += `<td class="calendar_detail_td td_sunday" tabindex="-1"><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+							calendarHtml += `<td class="calendar_detail_td td_sunday" tabindex="-1">
+												<div class="day-count-field">
+													<div class="calendar-detail-daycount">
+														${dayCount}
+													</div>
+												</div>
+												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												</div>
+												<div class="day-num-link-pen">
+													<a class="detail-cal-icon-link" href="#">
+														<i class="fas fa-pen"></i>
+													</a>
+												</div>
+											</td>`
+											
 						} else if (d === 6) {
-							calendarHtml += `<td class="calendar_detail_td td_saturday" tabindex="-1"><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+							calendarHtml += `<td class="calendar_detail_td td_saturday" tabindex="-1">
+												<div class="day-count-field">
+													<div class="calendar-detail-daycount">
+														${dayCount}
+													</div>
+												</div>
+												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												</div>
+												<div class="day-num-link-pen">
+													<a class="detail-cal-icon-link" href="#">
+														<i class="fas fa-pen"></i>
+													</a>
+												</div>
+											</td>`
 						} else {
-							calendarHtml += `<td class="calendar_detail_td" tabindex="-1" ><div class="calendar-detail-daycount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">${dayCount}</div><a class="detail-cal-icon-link" href="#"><i class="fas fa-pen"></i></a></td>`
+							calendarHtml += `<td class="calendar_detail_td" tabindex="-1" >
+												<div class="day-count-field">
+													<div class="calendar-detail-daycount">
+														${dayCount}
+													</div>
+												</div>
+												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												</div>
+												<div class="day-num-link-pen">
+													<a class="detail-cal-icon-link" href="#">
+														<i class="fas fa-pen"></i>
+													</a>
+												</div>
+											</td>`
 						}
 
 					dayCount++
@@ -164,7 +286,7 @@ function drawCalendar() {
 	showCalendar(year, month)
 
 	// 日付を表示している要素を取得
-	const calendarTd = document.querySelectorAll('.calendar-detail-daycount');
+	const calendarTd = document.querySelectorAll('.calendar-amount');
 	// カレンダーの日付と入出金日が重なっている日に支出と収入のデータを表示する要素を追加する処理
 	calendarTd.forEach(function(date) {
 		householdList.forEach(function(list) {
@@ -184,13 +306,13 @@ function drawCalendar() {
 				if(list.payment !== 0) {
 					// 要素にテキストとクラス属性を追加
 					payElement.innerText = `-${list.payment}`;
-					payElement.classList.add('add-minus');
+					payElement.style.color = "#AA4643";
 					
 					// 収入が0以外の場合
 				} else if(list.deposit !== 0) {
 					// 要素にテキストとクラス属性を追加
 					payElement.innerText = `+${list.deposit}`;
-					payElement.classList.add('add-plus');
+					payElement.style.color = "#4572A7";
 				}
 				
 				// 子要素として要素を追加する

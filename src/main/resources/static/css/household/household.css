@@ -726,6 +726,8 @@ footer {
 	color: #666;
 }
 
+
+
 /* 以下、householdDetails.html */
 .cf-btn-to-top {
 	opacity: 0;
@@ -792,6 +794,11 @@ footer {
 
 .subnav-unactive:hover {
 	text-decoration: underline;
+}
+
+.cf-btn-to-top:hover {
+	cursor: pointer;
+	background-color: #FFC7AF;
 }
 
 .col-custom-wrapper {
@@ -947,7 +954,7 @@ footer {
 	opacity: 0.7;
 }
 
-.is-detail-disabled-sunday {
+.disabled-sunday {
 	color: red;
 	background-color: #DDDDDD;
 	border-width: 1px 0 0 1px;
@@ -955,7 +962,7 @@ footer {
 	opacity: 0.7;
 }
 
-.is-detail-disabled-saturday {
+.disabled-saturday {
 	color: #0000FF;
 	background-color: #DDDDDD;
 	border-width: 1px 0 0 1px;
@@ -963,22 +970,65 @@ footer {
 	opacity: 0.7;
 }
 
-.calendar_detail_td_sunday {
+.td_sunday {
 	color: red;
 }
 
-.calendar_detail_td_saturday {
+.td_saturday {
 	color: #0000FF;
 }
 
 .cal-detail-table tbody>tr>td {
-	padding: 0 2px 5px 2px;
+	border-top-width: 0;
+	border-width: 1px 1px 0 1px;
+	padding: 0;
+    vertical-align: top;
+	width: 100px;
+	height: 80px;
+	position: relative;
+}
+
+.day-num {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.day-num div {
+	padding: 0 2px;
+	margin-bottom: 5px;
+	font-size: 15px;
+}
+
+.day-count-field {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.day-count-field div {
+	padding: 0 2px;
+	margin-bottom: 5px;
+	font-size: 15px;
+}
+
+.calendar-amount {
+	clear: both;
+	height: 100%;
+	padding: 2px 2px 1px;
+	margin-bottom: 10px;
+}
+
+.calendar-amount div {
+	font-size: 12px;
 }
 
 .cal-detail-table tbody>tr>td>div {
     padding: 0 2px;
-    font-size: 15px;
-    margin-bottom: 10px;
+}
+
+.day-num-link-pen {
+	position: absolute;
+	bottom: 0;
+	right: 2px;
 }
 
 .detail-cal-icon-link i {
