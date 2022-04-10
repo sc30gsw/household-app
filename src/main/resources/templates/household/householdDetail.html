@@ -105,12 +105,15 @@
 										</thead>
 										<tbody th:if="${monthlySumHousehold != null}">
 											<tr>
-												<td th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
+												<td th:if="${monthlySumHousehold.deposit != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
+												<td th:if="${monthlySumHousehold.deposit == 0}">0円</td>
 												<td>ー</td>
-												<td th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlySumHousehold.payment != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlySumHousehold.payment == 0}">0円</td>
 												<td>＝</td>
-												<td th:if="${monthlyHouseholdCalculated < 0}" class="minus-color" th:text="'-' + ${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
-												<td th:if="${monthlyHouseholdCalculated > 0}" class="plus-color" th:text = "${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated < 0 && monthlyHouseholdCalculated != 0}" class="minus-color" th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated > 0 && monthlyHouseholdCalculated != 0}" class="plus-color" th:text = "${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlyHouseholdCalculated == 0}">0円</td>
 											</tr>
 										</tbody>
 										<tbody th:if="${monthlySumHousehold == null}">
