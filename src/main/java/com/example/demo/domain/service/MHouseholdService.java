@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.app.MHousehold.controller.MHouseholdCondition;
 import com.example.demo.common.constants.CategoryConstants;
 import com.example.demo.domain.entity.MHousehold;
+import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
 import com.example.demo.domain.repository.MHouseholdRepository;
 
@@ -124,7 +125,7 @@ public class MHouseholdService {
 	 * 
 	 * @param condition 家計簿検索条件
 	 * @param loginUser ログインユーザー
-	 * @return
+	 * @return 月次家計簿マスタリスト
 	 */
 	public List<MHousehold> getMonthlyHouseholdList(MHouseholdCondition condition,
 			@AuthenticationPrincipal LoginUser loginUser) {
@@ -135,7 +136,7 @@ public class MHouseholdService {
 		// 検索条件を設定する
 		conditionSetting(condition, userId);
 
-		// 月次家計簿集計リストを取得
+		// 月次家計簿リストを取得
 		val monthlyHouseholdList = repository.monthlyGetHouseholdList(condition);
 
 		// カテゴリーコードを設定する
@@ -144,6 +145,68 @@ public class MHouseholdService {
 		log.trace("{}", "月次家計簿リスト取得処理が完了しました");
 
 		return monthlyHouseholdList;
+	}
+
+	/**
+	 * 月次家計簿集計検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタ
+	 */
+	public MHousehold getSearchMonthlySumHousehold(DetailHouseholdConditionForm form, MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次家計簿集計検索処理を開始します");
+		
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+		
+		// 月次家計簿集計を取得
+		val monthlySearchSumHousehold = repository.monthlyGetSumHousehold(condition);
+		
+		log.trace("{}", "月次家計簿集計検索処理が完了しました");
+		
+		return monthlySearchSumHousehold;
+	}
+
+	/**
+	 * 月次家計簿リスト検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 月次家計簿マスタリスト
+	 */
+	public List<MHousehold> getSearchMonthlyHouseholdList(DetailHouseholdConditionForm form,
+			MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次家計簿リスト検索処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+
+		// 月次家計簿リストを取得
+		val monthlySearchHouseholdList = repository.monthlyGetHouseholdList(condition);
+
+		// カテゴリーコードを設定する
+		settingCategoryCode(monthlySearchHouseholdList);
+
+		log.trace("{}", "月次家計簿リスト検索処理が完了しました");
+
+		return monthlySearchHouseholdList;
+
 	}
 
 	/**
