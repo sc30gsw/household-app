@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.domain.entity.MHousehold;
 import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
 import com.example.demo.domain.service.LoginUser;
@@ -157,10 +158,13 @@ public class MHouseholdController {
 		log.trace("{}", "月次家計簿集計取得処理の呼び出しを開始します");
 		val monthlySumHousehold = service.getSumMonthlyHousehold(condition, loginUser);
 		log.trace("{}", "月次家計簿集計取得処理の呼び出しが完了しました");
-		val monthlyHouseholdSumDeposit = monthlySumHousehold.getDeposit();
-		val monthlyHouseholdSumPayment = monthlySumHousehold.getPayment();
-		// 月次家計簿集計の合計を算出
-		val monthlyHouseholdCalculated = monthlyHouseholdSumDeposit - monthlyHouseholdSumPayment;
+		// 月次家計簿集計がnullでない場合
+		if (monthlySumHousehold != null) {
+			// 月次家計簿集計の合計を算出
+			val monthlyHouseholdCalculated = householdSumCalc(monthlySumHousehold);
+			// 月次家計簿集計の合計をModelに登録
+			model.addAttribute("monthlyHouseholdCalculated", monthlyHouseholdCalculated);
+		}
 
 		// 月次家計簿リスト取得処理の呼び出し
 		log.trace("{}", "月次家計簿リスト取得処理の呼び出しを開始します");
@@ -185,13 +189,11 @@ public class MHouseholdController {
 
 		// 月次家計簿集計をModelに登録
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
-		// 月次家計簿集計の剛系をModelに登録
-		model.addAttribute("monthlyHouseholdCalculated", monthlyHouseholdCalculated);
 		// 家計簿詳細検索条件フォームをModelに登録
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
 		model.addAttribute("startDate", condition.getStartDate());
-		// 月次家計簿集計リストをModelに登録
+		// 月次家計簿リストをModelに登録
 		model.addAttribute("householdList", monthlyHouseholdList);
 		// 重複を除いたカテゴリーコードをModelに登録
 		model.addAttribute("categoryCodeList", distinctCategoryCode);
@@ -199,5 +201,63 @@ public class MHouseholdController {
 		model.addAttribute("subCategoryNameList", distinctSubCategoryName);
 
 		return "household/householdDetail";
+	}
+
+	/**
+	 * 家計簿詳細を検索する処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param model
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return household/householdDetail
+	 */
+	@PostMapping("/detail/search")
+	public String postHouseholdDetailSearch(DetailHouseholdConditionForm form, Model model,
+			MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		// フォームから月の初日を取得
+		val formStartDate = form.getStartDate();
+
+		log.trace("{}", "月次家計簿集計検索処理の呼び出しを開始します");
+		val monthlySumHousehold = service.getSearchMonthlySumHousehold(form, condition, loginUser);
+		log.trace("{}", "月次家計簿集計検索処理の呼び出しが完了しました");
+
+		// 月次家計簿集計がnullでない場合
+		if (monthlySumHousehold != null) {
+			// 月次家計簿集計の合計を算出
+			val monthlyHouseholdCalculated = householdSumCalc(monthlySumHousehold);
+			// 月次家計簿集計の合計をModelに登録
+			model.addAttribute("monthlyHouseholdCalculated", monthlyHouseholdCalculated);
+		}
+		log.trace("{}", "月次家計簿リスト検索処理の呼び出しを開始します");
+		val monthlyHouseholdList = service.getSearchMonthlyHouseholdList(form, condition, loginUser);
+		log.trace("{}", "月次家計簿リスト検索処理の呼び出しが完了しました");
+
+		// フォームをModelに登録
+		model.addAttribute("form", form);
+		// 月の初日をModelに登録
+		model.addAttribute("startDate", formStartDate);
+		// 月次家計簿集計をModelに登録
+		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
+		// 月次家計簿リストをModelに登録
+		model.addAttribute("householdList", monthlyHouseholdList);
+
+		return "household/householdDetail";
+	}
+
+	/**
+	 * 月次家計簿集計の合計を算出する処理
+	 * 
+	 * @param household 家計簿マスタ
+	 * @return 月次家計簿集計の合計
+	 */
+	private Integer householdSumCalc(MHousehold household) {
+		val deposit = household.getDeposit();
+		val payment = household.getPayment();
+		val calc = deposit - payment;
+
+		return calc;
 	}
 }
