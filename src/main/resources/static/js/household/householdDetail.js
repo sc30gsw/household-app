@@ -12,9 +12,9 @@ function toTop() {
 
 	// 縦スクロールが10の位置に来たときに要素の表示・非表示を行う
 	window.addEventListener('scroll', function() {
-		if (window.pageYOffset > 10) {
+		if (window.pageYOffset > 240) {
 			toTopBtn.style.opacity = '1';
-		} else if (window.pageYOffset < 10) {
+		} else if (window.pageYOffset < 240) {
 			toTopBtn.style.opacity = '0';
 		}
 	});
