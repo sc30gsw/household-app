@@ -116,13 +116,14 @@
 									<input type="hidden" id="cal-date-input"
 										th:field="*{activeDate}">
 									<div class="input-date">
-										<p class="text-and-icon" id="cal-text"
+										<span class="text-and-icon" id="cal-text"
 											data-date-format="yyyy/mm/dd">
 											日付 <span id="date-span"></span><i
 												class="icon-calendar fas fa-calendar-alt"></i>
 										<!-- カレンダー描画部 -->
 										<div id="calendar" class="draw-cal dropdown-menu"></div>
-										</p>
+										</span>
+										<div style="margin-bottom: 10px;"></div>
 									</div>
 									<div class="left-column">
 										<input type="text" class="align-left"

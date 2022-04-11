@@ -959,19 +959,11 @@ footer {
     padding: 15px 0 0 15px;
 }
 
-.text-and-icon span {
+.text-and-icon {
 	cursor: pointer;
 }
 
-.text-and-icon i {
-	cursor: pointer;
-}
-
-.text-and-icon-second span {
-	cursor: pointer;
-}
-
-.text-and-icon-second i {
+.text-and-icon-second {
 	cursor: pointer;
 }
 
@@ -1025,7 +1017,7 @@ footer {
 .calendar-panel-input-second {
 	width: 110px;
 	vertical-align: top;
-	margin-bottom: 18px;
+	margin-bottom: 15px;
 	height: 18px;
     padding: 15px 6px;
     background-color: #fff;
