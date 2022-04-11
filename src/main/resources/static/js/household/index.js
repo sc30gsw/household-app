@@ -177,6 +177,11 @@ function subMenu() {
 
 // hiddenタイプの入力欄にカテゴリーのID値を設定する処理
 function getAnchorValue() {
+	// hiddenタイプのカテゴリーID入力要素を取得
+	const categoryInput = document.querySelector('.category-input')
+	// デフォルトでカテゴリーID入力値を「70(未分類)」とする
+	categoryInput.value = 70
+	
 	document.addEventListener('click', function(e) {
 		// 大カテゴリーのドロップダウンボタンの要素を取得
 		const dropdownMenuLink = document.getElementById('dropdownMenuLink')
@@ -184,9 +189,7 @@ function getAnchorValue() {
 		const dropdownSecondary = document.getElementById('js-middle-category-selected')
 		// 大カテゴリーのリンクを配列で取得
 		const links = document.querySelectorAll('.c_name')
-		// hiddenタイプのカテゴリーID入力要素を取得
-		const categoryInput = document.getElementById('categoryId')
-
+		
 		// 大カテゴリーのみ選択された時のドロップダウンの動作と入力欄の値の設定
 		for (let i = 0; i < links.length; i++) {
 
@@ -204,7 +207,7 @@ function getAnchorValue() {
 					// カテゴリーID入力欄に選択された値を設定する
 					categoryInput.value = links[i].dataset.value
 				})
-			}
+			} 
 		}
 
 		// クリックされた要素がサブカテゴリーのリンクだった場合の処理
@@ -335,6 +338,6 @@ function getAnchorValue() {
 			// クリックされたサブカテゴリーのdata-value属性を入力欄の値に設定する
 			categoryInput.value = e.target.closest('.m_c_name').dataset.value
 
-		}
+		} 
 	})
 }
