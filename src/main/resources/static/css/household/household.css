@@ -845,7 +845,31 @@ footer {
     outline: none;
 	width: 600px;
 	min-height: 550px;
-	display: block;
+	animation-name: modalopen;
+  	animation-duration: 1s;
+}
+
+.modal-fade-out {
+	animation-name: modalFadeOut;
+	animation-fill-mode: both;
+}
+
+@keyframes modalopen {
+  from {
+  		opacity: 0
+  	}
+  to {
+  		opacity: 1
+  	}
+}
+
+@keyframes modalFadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
 .modal-header {

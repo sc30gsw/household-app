@@ -55,6 +55,8 @@ document.addEventListener('click', function(e) {
 		container.style.opacity = "0.1";
 		// <footer>部の透明度の変更
 		footer.style.opacity = "0.1";
+		// モーダルウィンドウからフェードアウトのアニメーションを除去する
+		modal.classList.remove('modal-fade-out');
 		// モーダルウィンドウを表示する
 		modal.style.display = "block";
 		
@@ -70,7 +72,11 @@ document.addEventListener('click', function(e) {
 		container.style.opacity = "1";
 		// <footer>の透明度をもとに戻す
 		footer.style.opacity = "1";
-		// モーダルウィンドウを非表示にする
-		modal.style.display = "none";
+		// モーダルウィンドウにクラス属性を追加
+		modal.classList.add('modal-fade-out');
+		// モーダルウィンドウを非表示にする(フェードアウトのアニメーションを付与)
+		setTimeout(function () {
+			modal.style.display = "none";
+		}, 1000);
 	} 
 });
