@@ -164,7 +164,8 @@ function drawCalendar() {
 					}
 					// 曜日が日曜の場合
 					if (d === 0) {
-						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -181,7 +182,8 @@ function drawCalendar() {
 										
 						// 曜日が土曜の場合
 					} else if (d === 6) {
-						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -198,7 +200,8 @@ function drawCalendar() {
 										
 						// 土日以外の曜日の場合
 					} else {
-						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -225,7 +228,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
@@ -241,7 +245,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
@@ -256,7 +261,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
