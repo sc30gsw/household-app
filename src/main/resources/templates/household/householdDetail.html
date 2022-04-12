@@ -23,6 +23,7 @@
 <script th:src="@{/js/household/householdDetail.js}"></script>
 <script th:src="@{/js/household/modalAndTab.js}"></script>
 <script th:src="@{/js/household/categoryDetail.js}"></script>
+<script th:src="@{/js/household/categoryDetailSec.js}"></script>
 </head>
 <body id="detail-body">
 	<div class="wrapper" id="wrap">
@@ -45,12 +46,14 @@
 				<div class="panel-group">
 					<div class="panel tab-important is-show">
 						<!-- 支出入力セクション -->
-						<form class="tab-important-form">
+						<form class="tab-important-form" th:object="${easyHouseholdForm}"
+							th:action="@{/household/modalPayment}" method="post">
 							<div class="panel-control-group">
 								<div class="panel-left-column">日付</div>
 								<div class="panel-right-column panel-cal-column">
 									<div>
 										<input type="text" class="calendar-panel-input"
+											id="activeDate" name="activeDate"
 											th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}">
 									</div>
 									<!-- カレンダー描画部 -->
@@ -69,8 +72,8 @@
 								<div class="panel-right-column">
 									<div class="input-prepend input-append">
 										<span class="panel-add-minus-plus">-</span> <input type="text"
-											class="payment-panel-input"> <span
-											class="panel-add-money">円</span>
+											class="payment-panel-input" id="payment" name="payment">
+										<span class="panel-add-money">円</span>
 									</div>
 								</div>
 							</div>
@@ -78,7 +81,8 @@
 								<div class="panel-left-column lctg-mctg-panel">
 									項目 <span class="panel-category-text">※項目を選択しない場合は、未分類となります。</span>
 								</div>
-								<input type="hidden" class="category-input">
+								<input type="hidden" class="category-input" id="categoryId"
+									name="categoryId">
 								<div class="panel-right-column">
 									<!-- カテゴリードロップダウンメニュー部 -->
 									<div class="panel-category-column">
@@ -90,7 +94,7 @@
 										</div>
 									</div>
 									<input type="text" class="panel-note-input"
-										placeholder="内容をご入力下さい(任意)">
+										placeholder="内容をご入力下さい(任意)" id="note" name="note">
 								</div>
 							</div>
 							<div class="panel-submit-box">
@@ -100,12 +104,14 @@
 					</div>
 					<div class="panel tab-info">
 						<!-- 収入入力セクション -->
-						<form class="tab-info-form">
+						<form class="tab-info-form" th:object="${modalDepositForm}"
+							th:action="@{/household/modalDeposit}" method="post">
 							<div class="panel-control-group">
 								<div class="panel-left-column">日付</div>
 								<div class="panel-right-column panel-cal-column">
 									<div>
 										<input type="text" class="calendar-panel-input-second"
+											id="activeDate" name="activeDate"
 											th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}">
 									</div>
 									<!-- カレンダー描画部 -->
@@ -126,8 +132,8 @@
 								<div class="panel-right-column">
 									<div class="input-prepend input-append">
 										<span class="panel-add-minus-plus">+</span> <input type="text"
-											class="payment-panel-input"> <span
-											class="panel-add-money">円</span>
+											id="deposit" name="deposit" class="payment-panel-input">
+										<span class="panel-add-money">円</span>
 									</div>
 								</div>
 							</div>
@@ -135,7 +141,8 @@
 								<div class="panel-left-column left-column-info">
 									項目 <span class="panel-category-text">※項目を選択しない場合は、未分類となります。</span>
 								</div>
-								<input type="hidden" class="category-input">
+								<input type="hidden" class="category-input-sec" id="cateogryId"
+									name="categoryId">
 								<div class="panel-right-column">
 									<!-- カテゴリードロップダウンメニュー部 -->
 									<div class="panel-category-column">
@@ -147,7 +154,7 @@
 										</div>
 									</div>
 									<input type="text" class="panel-note-input"
-										placeholder="内容をご入力下さい(任意)">
+										placeholder="内容をご入力下さい(任意)" id="note" name="note">
 								</div>
 							</div>
 							<div class="panel-submit-box">
@@ -290,12 +297,12 @@
 						</section>
 					</section>
 				</div>
-				
+
 				<!-- 月次収支詳細セクション -->
 				<section class="in_out">
-				<a class="pull-right more-link" th:href="@{/household/edit}">
-					<i class="fas fa-arrow-circle-right"></i>編集はこちらから
-				</a>
+					<a class="pull-right more-link" th:href="@{/household/edit}"> <i
+						class="fas fa-arrow-circle-right"></i>編集はこちらから
+					</a>
 					<h1 class="heading-normal">収入・支出詳細</h1>
 					<div class="calc-field">
 						<button class="cf-new-btn"
@@ -400,6 +407,7 @@
 		tabMenu();
 		getAnchorValue();
 		getDetailAnchorValue();
+		getDetailAnchorValueSec();
 	</script>
 	<script th:src="@{/js/household/inputCalendar.js}"></script>
 	<script th:src="@{/js/household/inputCalendarSec.js}"></script>
