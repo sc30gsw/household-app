@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HouseHold</title>
+<!-- bootstarpのcss読み込み -->
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<!-- css読み込み -->
+<link rel="stylesheet" th:href="@{/css/household/household.css}">
+<!-- bootstrapのjs読み込み -->
+<script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"></script>
+<script
+	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
+<!-- fontawesome読み込み -->
+<script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
+<!-- JavaScrpt読み込み -->
+<script th:src="@{/js/household/index.js}"></script>
+<script th:src="@{/js/household/calendarDetail.js}"></script>
+<script th:src="@{/js/household/householdDetail.js}"></script>
+<script th:src="@{/js/household/modalAndTab.js}"></script>
+<script th:src="@{/js/household/categoryDetail.js}"></script>
+<script th:src="@{/js/household/categoryDetailSec.js}"></script>
+</head>
+<body id="detail-body">
+	<div class="wrapper" id="wrap">
+		<!-- モーダルウィンドウセクション -->
+		<div th:replace="~{/layout/modal::modal}"></div>
+		<header class="header">
+			<!-- メインヘッダー呼び出し -->
+			<div th:replace="~{layout/householdHeader::householdHeader}"></div>
+			<!-- ヘッダーメニューバー -->
+			<div class="global-menu">
+				<ul class="nav-horizontal">
+					<li class="global-menu-item"><a class="unactive"
+						th:href="@{/household/index}"> <i
+							class="unactive-icon fas fa-home"></i>ホーム
+					</a></li>
+					<li class="global-menu-item"><a class="active"
+						th:href="@{/household/detail}"> <i
+							class="active-icon fas fa-chart-pie"></i>家計
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-chart-bar"></i>予算
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-coins"></i>資産
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-cog"></i>設定
+					</a></li>
+					<li class="global-menu-item"><a class="unactive" href="#">
+							<i class="unactive-icon fas fa-ellipsis-h"></i>
+					</a></li>
+				</ul>
+			</div>
+			<div class="pfm-subnav">
+				<!-- ヘッダーサブメニューバー -->
+				<ul class="subnav-horizontal">
+					<li class="subnav-item"><a class="subnav-unactive"
+						th:href="@{/household/detail}">家計簿</a></li>
+					<li class="subnav-item"><a class="subnav-active"
+						th:href="@{/household/detail/chart}">収支内訳</a></li>
+				</ul>
+			</div>
+		</header>
+		<div class="container-large">
+			<div class="main-container">
+				<section id="summary-info">
+					<div class="pull-right">
+						<!-- 月次収支検索ボックス -->
+						<form id="monthly-form" method="post" th:object="${form}"
+							th:action="@{/household/detail/chart/search}">
+							<input type="hidden" th:field="*{startDate}"> <input
+								type="hidden" th:field="*{endDate}"> <select
+								class="search-year-filter">
+								<option
+									th:text="${#calendars.format(#calendars.createNow(), 'yyyy年')}"
+									th:value="${#calendars.format(#calendars.createNow(), 'yyyy')}"></option>
+								<option th:each="i : ${#numbers.sequence(2018, 2027)}"
+									th:value="${i}" th:text="${i} + '年'"></option>
+							</select> <select class="search-month-filter">
+								<option
+									th:text="${#calendars.format(#calendars.createNow(), 'M月')}"
+									th:value="${#calendars.format(#calendars.createNow(), 'M')}"></option>
+								<option th:each="i : ${#numbers.sequence(1, 12)}"
+									th:value="${i}" th:text="${i} + '月'"></option>
+							</select>
+							<button id="search-date-btn" type="submit">検索する</button>
+						</form>
+					</div>
+					<div id="draw-date-range" class="date-range"></div>
+					<div th:replace="~{layout/monthlyTotal::monthlyTotalTable}"></div>
+				</section>
+				<section id="cache-flow">
+					<h1 class="heading-normal">支出</h1>
+					<p style="margin-left: 5px;">
+						月々の支出内訳をご覧いただけます。 <br> 他の月をご覧になりたい場合は、上部にある検索欄で選択してください。 <br>
+						<a th:href="@{/household/edit}">家計簿の編集</a> で、計算対象の変更が行えます。
+					</p>
+					<div class="heading-radius-box"
+						th:text="'合計 : ' + ${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></div>
+					<button class="cf-new-btn"
+						style="padding: 5px 20px; width: 140px; margin-left: 10px;">
+						<i class="fas fa-pen"></i>手入力
+					</button>
+					<div class="cashflow-summary">
+						<table class="table table-out">
+							<tbody>
+								<tr>
+									<td style="margin: 0; padding: 0; text-align: center; vertical-align: top; border: none;">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th style="width: 300px; height: 10px; text-align: center;">項目</th>
+													<th style="width: 120px; height: 10px; text-align: cneter;">金額</th>
+													<th style="width: 80px; height: 10px; text-align: center">割合</th>
+												</tr>
+											</thead>
+											<tbody class="outgo">
+												<tr class="outgo-sum">
+													<td class="outgo-name">食費 合計</td>
+													<td class="outgo-number">10,000円</td>
+													<td class="outgo-number">10.5%</td>
+												</tr>
+												<tr class="outgo">
+													<td class="outgo-name">食費</td>
+													<td class="outgo-number">7,800円</td>
+													<td class="outbo-number">0.58%</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="detail-pie-chart"
+							style="width: 450px; height: 500px; vertical-align: middle; display: table-cell;">
+							<canvas id="detailPie"></canvas>
+							<div style="text-align: right; margin: 15px 25px 15px 0;">
+							<a class="pull-right more-link" th:href="@{/household/detail}">
+								<i class="fas fa-arrow-circle-right"></i>支出詳細へ
+							</a>
+						</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<div th:replace="~{layout/householdFooter::householdFooter}"></div>
+	</div>
+	<script th:inline="javascript">
+		const startDate = /*[[${startDate}]]*/"startDate";
+		drawDetailDate();
+		inputDate();
+		tabMenu();
+		subMenu();
+		subMenuSec();
+		getAnchorValue();
+		getDetailAnchorValueSec();
+	</script>
+	<script th:src="@{/js/household/inputCalendar.js}"></script>
+	<script th:src="@{/js/household/inputCalendarSec.js}"></script>
+</body>
+</html>
