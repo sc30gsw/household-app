@@ -329,8 +329,62 @@ public class MHouseholdController {
 		model.addAttribute("monthlySumHousehold", monthlyHouseholdList);
 		// 月次家計簿リストをModelに登録
 		model.addAttribute("householdList", monthlyHouseholdList);
-		
+
 		return "household/edit";
+	}
+
+	/**
+	 * 家計簿を更新し、編集画面にリダイレクトする処理
+	 * 
+	 * @param updateForm 家計簿更新フォーム
+	 * @param result
+	 * @param model
+	 * @param redirectAttributes
+	 * @return household/edit
+	 * @throws Exception
+	 */
+	@PostMapping("/update")
+	public String postMHouseholdUpdate(@ModelAttribute("updateForm") @Validated UpdateHouseholdForm updateForm,
+			BindingResult result, RedirectAttributes redirectAttributes) throws Exception {
+
+		log.info("バリデーションチェック開始");
+		if (result.hasErrors()) {
+			// フラッシュメッセージをリダイレクト先(/edit)に渡す
+			redirectAttributes.addFlashAttribute("errorMessage", "更新に失敗しました(支出・収入のいずれか、日付、カテゴリーを選択してください)");
+			// 編集画面に戻る
+			return "redirect:/household/edit";
+		}
+		log.info("バリデーションチェックが完了しました");
+
+		log.trace("{}", "家計簿更新処理の呼び出しを開始します");
+		service.updateInputMHousehold(updateForm);
+		log.info(updateForm.toString());
+		log.trace("{}", "家計簿更新処理の呼び出しが完了しました");
+		
+		// フラッシュメッセージをリダイレクト先(/edit)に渡す
+		redirectAttributes.addFlashAttribute("updateMessage", "家計簿を更新しました");
+
+		return "redirect:/household/edit";
+	}
+
+	/**
+	 * 家計簿を削除し、編集画面にリダイレクトする処理
+	 * 
+	 * @param deleteForm 家計簿削除フォーム
+	 * @param model
+	 * @param redirectAttributes
+	 * @return household/edit
+	 */
+	@PostMapping("/delete")
+	public String postMHouseholdDelete(DeleteHouseholdForm deleteForm, RedirectAttributes redirectAttributes) {
+
+		log.trace("{}", "家計簿削除処理の呼び出しを開始します");
+		service.deleteInputMHouhosed(deleteForm);
+		log.trace("{}", "家計簿削除処理の呼び出しが完了しました");
+
+		// フラッシュメッセージをリダイレクト先(/edit)に渡す
+		redirectAttributes.addFlashAttribute("deleteMessage", "家計簿を削除しました");
+		return "redirect:/household/edit";
 	}
 
 	/**
