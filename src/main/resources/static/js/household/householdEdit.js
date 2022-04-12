@@ -209,6 +209,11 @@ function checkBox(obj) {
 		that.checked = true;
 	}
 	
+	// セクション要素を取得
+	const section = document.getElementById('edit-form-section');
+	// セクション要素を表示する
+	section.style.display = "block";
+	
 	// フォームの要素を取得
 	const householdIdInput = document.getElementById('householdId')
 	const dateInput = document.getElementById('activeDate');
@@ -276,4 +281,12 @@ function checkBox(obj) {
 	noteInput.value = tableNote;
 	dropdownMenuLink.textContent = tableLCategory;
 	dropdownSubLink.textContent = tableMCategory;
+	
+	// ドロップダウンのスタイルの変更
+	dropdownMenuLink.style.backgroundColor ="#f7f7f7";
+	dropdownMenuLink.style.color = "#333";
+	dropdownMenuLink.style.borderColor = "rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)";
+	dropdownSubLink.style.backgroundColor = "#f7f7f7";
+	dropdownSubLink.style.color = "#333";
+	dropdownSubLink.style.borderColor = "rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)";
 }
