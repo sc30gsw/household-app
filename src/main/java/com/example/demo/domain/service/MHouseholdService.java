@@ -14,9 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.app.MHousehold.controller.MHouseholdCondition;
 import com.example.demo.common.constants.CategoryConstants;
+import com.example.demo.common.exception.BusinessException;
 import com.example.demo.domain.entity.MHousehold;
+import com.example.demo.domain.form.DeleteHouseholdForm;
 import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
+import com.example.demo.domain.form.UpdateHouseholdForm;
 import com.example.demo.domain.repository.MHouseholdRepository;
 
 import lombok.val;
@@ -207,6 +210,63 @@ public class MHouseholdService {
 
 		return monthlySearchHouseholdList;
 
+	}
+	
+	/**
+	 * 家計簿更新処理
+	 * 
+	 * @param form 家計簿更新フォーム
+	 * @throws Exception
+	 */
+	public void updateInputMHousehold(UpdateHouseholdForm form) throws Exception {
+		log.trace("{}", "家計簿更新処理を開始します");
+		
+		MHousehold household = new MHousehold();
+		
+		// 現在日時を取得
+		LocalDateTime now = LocalDateTime.now();
+
+		// フォームを家計簿マスタにコピー
+		BeanUtils.copyProperties(form, household);
+
+		// フォームの値を数値に変換して設定
+		household.setPayment(Integer.parseInt(form.getPayment()));
+		household.setDeposit(Integer.parseInt(form.getDeposit()));
+		
+		// 支出金額と収入金額の両方が0以下の場合
+		if (0 >= household.getPayment() && 0 >= household.getDeposit()) {
+			throw new BusinessException("支出金額・収入金額の更新時にエラーが発生しました");
+		}
+
+		// 出金日がnullの場合、今日の日付を設定する
+		if (household.getActiveDate() == null) {
+			long miliseconds = System.currentTimeMillis();
+			Date date = new Date(miliseconds);
+
+			// 出金日を設定
+			household.setActiveDate(date);
+		}
+		
+		// 更新日時を設定
+		household.setUpdateDate(now);
+
+		// 家計簿更新処理を呼び出し
+		log.info("{}", "家計簿更新処理を呼び出し");
+		repository.updateOneMHousehold(household);
+		log.trace("{}", "家計簿更新処理が完了しました");
+	}
+	
+	/**
+	 * 家計簿削除処理
+	 * 
+	 * @param form 家計簿削除フォーム
+	 */
+	public void deleteInputMHouhosed(DeleteHouseholdForm form) {
+		log.trace("{}", "家計簿削除処理を開始します");
+		
+		log.info("{}", "家計簿削除処理を呼び出し");
+		repository.deleteOneMHousehold(form.getHouseholdId());
+		log.trace("{}", "家計簿削除処理が完了しました");
 	}
 
 	/**
