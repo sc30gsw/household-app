@@ -116,4 +116,41 @@
  			order by mh.active_date desc;
  	</select>
  	
+ 	<!-- 家計簿更新処理 -->
+ 	<update id="updateMHousehold">
+ 		update
+ 				M_HOUSEHOLD
+ 			<set>
+ 				<if test="deposit != null">
+ 					deposit = #{deposit, jdbcType=INTEGER},
+ 				</if>
+ 				<if test="payment != null">
+ 					payment = #{payment, jdbcType=INTEGER},
+ 				</if>
+ 				<if test="note != null">
+ 					note = #{note, jdbcType=VARCHAR},
+ 				</if>
+ 				<if test="activeDate != null">
+ 					active_date = #{activeDate, jdbcType=DATE},
+ 				</if>
+ 				<if test="categoryId != null">
+ 					category_id = #{categoryId, jdbcType=INTEGER},
+ 				</if>
+ 				<if test="updateDate != null">
+ 					update_date = #{updateDate, jdbcType=TIMESTAMP},
+ 				</if>
+ 			</set>
+ 			where
+ 				household_id = #{householdId, jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<!-- 家計簿削除処理 -->
+ 	<delete id="deleteMHousehold">
+ 		delete
+ 			from
+ 				M_HOUSEHOLD
+ 			where
+ 				household_id = #{householdId, jdbcType=INTEGER}
+ 	</delete>
+ 	
  </mapper>

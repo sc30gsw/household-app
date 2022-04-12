@@ -44,4 +44,20 @@ public interface MHouseholdMapper {
 	 * @return 家計簿マスタリスト
 	 */
 	public List<MHousehold> monthlyHouseholdList(MHouseholdCondition condition);
+	
+	/**
+	 * 家計簿更新処理
+	 * 
+	 * @param householdId 家計簿ID
+	 * @return
+	 */
+	public int updateMHousehold(MHousehold household);
+	
+	/**
+	 * 家計簿削除処理
+	 * 
+	 * @param householdId 家計簿ID
+	 * @return
+	 */
+	public int deleteMHousehold(Integer householdId);
 }
