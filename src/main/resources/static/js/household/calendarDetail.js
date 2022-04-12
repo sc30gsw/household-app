@@ -351,9 +351,9 @@ function drawDetailDate() {
 		month = '0' + month.replace(/-/g, '');
 	}
 
-	// カレンダーを表示する処理
+	// 年月日を表示する処理
 	function showDetailDate(year, month) {
-		// カレンダーを作成する関数の呼び出し
+		// 年月日を作成する関数の呼び出し
 		const drawDateHtml = createDetailDate(year, month)
 
 		// div要素作成
@@ -363,7 +363,7 @@ function drawDetailDate() {
 		// div要素の子要素にカレンダーを設定
 		div.innerHTML = drawDateHtml
 
-		// <div id="detail-calendar"></div>内に上記で生成した要素を入れる
+		// <div id="draw-date-range"></div>内に上記で生成した要素を入れる
 		document.querySelector('#draw-date-range').appendChild(div)
 
 		month++
@@ -374,7 +374,7 @@ function drawDetailDate() {
 		}
 	}
 
-	// カレンダーを作成する関数
+	// 年月日を作成する関数
 	function createDetailDate(year, month) {
 		// 月の最初の日を取得
 		const startDate = new Date(year, month - 1, 1)
@@ -404,13 +404,13 @@ function drawDetailDate() {
 	const submit = document.getElementById('search-date-btn');
 
 	submit.addEventListener('click', function() {
-		// <div id="calendar"></div>内のHTMLを空にする
+		// <div id="draw-date-range"></div>内のHTMLを空にする
 		document.querySelector('#draw-date-range').innerHTML = ''
 		// 月が1月より下の場合、年から1を引いて、月を12にする
 		year = Number(selectYear.value);
 		month = Number(selectMonth.value);
 
-		// カレンダーを表示する関数の呼び出し
+		// 年月日を表示する関数の呼び出し
 		showDetailDate(year, month)
 	})
 
