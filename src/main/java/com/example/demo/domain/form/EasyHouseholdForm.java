@@ -32,6 +32,7 @@ public class EasyHouseholdForm implements Serializable {
 	private String note;
 	
 	/**出金日*/
+	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date activeDate;
 
