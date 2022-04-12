@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.domain.entity.MHousehold;
+import com.example.demo.domain.form.DeleteHouseholdForm;
 import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
+import com.example.demo.domain.form.ModalDepositForm;
+import com.example.demo.domain.form.UpdateHouseholdForm;
 import com.example.demo.domain.service.LoginUser;
 import com.example.demo.domain.service.MHouseholdService;
 
@@ -176,12 +179,7 @@ public class MHouseholdController {
 		List<String> subCategoryNameList = new ArrayList<>();
 
 		// 月次家計簿からカテゴリーコードとサブカテゴリーコードを取得し、上記リストに追加
-		monthlyHouseholdList.stream().forEach(list -> {
-			val categoryCode = list.getCategory().getCategoryCode();
-			val subCategoryName = list.getCategory().getSubCategoryName();
-			categoryCodeList.add(categoryCode);
-			subCategoryNameList.add(subCategoryName);
-		});
+		createCategoryList(monthlyHouseholdList, categoryCodeList, subCategoryNameList);
 
 		// カテゴリーコードとサブカテゴリー名のリストから重複を除外
 		List<String> distinctCategoryCode = categoryCodeList.stream().distinct().collect(Collectors.toList());
@@ -245,6 +243,234 @@ public class MHouseholdController {
 		model.addAttribute("householdList", monthlyHouseholdList);
 
 		return "household/householdDetail";
+	}
+
+	/**
+	 * モーダルウィンドウの支出金額の登録処理を行い、詳細画面にリダイレクトする処理
+	 * 
+	 * @param easyHouseholdForm 家計簿カンタン入力フォーム
+	 * @param result
+	 * @param loginUser ログインユーザー
+	 * @return household/detail
+	 */
+	@PostMapping("/modalPayment")
+	public String postModalPaymentHousehold(
+			@ModelAttribute("easyHouseholdForm") @Validated EasyHouseholdForm easyHouseholdForm, BindingResult result,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.info("{}", "バリデーションを開始します");
+		if (result.hasErrors()) {
+			// 詳細画面に遷移する
+			return "redirect:/household/detail";
+		}
+		log.info("{}", "バリデーションが完了しました");
+
+		// 家計簿カンタン入力処理の呼び出し
+		log.trace("{}", "家計簿カンタン入力処理(モーダルウィンドウ)の呼び出しを開始します");
+		service.easyInputMHousehold(easyHouseholdForm, loginUser);
+		log.info(easyHouseholdForm.toString());
+		log.trace("{}", "家計簿カンタン入力処理(モーダルウィンドウ)の呼び出しが完了しました");
+
+		return "redirect:/household/detail";
+	}
+
+	/**
+	 * モーダルウィンドウの主入金額の登録処理を行い、詳細画面にリダイレクトする処理
+	 * 
+	 * @param modalDepositForm モーダルウィンドウ用家計簿収入金額フォーム
+	 * @param result
+	 * @param loginUser ログインユーザー
+	 * @return household/detail
+	 */
+	@PostMapping("/modalDeposit")
+	public String postModalDepositHousehold(
+			@ModelAttribute("modalDepositForm") @Validated ModalDepositForm modalDepositForm, BindingResult result,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.info("{}", "バリデーションを開始します");
+		if (result.hasErrors()) {
+			// 詳細画面に遷移する
+			return "redirect:/household/detail";
+		}
+		log.info("{}", "バリデーションが完了しました");
+		
+		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しを開始します");
+		service.registDepositHousehold(modalDepositForm, loginUser);
+		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しが完了しました");
+		
+		return "redirect:/household/detail";
+	}
+
+	/**
+	 * 家計簿編集画面に遷移する処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param updateForm 家計簿更新フォームクラス
+	 * @param deleteForm 家計簿削除フォームクラス
+	 * @param model
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return household/edit
+	 */
+	@GetMapping("/edit")
+	public String getEditHousehold(DetailHouseholdConditionForm form, UpdateHouseholdForm updateForm,
+			DeleteHouseholdForm deleteForm, Model model,
+			MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser) {
+
+		// 月次家計簿リスト取得処理の呼び出し
+		log.trace("{}", "月次家計簿リスト取得処理の呼び出しを開始します");
+		val monthlyHouseholdList = service.getMonthlyHouseholdList(condition, loginUser);
+		log.trace("{}", "月次家計簿リスト取得処理の呼び出しが完了しました");
+
+		// 編集画面で検索処理を行うユーザーとログインユーザーのIDが異なる場合
+		if (condition.getUserId() != loginUser.getUser().getUserId()) {
+			// 詳細画面にリダイレクトする
+			return "redirect:/household/detail";
+		}
+
+		// カテゴリーコードとサブカテゴリー名のリストを作成
+		List<String> categoryCodeList = new ArrayList<>();
+		List<String> subCategoryNameList = new ArrayList<>();
+
+		// 月次家計簿からカテゴリーコードとサブカテゴリーコードを取得し、上記リストに追加
+		createCategoryList(monthlyHouseholdList, categoryCodeList, subCategoryNameList);
+
+		// カテゴリーコードとサブカテゴリー名のリストから重複を除外
+		List<String> distinctCategoryCode = categoryCodeList.stream().distinct().collect(Collectors.toList());
+		List<String> distinctSubCategoryName = subCategoryNameList.stream().distinct().collect(Collectors.toList());
+
+		// 家計簿詳細検索条件フォームをModelに登録
+		model.addAttribute("form", form);
+		// 家計簿更新フォームをModelに登録
+		model.addAttribute("updateForm", updateForm);
+		// 家計簿削除フォームをModelに登録
+		model.addAttribute("deleteForm", deleteForm);
+		// 月の初日をModelに登録
+		model.addAttribute("startDate", condition.getStartDate());
+		// 月次家計簿リストをModelに登録
+		model.addAttribute("householdList", monthlyHouseholdList);
+		// 重複を除いたカテゴリーコードをModelに登録
+		model.addAttribute("categoryCodeList", distinctCategoryCode);
+		// 重複を除いたサブカテゴリー名をModelに登録
+		model.addAttribute("subCategoryNameList", distinctSubCategoryName);
+
+		return "household/edit";
+	}
+
+	/**
+	 * 編集画面で家計簿詳細表を検索する処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param updateForm 家計簿更新フォーム
+	 * @param deleteForm 家計簿削除フォーム
+	 * @param model
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return household/edit
+	 */
+	@PostMapping("/edit/search")
+	public String postEditSearchHousehold(DetailHouseholdConditionForm form, UpdateHouseholdForm updateForm,
+			DeleteHouseholdForm deleteForm, Model model, MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		// フォームから月の初日を取得
+		val formStartDate = form.getStartDate();
+
+		log.trace("{}", "月次家計簿リスト検索処理の呼び出しを開始します");
+		val monthlyHouseholdList = service.getSearchMonthlyHouseholdList(form, condition, loginUser);
+		log.trace("{}", "月次家計簿リスト検索処理の呼び出しが完了しました");
+
+		// 編集画面で検索処理を行うユーザーとログインユーザーのIDが異なる場合
+		if (condition.getUserId() != loginUser.getUser().getUserId()) {
+			// 詳細画面にリダイレクトする
+			return "redirect:/household/detail";
+		}
+
+		// フォームをModelに登録
+		model.addAttribute("form", form);
+		// 月の初日をModelに登録
+		model.addAttribute("startDate", formStartDate);
+		// 家計簿更新フォームをModelに登録
+		model.addAttribute("updateForm", updateForm);
+		// 家計簿削除フォームをModelに登録
+		model.addAttribute("deleteForm", deleteForm);
+		// 月次家計簿集計をModelに登録
+		model.addAttribute("monthlySumHousehold", monthlyHouseholdList);
+		// 月次家計簿リストをModelに登録
+		model.addAttribute("householdList", monthlyHouseholdList);
+
+		return "household/edit";
+	}
+
+	/**
+	 * 家計簿を更新し、編集画面にリダイレクトする処理
+	 * 
+	 * @param updateForm 家計簿更新フォーム
+	 * @param result
+	 * @param model
+	 * @param redirectAttributes
+	 * @return household/edit
+	 * @throws Exception
+	 */
+	@PostMapping("/update")
+	public String postMHouseholdUpdate(@ModelAttribute("updateForm") @Validated UpdateHouseholdForm updateForm,
+			BindingResult result, RedirectAttributes redirectAttributes) throws Exception {
+
+		log.info("バリデーションチェック開始");
+		if (result.hasErrors()) {
+			// フラッシュメッセージをリダイレクト先(/edit)に渡す
+			redirectAttributes.addFlashAttribute("errorMessage", "更新に失敗しました(支出・収入のいずれか、日付、カテゴリーを選択してください)");
+			// 編集画面に戻る
+			return "redirect:/household/edit";
+		}
+		log.info("バリデーションチェックが完了しました");
+
+		log.trace("{}", "家計簿更新処理の呼び出しを開始します");
+		service.updateInputMHousehold(updateForm);
+		log.info(updateForm.toString());
+		log.trace("{}", "家計簿更新処理の呼び出しが完了しました");
+
+		// フラッシュメッセージをリダイレクト先(/edit)に渡す
+		redirectAttributes.addFlashAttribute("updateMessage", "家計簿を更新しました");
+
+		return "redirect:/household/edit";
+	}
+
+	/**
+	 * 家計簿を削除し、編集画面にリダイレクトする処理
+	 * 
+	 * @param deleteForm 家計簿削除フォーム
+	 * @param model
+	 * @param redirectAttributes
+	 * @return household/edit
+	 */
+	@PostMapping("/delete")
+	public String postMHouseholdDelete(DeleteHouseholdForm deleteForm, RedirectAttributes redirectAttributes) {
+
+		log.trace("{}", "家計簿削除処理の呼び出しを開始します");
+		service.deleteInputMHouhosed(deleteForm);
+		log.trace("{}", "家計簿削除処理の呼び出しが完了しました");
+
+		// フラッシュメッセージをリダイレクト先(/edit)に渡す
+		redirectAttributes.addFlashAttribute("deleteMessage", "家計簿を削除しました");
+		return "redirect:/household/edit";
+	}
+
+	/**
+	 * 家計簿マスタリストからカテゴリーコードとサブカテゴリー名を抽出しリストを作成する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @param categoryCodeList カテゴリーコードリスト
+	 * @param subCategoryNameList サブカテゴリー名リスト
+	 */
+	private void createCategoryList(List<MHousehold> householdList, List<String> categoryCodeList,
+			List<String> subCategoryNameList) {
+		householdList.stream().forEach(list -> {
+			val categoryCode = list.getCategory().getCategoryCode();
+			val subCategoryName = list.getCategory().getSubCategoryName();
+			categoryCodeList.add(categoryCode);
+			subCategoryNameList.add(subCategoryName);
+		});
 	}
 
 	/**

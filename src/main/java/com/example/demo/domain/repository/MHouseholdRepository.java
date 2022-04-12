@@ -57,4 +57,22 @@ public class MHouseholdRepository {
 	public List<MHousehold> monthlyGetHouseholdList(MHouseholdCondition condition) {
 		return mapper.monthlyHouseholdList(condition);
 	}
+	
+	/**
+	 * 家計簿更新処理
+	 * 
+	 * @param householdId 家計簿ID
+	 */
+	public void updateOneMHousehold(MHousehold household) {
+		mapper.updateMHousehold(household);
+	}
+	
+	/**
+	 * 家計簿削除処理
+	 * 
+	 * @param householdId 家計簿ID
+	 */
+	public void deleteOneMHousehold(Integer householdId) {
+		mapper.deleteMHousehold(householdId);
+	}
 }

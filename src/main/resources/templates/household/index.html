@@ -29,14 +29,18 @@
 <body>
 	<div class="wrapper">
 		<header class="header">
+			<!-- メインヘッダー呼び出し -->
 			<div th:replace="~{layout/householdHeader::householdHeader}"></div>
+			<!-- ヘッダーメニューバー -->
 			<div class="global-menu">
 				<ul class="nav-horizontal">
-					<li class="global-menu-item"><a class="active" th:href="@{/household/index}"> <i
+					<li class="global-menu-item"><a class="active"
+						th:href="@{/household/index}"> <i
 							class="active-icon fas fa-home"></i>ホーム
 					</a></li>
-					<li class="global-menu-item"><a class="unactive" th:href="@{/household/detail}">
-							<i class="unactive-icon fas fa-chart-pie"></i>家計
+					<li class="global-menu-item"><a class="unactive"
+						th:href="@{/household/detail}"> <i
+							class="unactive-icon fas fa-chart-pie"></i>家計
 					</a></li>
 					<li class="global-menu-item"><a class="unactive" href="#">
 							<i class="unactive-icon fas fa-chart-bar"></i>予算
@@ -55,8 +59,10 @@
 		</header>
 		<div class="container-large">
 			<div class="home">
+				<!-- 円グラフとカンタン入力セクション -->
 				<div class="home-col-assets">
 					<section class="user-info">
+						<!-- 当月の収支合計セクション -->
 						<section class="total-assets">
 							<h1 class="heading-normal"
 								th:text="${#calendars.format(#calendars.createNowForTimeZone('Asia/Tokyo'), 'yyyy年MM月')} + 'の状況'"></h1>
@@ -70,6 +76,7 @@
 							<div th:if="${monthlySum == null}" class="money-label">
 								<span class="money-label">今月の収支記録が見つかりませんでした</span>
 							</div>
+							<!-- 当月の収支合計円グラフ -->
 							<div th:if="${deposit != null && payment != null}"
 								class="pie-size">
 								<canvas id="assetPie">
@@ -83,142 +90,15 @@
 						</section>
 					</section>
 					<div class="home-manual-info">
+						<!-- カンタン入力セクション -->
 						<section class="manual-entry">
 							<h2 class="heading-normal">カンタン入力</h2>
 							<div class="manual-payment-entry">
 								<form th:action="@{/household/payment}" th:object="${form}"
 									method="post">
+									<!-- カテゴリーのドロップダウンメニュー -->
 									<div class="category-contents">
-										<div class="btn-group btn_l_ctg">
-											<a class="btn btn-red dropdown-toggle" href="#" role="button"
-												id="dropdownMenuLink" data-toggle="dropdown"
-												aria-haspopup="true" aria-expanded="false"> 未分類</a>
-											<ul class="dropdown-menu main_menu minus">
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="1" href="#">食費</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="1" href="#">食費</a></li>
-														<li><a class="m_c_name" data-value="2" href="#">食料品</a></li>
-														<li><a class="m_c_name" data-value="3" href="#">外食</a></li>
-														<li><a class="m_c_name" data-value="4" href="#">カフェ</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="5" href="#">日用品</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="5" href="#">日用品</a></li>
-														<li><a class="m_c_name" data-value="6" href="#">ドラッグストア</a></li>
-														<li><a class="m_c_name" data-value="7" href="#">おこづかい</a></li>
-														<li><a class="m_c_name" data-value="8" href="#">ペット用品</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="9" href="#">趣味・娯楽</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="9" href="#">趣味・娯楽</a></li>
-														<li><a class="m_c_name" data-value="10" href="#">アウトドア</a></li>
-														<li><a class="m_c_name" data-value="11" href="#">スポーツ</a></li>
-														<li><a class="m_c_name" data-value="12" href="#">映画・音楽・ゲーム</a></li>
-														<li><a class="m_c_name" data-value="13" href="#">旅行</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="14" href="#">交際費</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="14" href="#">交際費</a></li>
-														<li><a class="m_c_name" data-value="15" href="#">飲み代</a></li>
-														<li><a class="m_c_name" data-value="16" href="#">プレゼント代</a></li>
-														<li><a class="m_c_name" data-value="17" href="#">冠婚葬祭</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="18" href="#">交通費</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="18" href="#">交通費</a></li>
-														<li><a class="m_c_name" data-value="19" href="#">電車</a></li>
-														<li><a class="m_c_name" data-value="20" href="#">バス</a></li>
-														<li><a class="m_c_name" data-value="21" href="#">タクシー</a></li>
-														<li><a class="m_c_name" data-value="22" href="#">飛行機</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="23" href="#">衣服・美容</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="24" href="#">衣服</a></li>
-														<li><a class="m_c_name" data-value="25" href="#">クリーニング</a></li>
-														<li><a class="m_c_name" data-value="26" href="#">美容院・理髪</a></li>
-														<li><a class="m_c_name" data-value="27" href="#">化粧品</a></li>
-														<li><a class="m_c_name" data-value="28" href="#">アクセサリー</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="29" href="#">自動車</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="30" href="#">自動車ローン</a></li>
-														<li><a class="m_c_name" data-value="31" href="#">道路料金</a></li>
-														<li><a class="m_c_name" data-value="32" href="#">ガソリン</a></li>
-														<li><a class="m_c_name" data-value="33" href="#">駐車場</a></li>
-														<li><a class="m_c_name" data-value="34" href="#">車検・整備</a></li>
-														<li><a class="m_c_name" data-value="35" href="#">自動車保険</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="36" href="#">健康・医療</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="37" href="#">フィットネス</a></li>
-														<li><a class="m_c_name" data-value="38" href="#">ボディケア</a></li>
-														<li><a class="m_c_name" data-value="39" href="#">医療費</a></li>
-														<li><a class="m_c_name" data-value="40" href="#">薬</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="41" href="#">教養・教育</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="42" href="#">書籍</a></li>
-														<li><a class="m_c_name" data-value="43" href="#">新聞・雑誌</a></li>
-														<li><a class="m_c_name" data-value="44" href="#">習い事</a></li>
-														<li><a class="m_c_name" data-value="45" href="#">学費</a></li>
-														<li><a class="m_c_name" data-value="46" href="#">塾</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="47" href="#">特別な支出</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="48" href="#">家具・家電</a></li>
-														<li><a class="m_c_name" data-value="49" href="#">住宅・リフォーム</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="50" href="#">水道・光熱費</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="51" href="#">光熱費</a></li>
-														<li><a class="m_c_name" data-value="52" href="#">電気代</a></li>
-														<li><a class="m_c_name" data-value="53" href="#">ガス・灯油代</a></li>
-														<li><a class="m_c_name" data-value="54" href="#">水道代</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="55" href="#">通信費</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="56" href="#">携帯電話</a></li>
-														<li><a class="m_c_name" data-value="57" href="#">固定電話</a></li>
-														<li><a class="m_c_name" data-value="58" href="#">インターネット</a></li>
-														<li><a class="m_c_name" data-value="59" href="#">放送視聴料</a></li>
-														<li><a class="m_c_name" data-value="60" href="#">情報サービス</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="61" href="#">住宅</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="61" href="#">住宅</a></li>
-														<li><a class="m_c_name" data-value="62" href="#">家賃・地代</a></li>
-														<li><a class="m_c_name" data-value="63" href="#">ローン返済</a></li>
-														<li><a class="m_c_name" data-value="64" href="#">管理費・積立金</a></li>
-														<li><a class="m_c_name" data-value="65" href="#">地震・火災保険</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="66" href="#">その他</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="66" href="#">その他</a></li>
-														<li><a class="m_c_name" data-value="67" href="#">仕送り</a></li>
-														<li><a class="m_c_name" data-value="68" href="#">寄付金</a></li>
-														<li><a class="m_c_name" data-value="69" href="#">雑費</a></li>
-													</ul></li>
-												<li class="dropdown-submenu"><a class="c_name"
-													data-value="70" href="#">未分類</a>
-													<ul class="sub_menu">
-														<li><a class="m_c_name" data-value="70" href="#">未分類</a></li>
-													</ul></li>
-											</ul>
-										</div>
+										<div th:replace="~{layout/categoryList::categoryList}"></div>
 										<div class="btn-group btn_m_ctg">
 											<a class="btn btn-secondary dropdown-toggle v_m_ctg"
 												data-toggle="dropdown" id="js-middle-category-selected">
@@ -226,7 +106,7 @@
 										</div>
 									</div>
 									<div class="right-column">
-										<input type="hidden" th:field="*{categoryId}"
+										<input type="hidden" class="category-input" th:field="*{categoryId}"
 											th:errorclass="is-invalid"> <input type="text"
 											class="payment-amount" placeholder="金額を入力してください"
 											th:field="*{payment}" th:errorclass="is-invalid"> <span
@@ -236,12 +116,14 @@
 									<input type="hidden" id="cal-date-input"
 										th:field="*{activeDate}">
 									<div class="input-date">
-										<p class="text-and-icon" id="cal-text"
+										<span class="text-and-icon" id="cal-text"
 											data-date-format="yyyy/mm/dd">
 											日付 <span id="date-span"></span><i
 												class="icon-calendar fas fa-calendar-alt"></i>
+										<!-- カレンダー描画部 -->
 										<div id="calendar" class="draw-cal dropdown-menu"></div>
-										</p>
+										</span>
+										<div style="margin-bottom: 10px;"></div>
 									</div>
 									<div class="left-column">
 										<input type="text" class="align-left"
@@ -258,32 +140,45 @@
 				</div>
 				<div class="custom-col-home">
 					<div class="home-latest">
+						<!-- 最近の履歴表示セクション -->
 						<div class="cf-latest">
 							<h2 class="heading-normal">最近の入出金</h2>
 							<section class="recent-transactions">
 								<div class="recent-transactions-table">
-									<div th:if="${latestHouseholdList != null}" class="recent-transactions-row" th:each="item: ${latestHouseholdList}">
+									<div th:if="${latestHouseholdList != null}"
+										class="recent-transactions-row"
+										th:each="item: ${latestHouseholdList}">
 										<div class="recent-transactions-row-left">
-											<div class="recent-transactions-date" th:text="${#dates.format(item.activeDate, 'yyyy/MM/dd')}"></div>
-											<div class="recent-transactions-category" th:text="${item.category.categoryCode} + '＞' + ${item.category.subCategoryName}">未分類＞未分類</div>
-											<div class="recent-transactions-content" th:text="${item.note}"></div>
-											<div th:if="${item.note == null || item.note == ''}" class="recent-trancastions-content">備考はありません</div>
+											<div class="recent-transactions-date"
+												th:text="${#dates.format(item.activeDate, 'yyyy/MM/dd')}"></div>
+											<div class="recent-transactions-category"
+												th:text="${item.category.categoryCode} + '＞' + ${item.category.subCategoryName}">未分類＞未分類</div>
+											<div class="recent-transactions-content"
+												th:text="${item.note}"></div>
+											<div th:if="${item.note == null || item.note == ''}"
+												class="recent-trancastions-content">備考はありません</div>
 										</div>
-										<div th:if="${item.payment != null && item.payment > 0}" class="recent-transactions-amount" th:text="'-' + ${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></div>
-										<div th:if="${item.deposit != null && item.deposit > 0}" class="recent-transactions-amount" th:text="${#numbers.formatInteger(item.deposit, 3, 'COMMA')} + '円'"></div>
+										<div th:if="${item.payment != null && item.payment > 0}"
+											class="recent-transactions-amount"
+											th:text="'-' + ${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></div>
+										<div th:if="${item.deposit != null && item.deposit > 0}"
+											class="recent-transactions-amount"
+											th:text="${#numbers.formatInteger(item.deposit, 3, 'COMMA')} + '円'"></div>
 									</div>
-									<div th:if="${latestHouseholdList == null}" class="recent-transactions-row">
+									<div th:if="${latestHouseholdList == null}"
+										class="recent-transactions-row">
 										<h2 class="money-label">最近の入出金はありません</h2>
 									</div>
 								</div>
 							</section>
 							<div th:text="${latestFormatDeposit}"></div>
-							<a class="pull-right more-link" href="#"> <i
+							<a class="pull-right more-link" th:href="@{/household/detail}"> <i
 								class="fas fa-arrow-circle-right"></i>履歴の詳細を見る
 							</a>
 						</div>
 					</div>
 					<div class="headline">
+						<!-- 当月の収支合計表セクション -->
 						<div class="headline-contents">
 							<h2 class="heading-normal" th:inline="text">
 								[[${#calendars.format(#calendars.createNowForTimeZone('Asia/Tokyo'),
@@ -304,8 +199,10 @@
 									</tr>
 									<tr class="monthly-total">
 										<th class="monthly-total-head">当月収支</th>
-										<td th:if="${monthlySum >= 0}" th:text="${monthlyFormatSum} + '円'"></td>
-										<td th:if="${monthlySum < 0}" class="minus-color" th:text="${monthlyFormatSum} + '円'"></td>
+										<td th:if="${monthlySum >= 0}"
+											th:text="${monthlyFormatSum} + '円'"></td>
+										<td th:if="${monthlySum < 0}" class="minus-color"
+											th:text="${monthlyFormatSum} + '円'"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -327,7 +224,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<a class="pull-right more-link" href="#"> <i
+							<a class="pull-right more-link" th:href="@{/household/detail}"> <i
 								class="fas fa-arrow-circle-right"></i>詳細(家計簿)を見る
 							</a>
 						</div>
@@ -335,6 +232,7 @@
 				</div>
 			</div>
 		</div>
+		<!-- メインフッターの呼び出し -->
 		<footer th:replace="~{layout/householdFooter::householdFooter}"></footer>
 	</div>
 	<script th:if="${deposit != null && payment != null}"

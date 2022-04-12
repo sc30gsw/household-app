@@ -1,157 +1,5 @@
-// トップページの円グラフを描画する関数(月の収支計算用)
-function pieChart() {
-	// data-labels-pluginの登録
-	Chart.register(ChartDataLabels);
-	// チャートのタイプで円グラフを指定
-	const type = 'pie';
-	// データの設定
-	const data = {
-		// ラベルの設定
-		labels: ["収入", "支出"],
-		// データをセット
-		datasets: [{
-			// 円グラフの背景色を設定
-			backgroundColor: [
-				// 収入
-				"#136FFF",
-				// 支出
-				"#FF9872"
-			],
-			// 値の設定
-			data: [cDeposit, cPayment]
-		}]
-	};
-
-	// オプションの設定
-	const options = {
-		// レスポンシブwebデザインの自動補正を設定
-		responsive: true,
-		plugins: {
-			// 凡例の設定
-			legend: {
-				// 凡例の除去
-				display: false
-			},
-			// タイトル部の設定
-			title: {
-				display: true,
-				// タイトル名の設定
-				text: '支出内訳',
-				// タイトルフォントの設定
-				font: {
-					// フォントサイズを設定
-					size: 20
-				}
-			},
-			// data-labels(チャート内のラベル)の設定
-			datalabels: {
-				// 色の設定
-				color: "#fff",
-				// 円グラフからラベルのみ取得する
-				formatter: function(value, ctx) {
-					const label = ctx.chart.data.labels[ctx.dataIndex];
-					return label;
-				}
-			},
-			// チャートhover時に表示する文字列等の設定
-			tooltip: {
-				callbacks: {
-					// ラベルをカスタマイズする
-					label: function(tooltipItem) {
-						// 収支合計
-						const sum = tooltipItem.dataset.data[0] + tooltipItem.dataset.data[1];
-						// 各値が全体に占める割合を算出する(小数点以下切り捨て)
-						const payRatio = Math.floor(tooltipItem.dataset.data[tooltipItem.dataIndex] / sum * 100);
-						// 金額をカンマ区切りに変換
-						const parsed = tooltipItem.parsed .toLocaleString();
-						return  `${tooltipItem.label} : ${parsed} 円 | 収支割合 :  ${payRatio}%`;
-					}
-				}
-			}
-		}
-	};
-	// 円グラフを描画する要素を取得
-	const ctx = document.getElementById("assetPie").getContext('2d');
-	// 円グラフを描画する処理
-	const pieChart = new Chart(ctx, {
-		type: type,
-		data: data,
-		options: options
-	})
-};
-
-// トップページの円グラフを描画する関数(デフォルト)
-function pieChartDefault() {
-	// data-labels-pluginの登録
-	Chart.register(ChartDataLabels);
-	// チャートのタイプで円グラフを指定
-	const type = 'pie';
-	// データの設定
-	const data = {
-		// ラベルの設定
-		labels: ["収支記録をつけてみよう"],
-		// データをセット
-		datasets: [{
-			// 円グラフの背景色を設定
-			backgroundColor: '#c0c0c0',
-			// 値の設定
-			data: [100]
-		}]
-	};
-
-	// オプションの設定
-	const options = {
-		// レスポンシブwebデザインの自動補正を設定
-		responsive: true,
-		plugins: {
-			// 凡例の設定
-			legend: {
-				// 凡例の除去
-				display: false
-			},
-			// タイトル部の設定
-			title: {
-				display: true,
-				// タイトル名の設定
-				text: '支出内訳を開始しよう',
-				// タイトルフォントの設定
-				font: {
-					// フォントサイズを設定
-					size: 20
-				}
-			},
-			// data-labels(チャート内のラベル)の設定
-			datalabels: {
-				color: '#000',
-				// 円グラフからラベルのみ取得する
-				formatter: function(value, ctx) {
-					const label = ctx.chart.data.labels[ctx.dataIndex];
-					return label;
-				}
-			},
-			// チャートhover時に表示する文字列等の設定
-			tooltip: {
-				callbacks: {
-					// ラベルをカスタマイズする
-					label: function(tooltipItem) {
-						return  `収支割合が表示されます`;
-					}
-				}
-			}
-		}
-	};
-	// 円グラフを描画する要素を取得
-	const ctx = document.getElementById("assetPieDefault").getContext('2d');
-	// 円グラフを描画する処理
-	const pieChart = new Chart(ctx, {
-		type: type,
-		data: data,
-		options: options
-	})
-};
-
-// ドロップダウンのサブメニューを表示する処理
-function subMenu() {
+// ドロップダウンのサブメニューを表示する処理(編集画面用)
+function subMenuEdit() {
 	// ドロップダウンのメインカテゴリー要素(li要素)を取得
 	const parent = document.querySelectorAll('.dropdown-submenu');
 	const item = Array.prototype.slice.call(parent, 0);
@@ -175,13 +23,12 @@ function subMenu() {
 	});
 };
 
-// hiddenタイプの入力欄にカテゴリーのID値を設定する処理
-function getAnchorValue() {
-	// hiddenタイプのカテゴリーID入力要素を取得
-	const categoryInput = document.querySelector('.category-input')
-	// デフォルトでカテゴリーID入力値を「70(未分類)」とする
-	categoryInput.value = 70
+// hiddenタイプの入力欄にカテゴリーのID値を設定する処理(編集画面用)
+function getEditAnchorValue() {
 	
+	// hiddenタイプのカテゴリーID入力要素を取得
+	const categoryInput = document.querySelector('.categoryField')
+
 	document.addEventListener('click', function(e) {
 		// 大カテゴリーのドロップダウンボタンの要素を取得
 		const dropdownMenuLink = document.getElementById('dropdownMenuLink')
@@ -189,7 +36,7 @@ function getAnchorValue() {
 		const dropdownSecondary = document.getElementById('js-middle-category-selected')
 		// 大カテゴリーのリンクを配列で取得
 		const links = document.querySelectorAll('.c_name')
-		
+
 		// 大カテゴリーのみ選択された時のドロップダウンの動作と入力欄の値の設定
 		for (let i = 0; i < links.length; i++) {
 
@@ -207,7 +54,7 @@ function getAnchorValue() {
 					// カテゴリーID入力欄に選択された値を設定する
 					categoryInput.value = links[i].dataset.value
 				})
-			} 
+			}
 		}
 
 		// クリックされた要素がサブカテゴリーのリンクだった場合の処理
@@ -338,6 +185,6 @@ function getAnchorValue() {
 			// クリックされたサブカテゴリーのdata-value属性を入力欄の値に設定する
 			categoryInput.value = e.target.closest('.m_c_name').dataset.value
 
-		} 
+		}
 	})
 }

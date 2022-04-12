@@ -12,21 +12,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 /**
- * 家計簿カンタン入力用フォームクラス
+ * モーダルウィンドウ用家計簿収入金額フォームクラス
  */
 @Data
-public class EasyHouseholdForm implements Serializable {
+public class ModalDepositForm implements Serializable {
 	
-	private static final long serialVersionUID = 2285865115133379825L;
-	
+	private static final long serialVersionUID = 220660942865569949L;
+
 	/**カテゴリーID*/
 	@NotNull
 	private Integer categoryId;
 	
-	/**出金*/
+	/**入金*/
 	@NotBlank
 	@Pattern(regexp = "^[0-9]+$")
-	private String payment;
+	private String deposit;
 	
 	/**備考(メモ)*/
 	private String note;
@@ -35,5 +35,4 @@ public class EasyHouseholdForm implements Serializable {
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date activeDate;
-
 }

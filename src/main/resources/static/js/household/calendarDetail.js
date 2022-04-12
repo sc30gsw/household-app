@@ -59,7 +59,14 @@ function drawCalendar() {
 		// HTMLを組み立てる変数
 		let calendarHtml = ''
 
-		calendarHtml += `<span class="fc-header-title"><h2 id="cal-detail-title" class="cal-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		calendarHtml += `<span class="fc-header-title">
+							<h2 id="cal-detail-title" class="cal-detail-title"
+								data-startdate="${year}-${month}-${startDayCount}"
+								data-enddate="${year}-${month}-${endDayCount}">` 
+									+ year + '/' + month + '/' + startDayCount + '-' + 
+									year + '/' + month + '/' + endDayCount + 
+							'</h2>' +
+						'</span>'
 		calendarHtml += `<table class="cal-detail-table">`
 		calendarHtml += '<thead>'
 
@@ -157,7 +164,8 @@ function drawCalendar() {
 					}
 					// 曜日が日曜の場合
 					if (d === 0) {
-						calendarHtml += `<td class="is-detail-disabled disabled-sunday" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled disabled-sunday" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -174,7 +182,8 @@ function drawCalendar() {
 										
 						// 曜日が土曜の場合
 					} else if (d === 6) {
-						calendarHtml += `<td class="is-detail-disabled disabled-saturday" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled disabled-saturday" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -191,7 +200,8 @@ function drawCalendar() {
 										
 						// 土日以外の曜日の場合
 					} else {
-						calendarHtml += `<td class="is-detail-disabled" data-date="${nextYear}-${nextMonth}-${num}">
+						calendarHtml += `<td class="is-detail-disabled" 
+											data-date="${nextYear}-${nextMonth}-${num}">
 											<div class="day-num">
 												<div>
 													${num}
@@ -218,7 +228,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
@@ -234,7 +245,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
@@ -249,7 +261,8 @@ function drawCalendar() {
 														${dayCount}
 													</div>
 												</div>
-												<div class="calendar-amount" data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
+												<div class="calendar-amount" 
+													data-date="${year}-${month}-${dayCount.toString().padStart(2, '0')}">
 												</div>
 												<div class="day-num-link-pen">
 													<a class="detail-cal-icon-link" href="#">
@@ -338,9 +351,9 @@ function drawDetailDate() {
 		month = '0' + month.replace(/-/g, '');
 	}
 
-	// カレンダーを表示する処理
+	// 年月日を表示する処理
 	function showDetailDate(year, month) {
-		// カレンダーを作成する関数の呼び出し
+		// 年月日を作成する関数の呼び出し
 		const drawDateHtml = createDetailDate(year, month)
 
 		// div要素作成
@@ -350,7 +363,7 @@ function drawDetailDate() {
 		// div要素の子要素にカレンダーを設定
 		div.innerHTML = drawDateHtml
 
-		// <div id="detail-calendar"></div>内に上記で生成した要素を入れる
+		// <div id="draw-date-range"></div>内に上記で生成した要素を入れる
 		document.querySelector('#draw-date-range').appendChild(div)
 
 		month++
@@ -361,7 +374,7 @@ function drawDetailDate() {
 		}
 	}
 
-	// カレンダーを作成する関数
+	// 年月日を作成する関数
 	function createDetailDate(year, month) {
 		// 月の最初の日を取得
 		const startDate = new Date(year, month - 1, 1)
@@ -375,7 +388,14 @@ function drawDetailDate() {
 		let drawDateHtml = ''
 
 		// HTMLを組み立てる
-		drawDateHtml += `<span class="draw-date-header-title"><h2 id="detail-draw-title" class="draw-date-detail-title" data-startdate="${year}-${month}-${startDayCount}" data-enddate="${year}-${month}-${endDayCount}">` + year + '/' + month + '/' + startDayCount + '-' + year + '/' + month + '/' + endDayCount + '</h2></span>'
+		drawDateHtml += `<span class="draw-date-header-title">
+							<h2 id="detail-draw-title" class="draw-date-detail-title" 
+								data-startdate="${year}-${month}-${startDayCount}" 
+								data-enddate="${year}-${month}-${endDayCount}">` 
+									+ year + '/' + month + '/' + startDayCount + 
+									'-' + year + '/' + month + '/' + endDayCount + 
+							'</h2>' + 
+						'</span>'
 
 		return drawDateHtml
 	}
@@ -384,13 +404,13 @@ function drawDetailDate() {
 	const submit = document.getElementById('search-date-btn');
 
 	submit.addEventListener('click', function() {
-		// <div id="calendar"></div>内のHTMLを空にする
+		// <div id="draw-date-range"></div>内のHTMLを空にする
 		document.querySelector('#draw-date-range').innerHTML = ''
 		// 月が1月より下の場合、年から1を引いて、月を12にする
 		year = Number(selectYear.value);
 		month = Number(selectMonth.value);
 
-		// カレンダーを表示する関数の呼び出し
+		// 年月日を表示する関数の呼び出し
 		showDetailDate(year, month)
 	})
 

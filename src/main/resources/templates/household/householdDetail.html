@@ -4,18 +4,171 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HouseHold</title>
+<!-- bootstarpのcss読み込み -->
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 <!-- css読み込み -->
 <link rel="stylesheet" th:href="@{/css/household/household.css}">
+<!-- bootstrapのjs読み込み -->
+<script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"></script>
+<script
+	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
 <!-- fontawesome読み込み -->
 <script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
 <!-- JavaScript読み込み -->
+<script th:src="@{/js/household/index.js}"></script>
 <script th:src="@{/js/household/calendarDetail.js}"></script>
 <script th:src="@{/js/household/householdDetail.js}"></script>
+<script th:src="@{/js/household/modalAndTab.js}"></script>
+<script th:src="@{/js/household/categoryDetail.js}"></script>
+<script th:src="@{/js/household/categoryDetailSec.js}"></script>
 </head>
-<body>
+<body id="detail-body">
 	<div class="wrapper" id="wrap">
+		<!-- モーダルウィンドウセクション -->
+		<div class="modal-list" id="detail-modal">
+			<div class="modal-header">
+				<h3>家計簿入力</h3>
+				<div class="modal-close">×</div>
+			</div>
+			<div class="modal-body">
+				<ul class="tab-menu">
+					<li class="tab-menu-list" id="important"><label
+						class="tab-menu-active is-tab-active"> <i
+							class="fas fa-minus-circle"></i>支出
+					</label></li>
+					<li class="tab-menu-list" id="info"><label
+						class="tab-menu-unactive"> <i class="fas fa-plus-circle"></i>収入
+					</label></li>
+				</ul>
+				<div class="panel-group">
+					<div class="panel tab-important is-show">
+						<!-- 支出入力セクション -->
+						<form class="tab-important-form" th:object="${easyHouseholdForm}"
+							th:action="@{/household/modalPayment}" method="post">
+							<div class="panel-control-group">
+								<div class="panel-left-column">日付</div>
+								<div class="panel-right-column panel-cal-column">
+									<div>
+										<input type="text" class="calendar-panel-input"
+											id="activeDate" name="activeDate"
+											th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}">
+									</div>
+									<!-- カレンダー描画部 -->
+									<div class="input-date-first">
+										<span class="text-and-icon" data-date-format="yyyy/mm/dd">
+											<span>日付： </span><span class="date-span"></span><i
+											class="icon-calendar fas fa-calendar-alt"></i> <!-- カレンダー描画部 -->
+											<div class="calendar-detail-input draw-cal dropdown-menu"></div>
+										</span>
+										<div style="margin-bottom: 10px;"></div>
+									</div>
+								</div>
+							</div>
+							<div class="panel-control-group">
+								<div class="panel-left-column">支出金額</div>
+								<div class="panel-right-column">
+									<div class="input-prepend input-append">
+										<span class="panel-add-minus-plus">-</span> <input type="text"
+											class="payment-panel-input" id="payment" name="payment">
+										<span class="panel-add-money">円</span>
+									</div>
+								</div>
+							</div>
+							<div class="panel-control-group">
+								<div class="panel-left-column lctg-mctg-panel">
+									項目 <span class="panel-category-text">※項目を選択しない場合は、未分類となります。</span>
+								</div>
+								<input type="hidden" class="category-input" id="categoryId"
+									name="categoryId">
+								<div class="panel-right-column">
+									<!-- カテゴリードロップダウンメニュー部 -->
+									<div class="panel-category-column">
+										<div th:replace="~{layout/categoryList::categoryList}"></div>
+										<div class="btn-group-detail btn_m_ctg">
+											<a class="btn btn-secondary dropdown-toggle v_m_ctg"
+												data-toggle="dropdown" id="js-middle-category-selected">
+												未分類 </a>
+										</div>
+									</div>
+									<input type="text" class="panel-note-input"
+										placeholder="内容をご入力下さい(任意)" id="note" name="note">
+								</div>
+							</div>
+							<div class="panel-submit-box">
+								<input type="submit" class="panel-btn-success" value="保存する">
+							</div>
+						</form>
+					</div>
+					<div class="panel tab-info">
+						<!-- 収入入力セクション -->
+						<form class="tab-info-form" th:object="${modalDepositForm}"
+							th:action="@{/household/modalDeposit}" method="post">
+							<div class="panel-control-group">
+								<div class="panel-left-column">日付</div>
+								<div class="panel-right-column panel-cal-column">
+									<div>
+										<input type="text" class="calendar-panel-input-second"
+											id="activeDate" name="activeDate"
+											th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}">
+									</div>
+									<!-- カレンダー描画部 -->
+									<div class="input-date-second">
+										<span class="text-and-icon-second"
+											data-date-format="yyyy/mm/dd"> <span>日付： </span><span
+											class="date-span-second"></span><i
+											class="icon-calendar fas fa-calendar-alt"></i>
+											<div
+												class="calendar-detail-input-second draw-cal dropdown-menu"></div>
+										</span>
+										<div style="margin-bottom: 10px;"></div>
+									</div>
+								</div>
+							</div>
+							<div class="panel-control-group">
+								<div class="panel-left-column">収入金額</div>
+								<div class="panel-right-column">
+									<div class="input-prepend input-append">
+										<span class="panel-add-minus-plus">+</span> <input type="text"
+											id="deposit" name="deposit" class="payment-panel-input">
+										<span class="panel-add-money">円</span>
+									</div>
+								</div>
+							</div>
+							<div class="panel-control-group">
+								<div class="panel-left-column left-column-info">
+									項目 <span class="panel-category-text">※項目を選択しない場合は、未分類となります。</span>
+								</div>
+								<input type="hidden" class="category-input-sec" id="cateogryId"
+									name="categoryId">
+								<div class="panel-right-column">
+									<!-- カテゴリードロップダウンメニュー部 -->
+									<div class="panel-category-column">
+										<div th:replace="~{layout/categoryListSec::categoryListSec}"></div>
+										<div class="btn-group-detail btn_m_ctg">
+											<a class="btn btn-secondary dropdown-toggle v_m_ctg"
+												data-toggle="dropdown"
+												id="js-middle-category-selected-second"> 未分類 </a>
+										</div>
+									</div>
+									<input type="text" class="panel-note-input"
+										placeholder="内容をご入力下さい(任意)" id="note" name="note">
+								</div>
+							</div>
+							<div class="panel-submit-box">
+								<input type="submit" class="panel-btn-success" value="保存する">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		<header class="header">
+			<!-- メインヘッダー呼び出し -->
 			<div th:replace="~{layout/householdHeader::householdHeader}"></div>
+			<!-- ヘッダーメニューバー -->
 			<div class="global-menu">
 				<ul class="nav-horizontal">
 					<li class="global-menu-item"><a class="unactive"
@@ -41,6 +194,7 @@
 				</ul>
 			</div>
 			<div class="pfm-subnav">
+				<!-- ヘッダーサブメニューバー -->
 				<ul class="subnav-horizontal">
 					<li class="subnav-item"><a class="subnav-active" href="#">家計簿</a>
 					</li>
@@ -55,17 +209,20 @@
 				</button>
 				<div class="col-custom-wrapper">
 					<section class="col-custome-content-body">
+						<!-- 月次収支合計セクション -->
 						<section>
 							<h1 class="heading-normal">月次収支</h1>
 							<div class="clearfix">
 								<div class="calc-field">
-									<button class="cf-new-btn" style="padding: 5px 20px; width: 140px;">
+									<button class="cf-new-btn"
+										style="padding: 5px 20px; width: 140px;">
 										<i class="fas fa-pen"></i>手入力
 									</button>
 								</div>
 								<p class="search-explain">検索したい年月を選択すると、その年月の家計簿の履歴を表示します。</p>
 								<div class="col-custome-content-body">
 									<div class="pull-right">
+										<!-- 月次収支検索ボックス -->
 										<form id="monthly-form" method="post" th:object="${form}"
 											th:action="@{/household/detail/search}">
 											<input type="hidden" th:field="*{startDate}"> <input
@@ -92,6 +249,7 @@
 									</p>
 								</div>
 								<div class="col-custome-content-body">
+									<!-- 月次収支合計表 -->
 									<table cellpadding="10px" class="monthly-total-detail-table"
 										title="当月の合計金額です">
 										<thead>
@@ -105,14 +263,22 @@
 										</thead>
 										<tbody th:if="${monthlySumHousehold != null}">
 											<tr>
-												<td th:if="${monthlySumHousehold.deposit != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
+												<td th:if="${monthlySumHousehold.deposit != 0}"
+													th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
 												<td th:if="${monthlySumHousehold.deposit == 0}">0円</td>
 												<td>ー</td>
-												<td th:if="${monthlySumHousehold.payment != 0}" th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
+												<td th:if="${monthlySumHousehold.payment != 0}"
+													th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
 												<td th:if="${monthlySumHousehold.payment == 0}">0円</td>
 												<td>＝</td>
-												<td th:if="${monthlyHouseholdCalculated < 0 && monthlyHouseholdCalculated != 0}" class="minus-color" th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
-												<td th:if="${monthlyHouseholdCalculated > 0 && monthlyHouseholdCalculated != 0}" class="plus-color" th:text = "${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td
+													th:if="${monthlyHouseholdCalculated < 0 && monthlyHouseholdCalculated != 0}"
+													class="minus-color"
+													th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+												<td
+													th:if="${monthlyHouseholdCalculated > 0 && monthlyHouseholdCalculated != 0}"
+													class="plus-color"
+													th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
 												<td th:if="${monthlyHouseholdCalculated == 0}">0円</td>
 											</tr>
 										</tbody>
@@ -124,13 +290,19 @@
 									</table>
 								</div>
 							</div>
+							<!--カレンダー描画部 -->
 							<div class="col-custome-body">
 								<div id="detail-calendar"></div>
 							</div>
 						</section>
 					</section>
 				</div>
+
+				<!-- 月次収支詳細セクション -->
 				<section class="in_out">
+					<a class="pull-right more-link" th:href="@{/household/edit}"> <i
+						class="fas fa-arrow-circle-right"></i>編集はこちらから
+					</a>
 					<h1 class="heading-normal">収入・支出詳細</h1>
 					<div class="calc-field">
 						<button class="cf-new-btn"
@@ -141,6 +313,7 @@
 					<div id="draw-date-range" class="date-range"></div>
 					<div class="clearfix daily-info-contents">
 						<div class="break-contents">
+							<!-- 月次収支詳細表 -->
 							<table th:if="${householdList != null}"
 								class="detail-table table-hover table-autosort:1 table-autosort table-autofilter">
 								<thead>
@@ -158,14 +331,16 @@
 											id="table-lctg-filter" class="table-autofilter"
 											style="width: 80%;">
 												<option value>全て</option>
-												<option th:each="item: ${categoryCodeList}" th:value="${item}" th:text="${item}">
+												<option th:each="item: ${categoryCodeList}"
+													th:value="${item}" th:text="${item}">
 										</select>
 										</th>
 										<th class="sortable-mctg table-filterable">中項目<br> <select
 											id="table-mctg-filter" class="table-autofilter"
 											style="width: 80%;">
 												<option value>全て</option>
-												<option th:each="item: ${subCategoryNameList}" th:value="${item}" th:text="${item}">
+												<option th:each="item: ${subCategoryNameList}"
+													th:value="${item}" th:text="${item}">
 										</select>
 										</th>
 									</tr>
@@ -174,7 +349,8 @@
 									<tr class="transaction_list">
 										<td class="transaction-date">
 											<div>
-												<span th:text="${#dates.format(item.activeDate, 'MM/dd (E)')}"></span>
+												<span
+													th:text="${#dates.format(item.activeDate, 'MM/dd (E)')}"></span>
 											</div>
 										</td>
 										<td class="transaction-content">
@@ -182,35 +358,42 @@
 												<span th:text="${item.note}"></span>
 											</div>
 										</td>
-										<td th:if="${item.payment != null && item.payment > 0}" class="transaction-amount-minus">
+										<td th:if="${item.payment != null && item.payment > 0}"
+											class="transaction-amount-minus">
 											<div>
 												<span th:text="'-' + ${item.payment}"></span>
 											</div>
 										</td>
-										<td th:if="${item.deposit != null && item.deposit > 0}" class="transaction-amount-deposit">
+										<td th:if="${item.deposit != null && item.deposit > 0}"
+											class="transaction-amount-deposit">
 											<div>
 												<span th:text="${item.deposit}"></span>
 											</div>
 										</td>
 										<td class="transaction-lctg">
 											<div>
-												<span class="lctg-text" th:text="${item.category.categoryCode}"></span>
+												<span class="lctg-text"
+													th:text="${item.category.categoryCode}"></span>
 											</div>
 										</td>
 										<td class="transaction-mctg">
 											<div>
-												<span class="mctg-text" th:text="${item.category.subCategoryName}"></span>
+												<span class="mctg-text"
+													th:text="${item.category.subCategoryName}"></span>
 											</div>
 										</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
+						<a class="pull-right more-link" th:href="@{/household/edit}">
+							<i class="fas fa-arrow-circle-right"></i>編集はこちらから
+						</a>
 					</div>
 				</section>
 			</div>
 		</div>
-		<footer th:replace="~{layout/householdFooter::householdFooter}"></footer>
+		<div th:replace="~{layout/householdFooter::householdFooter}"></div>
 	</div>
 	<script th:inline="javascript">
 		const startDate = /*[[${startDate}]]*/"startDate";
@@ -219,6 +402,14 @@
 		drawCalendar();
 		drawDetailDate();
 		inputDate();
+		subMenu();
+		subMenuSec();
+		tabMenu();
+		getAnchorValue();
+		getDetailAnchorValue();
+		getDetailAnchorValueSec();
 	</script>
+	<script th:src="@{/js/household/inputCalendar.js}"></script>
+	<script th:src="@{/js/household/inputCalendarSec.js}"></script>
 </body>
 </html>

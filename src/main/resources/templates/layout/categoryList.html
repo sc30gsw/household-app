@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="btn-group btn_l_ctg" th:fragment="categoryList">
+		<a class="btn btn-red dropdown-toggle" href="#" role="button"
+			id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+			aria-expanded="false"> 未分類</a>
+		<ul class="dropdown-menu main_menu minus">
+			<li class="dropdown-submenu"><a class="c_name" data-value="1"
+				href="#">食費</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="1" href="#">食費</a></li>
+					<li><a class="m_c_name" data-value="2" href="#">食料品</a></li>
+					<li><a class="m_c_name" data-value="3" href="#">外食</a></li>
+					<li><a class="m_c_name" data-value="4" href="#">カフェ</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="5"
+				href="#">日用品</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="5" href="#">日用品</a></li>
+					<li><a class="m_c_name" data-value="6" href="#">ドラッグストア</a></li>
+					<li><a class="m_c_name" data-value="7" href="#">おこづかい</a></li>
+					<li><a class="m_c_name" data-value="8" href="#">ペット用品</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="9"
+				href="#">趣味・娯楽</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="9" href="#">趣味・娯楽</a></li>
+					<li><a class="m_c_name" data-value="10" href="#">アウトドア</a></li>
+					<li><a class="m_c_name" data-value="11" href="#">スポーツ</a></li>
+					<li><a class="m_c_name" data-value="12" href="#">映画・音楽・ゲーム</a></li>
+					<li><a class="m_c_name" data-value="13" href="#">旅行</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="14"
+				href="#">交際費</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="14" href="#">交際費</a></li>
+					<li><a class="m_c_name" data-value="15" href="#">飲み代</a></li>
+					<li><a class="m_c_name" data-value="16" href="#">プレゼント代</a></li>
+					<li><a class="m_c_name" data-value="17" href="#">冠婚葬祭</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="18"
+				href="#">交通費</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="18" href="#">交通費</a></li>
+					<li><a class="m_c_name" data-value="19" href="#">電車</a></li>
+					<li><a class="m_c_name" data-value="20" href="#">バス</a></li>
+					<li><a class="m_c_name" data-value="21" href="#">タクシー</a></li>
+					<li><a class="m_c_name" data-value="22" href="#">飛行機</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="23"
+				href="#">衣服・美容</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="24" href="#">衣服</a></li>
+					<li><a class="m_c_name" data-value="25" href="#">クリーニング</a></li>
+					<li><a class="m_c_name" data-value="26" href="#">美容院・理髪</a></li>
+					<li><a class="m_c_name" data-value="27" href="#">化粧品</a></li>
+					<li><a class="m_c_name" data-value="28" href="#">アクセサリー</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="29"
+				href="#">自動車</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="30" href="#">自動車ローン</a></li>
+					<li><a class="m_c_name" data-value="31" href="#">道路料金</a></li>
+					<li><a class="m_c_name" data-value="32" href="#">ガソリン</a></li>
+					<li><a class="m_c_name" data-value="33" href="#">駐車場</a></li>
+					<li><a class="m_c_name" data-value="34" href="#">車検・整備</a></li>
+					<li><a class="m_c_name" data-value="35" href="#">自動車保険</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="36"
+				href="#">健康・医療</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="37" href="#">フィットネス</a></li>
+					<li><a class="m_c_name" data-value="38" href="#">ボディケア</a></li>
+					<li><a class="m_c_name" data-value="39" href="#">医療費</a></li>
+					<li><a class="m_c_name" data-value="40" href="#">薬</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="41"
+				href="#">教養・教育</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="42" href="#">書籍</a></li>
+					<li><a class="m_c_name" data-value="43" href="#">新聞・雑誌</a></li>
+					<li><a class="m_c_name" data-value="44" href="#">習い事</a></li>
+					<li><a class="m_c_name" data-value="45" href="#">学費</a></li>
+					<li><a class="m_c_name" data-value="46" href="#">塾</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="47"
+				href="#">特別な支出</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="48" href="#">家具・家電</a></li>
+					<li><a class="m_c_name" data-value="49" href="#">住宅・リフォーム</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="50"
+				href="#">水道・光熱費</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="51" href="#">光熱費</a></li>
+					<li><a class="m_c_name" data-value="52" href="#">電気代</a></li>
+					<li><a class="m_c_name" data-value="53" href="#">ガス・灯油代</a></li>
+					<li><a class="m_c_name" data-value="54" href="#">水道代</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="55"
+				href="#">通信費</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="56" href="#">携帯電話</a></li>
+					<li><a class="m_c_name" data-value="57" href="#">固定電話</a></li>
+					<li><a class="m_c_name" data-value="58" href="#">インターネット</a></li>
+					<li><a class="m_c_name" data-value="59" href="#">放送視聴料</a></li>
+					<li><a class="m_c_name" data-value="60" href="#">情報サービス</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="61"
+				href="#">住宅</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="61" href="#">住宅</a></li>
+					<li><a class="m_c_name" data-value="62" href="#">家賃・地代</a></li>
+					<li><a class="m_c_name" data-value="63" href="#">ローン返済</a></li>
+					<li><a class="m_c_name" data-value="64" href="#">管理費・積立金</a></li>
+					<li><a class="m_c_name" data-value="65" href="#">地震・火災保険</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="66"
+				href="#">その他</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="66" href="#">その他</a></li>
+					<li><a class="m_c_name" data-value="67" href="#">仕送り</a></li>
+					<li><a class="m_c_name" data-value="68" href="#">寄付金</a></li>
+					<li><a class="m_c_name" data-value="69" href="#">雑費</a></li>
+				</ul></li>
+			<li class="dropdown-submenu"><a class="c_name" data-value="70"
+				href="#">未分類</a>
+				<ul class="sub_menu">
+					<li><a class="m_c_name" data-value="70" href="#">未分類</a></li>
+				</ul></li>
+		</ul>
+	</div>
+</body>
+</html>
