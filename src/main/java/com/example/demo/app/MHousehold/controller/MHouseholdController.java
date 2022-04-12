@@ -22,6 +22,7 @@ import com.example.demo.domain.entity.MHousehold;
 import com.example.demo.domain.form.DeleteHouseholdForm;
 import com.example.demo.domain.form.DetailHouseholdConditionForm;
 import com.example.demo.domain.form.EasyHouseholdForm;
+import com.example.demo.domain.form.ModalDepositForm;
 import com.example.demo.domain.form.UpdateHouseholdForm;
 import com.example.demo.domain.service.LoginUser;
 import com.example.demo.domain.service.MHouseholdService;
@@ -242,6 +243,62 @@ public class MHouseholdController {
 		model.addAttribute("householdList", monthlyHouseholdList);
 
 		return "household/householdDetail";
+	}
+
+	/**
+	 * モーダルウィンドウの支出金額の登録処理を行い、詳細画面にリダイレクトする処理
+	 * 
+	 * @param easyHouseholdForm 家計簿カンタン入力フォーム
+	 * @param result
+	 * @param loginUser ログインユーザー
+	 * @return household/detail
+	 */
+	@PostMapping("/modalPayment")
+	public String postModalPaymentHousehold(
+			@ModelAttribute("easyHouseholdForm") @Validated EasyHouseholdForm easyHouseholdForm, BindingResult result,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.info("{}", "バリデーションを開始します");
+		if (result.hasErrors()) {
+			// 詳細画面に遷移する
+			return "redirect:/household/detail";
+		}
+		log.info("{}", "バリデーションが完了しました");
+
+		// 家計簿カンタン入力処理の呼び出し
+		log.trace("{}", "家計簿カンタン入力処理(モーダルウィンドウ)の呼び出しを開始します");
+		service.easyInputMHousehold(easyHouseholdForm, loginUser);
+		log.info(easyHouseholdForm.toString());
+		log.trace("{}", "家計簿カンタン入力処理(モーダルウィンドウ)の呼び出しが完了しました");
+
+		return "redirect:/household/detail";
+	}
+
+	/**
+	 * モーダルウィンドウの主入金額の登録処理を行い、詳細画面にリダイレクトする処理
+	 * 
+	 * @param modalDepositForm モーダルウィンドウ用家計簿収入金額フォーム
+	 * @param result
+	 * @param loginUser ログインユーザー
+	 * @return household/detail
+	 */
+	@PostMapping("/modalDeposit")
+	public String postModalDepositHousehold(
+			@ModelAttribute("modalDepositForm") @Validated ModalDepositForm modalDepositForm, BindingResult result,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.info("{}", "バリデーションを開始します");
+		if (result.hasErrors()) {
+			// 詳細画面に遷移する
+			return "redirect:/household/detail";
+		}
+		log.info("{}", "バリデーションが完了しました");
+		
+		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しを開始します");
+		service.registDepositHousehold(modalDepositForm, loginUser);
+		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しが完了しました");
+		
+		return "redirect:/household/detail";
 	}
 
 	/**
