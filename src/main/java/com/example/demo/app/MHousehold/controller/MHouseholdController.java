@@ -265,6 +265,12 @@ public class MHouseholdController {
 		val monthlyHouseholdList = service.getMonthlyHouseholdList(condition, loginUser);
 		log.trace("{}", "月次家計簿リスト取得処理の呼び出しが完了しました");
 
+		// 編集画面で検索処理を行うユーザーとログインユーザーのIDが異なる場合
+		if (condition.getUserId() != loginUser.getUser().getUserId()) {
+			// 詳細画面にリダイレクトする
+			return "redirect:/household/detail";
+		}
+
 		// カテゴリーコードとサブカテゴリー名のリストを作成
 		List<String> categoryCodeList = new ArrayList<>();
 		List<String> subCategoryNameList = new ArrayList<>();
@@ -317,6 +323,12 @@ public class MHouseholdController {
 		val monthlyHouseholdList = service.getSearchMonthlyHouseholdList(form, condition, loginUser);
 		log.trace("{}", "月次家計簿リスト検索処理の呼び出しが完了しました");
 
+		// 編集画面で検索処理を行うユーザーとログインユーザーのIDが異なる場合
+		if (condition.getUserId() != loginUser.getUser().getUserId()) {
+			// 詳細画面にリダイレクトする
+			return "redirect:/household/detail";
+		}
+
 		// フォームをModelに登録
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
@@ -360,7 +372,7 @@ public class MHouseholdController {
 		service.updateInputMHousehold(updateForm);
 		log.info(updateForm.toString());
 		log.trace("{}", "家計簿更新処理の呼び出しが完了しました");
-		
+
 		// フラッシュメッセージをリダイレクト先(/edit)に渡す
 		redirectAttributes.addFlashAttribute("updateMessage", "家計簿を更新しました");
 
