@@ -57,9 +57,8 @@
 									<div class="input-date-first">
 										<span class="text-and-icon" data-date-format="yyyy/mm/dd">
 											<span>日付： </span><span class="date-span"></span><i
-												class="icon-calendar fas fa-calendar-alt"></i>
-											<!-- カレンダー描画部 -->
-										<div class="calendar-detail-input draw-cal dropdown-menu"></div>
+											class="icon-calendar fas fa-calendar-alt"></i> <!-- カレンダー描画部 -->
+											<div class="calendar-detail-input draw-cal dropdown-menu"></div>
 										</span>
 										<div style="margin-bottom: 10px;"></div>
 									</div>
@@ -111,11 +110,12 @@
 									</div>
 									<!-- カレンダー描画部 -->
 									<div class="input-date-second">
-										<span class="text-and-icon-second" data-date-format="yyyy/mm/dd">
-											<span>日付： </span><span class="date-span"></span><i
-												class="icon-calendar fas fa-calendar-alt"></i>
-										<div
-											class="calendar-detail-input-second draw-cal dropdown-menu"></div>
+										<span class="text-and-icon-second"
+											data-date-format="yyyy/mm/dd"> <span>日付： </span><span
+											class="date-span-second"></span><i
+											class="icon-calendar fas fa-calendar-alt"></i>
+											<div
+												class="calendar-detail-input-second draw-cal dropdown-menu"></div>
 										</span>
 										<div style="margin-bottom: 10px;"></div>
 									</div>
@@ -142,8 +142,8 @@
 										<div th:replace="~{layout/categoryListSec::categoryListSec}"></div>
 										<div class="btn-group-detail btn_m_ctg">
 											<a class="btn btn-secondary dropdown-toggle v_m_ctg"
-												data-toggle="dropdown" id="js-middle-category-selected-second">
-												未分類 </a>
+												data-toggle="dropdown"
+												id="js-middle-category-selected-second"> 未分類 </a>
 										</div>
 									</div>
 									<input type="text" class="panel-note-input"
@@ -241,7 +241,6 @@
 											class="fas fa-pen" style="color: #08C;"></i>ボタンからも手入力できます。
 									</p>
 								</div>
-								<!--カレンダー描画部 -->
 								<div class="col-custome-content-body">
 									<!-- 月次収支合計表 -->
 									<table cellpadding="10px" class="monthly-total-detail-table"
@@ -284,14 +283,19 @@
 									</table>
 								</div>
 							</div>
+							<!--カレンダー描画部 -->
 							<div class="col-custome-body">
 								<div id="detail-calendar"></div>
 							</div>
 						</section>
 					</section>
 				</div>
+				
 				<!-- 月次収支詳細セクション -->
 				<section class="in_out">
+				<a class="pull-right more-link" th:href="@{/household/edit}">
+					<i class="fas fa-arrow-circle-right"></i>編集はこちらから
+				</a>
 					<h1 class="heading-normal">収入・支出詳細</h1>
 					<div class="calc-field">
 						<button class="cf-new-btn"
@@ -375,6 +379,9 @@
 								</tbody>
 							</table>
 						</div>
+						<a class="pull-right more-link" th:href="@{/household/edit}">
+							<i class="fas fa-arrow-circle-right"></i>編集はこちらから
+						</a>
 					</div>
 				</section>
 			</div>
@@ -395,5 +402,6 @@
 		getDetailAnchorValue();
 	</script>
 	<script th:src="@{/js/household/inputCalendar.js}"></script>
+	<script th:src="@{/js/household/inputCalendarSec.js}"></script>
 </body>
 </html>
