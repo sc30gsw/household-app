@@ -1601,6 +1601,7 @@ footer {
 
 .table {
     background-color: #fff;
+    width: 70%;
 }
 
 .table.table-out {
