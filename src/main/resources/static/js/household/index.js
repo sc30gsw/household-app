@@ -60,8 +60,8 @@ function pieChart() {
 					label: function(tooltipItem) {
 						// 収支合計
 						const sum = tooltipItem.dataset.data[0] + tooltipItem.dataset.data[1];
-						// 各値が全体に占める割合を算出する(小数点以下切り捨て)
-						const payRatio = Math.floor(tooltipItem.dataset.data[tooltipItem.dataIndex] / sum * 100);
+						// 各値が全体に占める割合を算出する(小数点2桁を残し切り捨て)
+						const payRatio = Math.round(tooltipItem.dataset.data[tooltipItem.dataIndex] / sum * 100 * 100) / 100;
 						// 金額をカンマ区切りに変換
 						const parsed = tooltipItem.parsed .toLocaleString();
 						return  `${tooltipItem.label} : ${parsed} 円 | 収支割合 :  ${payRatio}%`;
