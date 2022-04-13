@@ -233,7 +233,7 @@ public class MHouseholdController {
 		val monthlyHouseholdList = service.getSearchMonthlyHouseholdList(form, condition, loginUser);
 		log.trace("{}", "月次家計簿リスト検索処理の呼び出しが完了しました");
 
-		// フォームをModelに登録
+		// 家計簿詳細検索条件フォームをModelに登録
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
 		model.addAttribute("startDate", formStartDate);
@@ -243,6 +243,174 @@ public class MHouseholdController {
 		model.addAttribute("householdList", monthlyHouseholdList);
 
 		return "household/householdDetail";
+	}
+
+	/**
+	 * 収支内訳画面に遷移する処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param model
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return household/detailChart
+	 */
+	@GetMapping("/detail/chart")
+	public String getDetailChart(DetailHouseholdConditionForm form, Model model, MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		// 月次家計簿集計取得処理の呼び出し
+		log.trace("{}", "月次家計簿集計取得処理の呼び出しを開始します");
+		val monthlySumHousehold = service.getSumMonthlyHousehold(condition, loginUser);
+		log.trace("{}", "月次家計簿集計取得処理の呼び出しが完了しました");
+		// 月次家計簿集計がnullでない場合
+		if (monthlySumHousehold != null) {
+			// 月次家計簿集計の合計を算出
+			val monthlyHouseholdCalculated = householdSumCalc(monthlySumHousehold);
+			// 月次家計簿集計の合計をModelに登録
+			model.addAttribute("monthlyHouseholdCalculated", monthlyHouseholdCalculated);
+		}
+		log.trace("{}", "カテゴリー別支出内訳集計リスト取得処理の呼び出しを開始します");
+		val monthlyCategorySumPayList = service.getMonthlySumCategoryPayment(condition, loginUser);
+		log.trace("{}", "カテゴリー別支出内訳集計リスト取得処理の呼び出しが完了しました");
+
+		// カテゴリー別支出内訳集計リストの支出を合計する
+		val categoryPayTotal = monthlyCategorySumPayList.stream().mapToInt(list -> list.getPayment()).sum();
+
+		log.trace("{}", "月次カテゴリー別支出リスト取得処理の呼び出しを開始します");
+		val monthlyCategoryPayList = service.getMonthlyCategoryPayment(condition, loginUser);
+		log.trace("{}", "月次カテゴリー別支出リスト取得処理の呼び出しが完了しました");
+
+		// 月次家計簿集計をModelに登録
+		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
+		// 家計簿詳細検索条件フォームをModelに登録
+		model.addAttribute("form", form);
+		// 月の初日をModelに登録
+		model.addAttribute("startDate", condition.getStartDate());
+
+		// カテゴリーの合計支出をModelに登録
+		model.addAttribute("categoryPayTotal", categoryPayTotal);
+
+		// カテゴリーごとの集計結果をModelに登録
+		model.addAttribute("sumFoodList", service.filterFoodCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumComoddityList", service.filterCommodityCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHobbyList", service.filterHobbyCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumSocialExList", service.filterSocialExpenceCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumTransportList", service.filterTransportCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumFasshonList", service.filterFasshonCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumCarList", service.filterCarCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHealthList", service.filterHealthCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumLiberalList", service.filterLiberalCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumSpecialExList", service.filterSpecialExpenceCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumUnilList", service.filterUtilitiesCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumCommunicationList", service.filterCommunicationCostCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHouseList", service.filterHouseCostCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumOtherList", service.filterOthersCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumUnsortList", service.filterUnsortedCategory(monthlyCategorySumPayList));
+
+		// カテゴリーごとのリストをModelに登録
+		model.addAttribute("foodList", service.filterFoodCategory(monthlyCategoryPayList));
+		model.addAttribute("comoddityList", service.filterCommodityCategory(monthlyCategoryPayList));
+		model.addAttribute("hobbyList", service.filterHobbyCategory(monthlyCategoryPayList));
+		model.addAttribute("socialExList", service.filterSocialExpenceCategory(monthlyCategoryPayList));
+		model.addAttribute("transportList", service.filterTransportCategory(monthlyCategoryPayList));
+		model.addAttribute("fasshonList", service.filterFasshonCategory(monthlyCategoryPayList));
+		model.addAttribute("carList", service.filterCarCategory(monthlyCategoryPayList));
+		model.addAttribute("healthList", service.filterHealthCategory(monthlyCategoryPayList));
+		model.addAttribute("liberalList", service.filterLiberalCategory(monthlyCategoryPayList));
+		model.addAttribute("specialExList", service.filterSpecialExpenceCategory(monthlyCategoryPayList));
+		model.addAttribute("unilList", service.filterUtilitiesCategory(monthlyCategoryPayList));
+		model.addAttribute("communicationList", service.filterCommunicationCostCategory(monthlyCategoryPayList));
+		model.addAttribute("houseList", service.filterHouseCostCategory(monthlyCategoryPayList));
+		model.addAttribute("otherList", service.filterOthersCategory(monthlyCategoryPayList));
+		model.addAttribute("unsortList", service.filterUnsortedCategory(monthlyCategoryPayList));
+
+		return "household/detailChart";
+	}
+
+	/**
+	 * 収支内訳を検索する処理
+	 * 
+	 * @param form 家計簿詳細検索フォーム
+	 * @param model
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return household/detailChart
+	 */
+	@PostMapping("/detail/chart/search")
+	public String postDetailChart(DetailHouseholdConditionForm form, Model model,
+			MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+		// フォームから月の初日を取得
+		val formStartDate = form.getStartDate();
+
+		log.trace("{}", "月次家計簿集計検索処理の呼び出しを開始します");
+		val monthlySumHousehold = service.getSearchMonthlySumHousehold(form, condition, loginUser);
+		log.trace("{}", "月次家計簿集計検索処理の呼び出しが完了しました");
+
+		// 月次家計簿集計がnullでない場合
+		if (monthlySumHousehold != null) {
+			// 月次家計簿集計の合計を算出
+			val monthlyHouseholdCalculated = householdSumCalc(monthlySumHousehold);
+			// 月次家計簿集計の合計をModelに登録
+			model.addAttribute("monthlyHouseholdCalculated", monthlyHouseholdCalculated);
+		}
+
+		log.trace("{}", "カテゴリー別支出内訳集計リスト検索処理の呼び出しを開始します");
+		val monthlyCategorySumPayList = service.searchMonthlySumCategoryPayment(form, condition, loginUser);
+		log.trace("{}", "カテゴリー別支出内訳集計リスト検索処理の呼び出しが完了しました");
+
+		// カテゴリー別支出内訳集計リストの支出を合計する
+		val categoryPayTotal = monthlyCategorySumPayList.stream().mapToInt(list -> list.getPayment()).sum();
+
+		log.trace("{}", "月次カテゴリー別支出内訳リスト検索処理の呼び出しを開始します");
+		val monthlyCategoryPayList = service.searchMonthlyCategoryPayment(form, condition, loginUser);
+		log.trace("{}", "月次カテゴリー別支出内訳リスト検索処理の呼び出しが完了しました");
+
+		// 家計簿詳細検索条件フォームをModelに登録
+		model.addAttribute("form", form);
+		// 月の初日をModelに登録
+		model.addAttribute("startDate", formStartDate);
+		// 月次家計簿集計をModelに登録
+		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
+
+		// カテゴリーの合計支出をModelに登録
+		model.addAttribute("categoryPayTotal", categoryPayTotal);
+
+		// カテゴリーごとの集計結果をModelに登録
+		model.addAttribute("sumFoodList", service.filterFoodCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumComoddityList", service.filterCommodityCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHobbyList", service.filterHobbyCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumSocialExList", service.filterSocialExpenceCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumTransportList", service.filterTransportCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumFasshonList", service.filterFasshonCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumCarList", service.filterCarCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHealthList", service.filterHealthCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumLiberalList", service.filterLiberalCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumSpecialExList", service.filterSpecialExpenceCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumUnilList", service.filterUtilitiesCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumCommunicationList", service.filterCommunicationCostCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumHouseList", service.filterHouseCostCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumOtherList", service.filterOthersCategory(monthlyCategorySumPayList));
+		model.addAttribute("sumUnsortList", service.filterUnsortedCategory(monthlyCategorySumPayList));
+
+		// カテゴリーごとのリストをModelに登録
+		model.addAttribute("foodList", service.filterFoodCategory(monthlyCategoryPayList));
+		model.addAttribute("comoddityList", service.filterCommodityCategory(monthlyCategoryPayList));
+		model.addAttribute("hobbyList", service.filterHobbyCategory(monthlyCategoryPayList));
+		model.addAttribute("socialExList", service.filterSocialExpenceCategory(monthlyCategoryPayList));
+		model.addAttribute("transportList", service.filterTransportCategory(monthlyCategoryPayList));
+		model.addAttribute("fasshonList", service.filterFasshonCategory(monthlyCategoryPayList));
+		model.addAttribute("carList", service.filterCarCategory(monthlyCategoryPayList));
+		model.addAttribute("healthList", service.filterHealthCategory(monthlyCategoryPayList));
+		model.addAttribute("liberalList", service.filterLiberalCategory(monthlyCategoryPayList));
+		model.addAttribute("specialExList", service.filterSpecialExpenceCategory(monthlyCategoryPayList));
+		model.addAttribute("unilList", service.filterUtilitiesCategory(monthlyCategoryPayList));
+		model.addAttribute("communicationList", service.filterCommunicationCostCategory(monthlyCategoryPayList));
+		model.addAttribute("houseList", service.filterHouseCostCategory(monthlyCategoryPayList));
+		model.addAttribute("otherList", service.filterOthersCategory(monthlyCategoryPayList));
+		model.addAttribute("unsortList", service.filterUnsortedCategory(monthlyCategoryPayList));
+
+		return "household/detailChart";
 	}
 
 	/**
@@ -293,11 +461,11 @@ public class MHouseholdController {
 			return "redirect:/household/detail";
 		}
 		log.info("{}", "バリデーションが完了しました");
-		
+
 		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しを開始します");
 		service.registDepositHousehold(modalDepositForm, loginUser);
 		log.trace("{}", "家計簿カンタン収入登録処理の呼び出しが完了しました");
-		
+
 		return "redirect:/household/detail";
 	}
 
