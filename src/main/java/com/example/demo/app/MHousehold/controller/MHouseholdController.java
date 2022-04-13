@@ -276,9 +276,9 @@ public class MHouseholdController {
 		// カテゴリー別支出内訳集計リストの支出を合計する
 		val categoryPayTotal = monthlyCategorySumPayList.stream().mapToInt(list -> list.getPayment()).sum();
 
-		log.trace("{}", "月次カテゴリー別支出リスト取得処理の呼び出しを開始します");
+		log.trace("{}", "月次カテゴリー別支出内訳リスト取得処理の呼び出しを開始します");
 		val monthlyCategoryPayList = service.getMonthlyCategoryPayment(condition, loginUser);
-		log.trace("{}", "月次カテゴリー別支出リスト取得処理の呼び出しが完了しました");
+		log.trace("{}", "月次カテゴリー別支出内訳リスト取得処理の呼び出しが完了しました");
 
 		// 月次家計簿集計をModelに登録
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
@@ -287,8 +287,9 @@ public class MHouseholdController {
 		// 月の初日をModelに登録
 		model.addAttribute("startDate", condition.getStartDate());
 		
-		// カテゴリー別支出内訳リストをModelに登録
+		// カテゴリー別支出内訳集計リストをModelに登録
 		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
+		// カテボリー別支出内訳リストをModelに登録
 		model.addAttribute("monthlyCategoryPayList", monthlyCategoryPayList);
 
 		// カテゴリーの合計支出をModelに登録
@@ -377,8 +378,9 @@ public class MHouseholdController {
 		// 月次家計簿集計をModelに登録
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
 		
-		// カテゴリー別支出内訳リストをModelに登録
+		// カテゴリー別支出内訳集計リストをModelに登録
 		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
+		// カテゴリー別支出内訳リストをModelに登録
 		model.addAttribute("monthlyCategoryPayList", monthlyCategoryPayList);
 
 		// カテゴリーの合計支出をModelに登録

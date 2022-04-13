@@ -1,7 +1,11 @@
+// 大項目の円グラフ描画処理
 function detailPieChart() {
+	// カテゴリーコードを格納する配列
 	const categoryCode = [];
+	// 大項目のカテゴリーごとの支出を格納する配列
 	const paySumList = [];
 
+	// カテゴリーごとのコードと支出を取得し、配列に格納する処理
 	monthlyCategoryList.forEach(function(list) {
 		categoryCode.push(list.category.categoryCode);
 		paySumList.push(list.payment);
@@ -111,10 +115,14 @@ function detailPieChart() {
 	})
 }
 
+// 中項目の円グラフを描画する処理
 function detailPieChartSec() {
+	// 中項目名を格納する配列
 	const subCategory = [];
+	// 中項目ごとの支出を格納する配列
 	const payList = [];
 	
+	// 中項目ごとの中項目名と支出を取得し、配列に格納する
 	monthlyCategoryPayList.forEach(function(item) {
 		subCategory.push(item.category.subCategoryName);
 		payList.push(item.payment);
