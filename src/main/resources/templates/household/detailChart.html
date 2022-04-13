@@ -17,6 +17,12 @@
 	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js}"></script>
 <!-- fontawesome読み込み -->
 <script th:src="@{https://kit.fontawesome.com/7109a52a62.js}"></script>
+<!-- Chart.js読み込み -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<!-- Chart.jsのdatalabelsの読み込み -->
+<script
+	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <!-- JavaScrpt読み込み -->
 <script th:src="@{/js/household/index.js}"></script>
 <script th:src="@{/js/household/calendarDetail.js}"></script>
@@ -102,9 +108,11 @@
 						月々の支出内訳をご覧いただけます。 <br> 他の月をご覧になりたい場合は、上部にある検索欄で選択してください。 <br>
 						<a th:href="@{/household/edit}">家計簿の編集</a> で、計算対象の変更が行えます。
 					</p>
-					<div class="heading-radius-box" th:if="${monthlyHouseholdCalculated != null}"
+					<div class="heading-radius-box"
+						th:if="${monthlyHouseholdCalculated != null}"
 						th:text="'合計 : ' + ${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></div>
-					<div class="heading-radius-box" th:if="${monthlyHouseholdCalculated == null}">0円</div>
+					<div class="heading-radius-box"
+						th:if="${monthlyHouseholdCalculated == null}">0円</div>
 					<button class="cf-new-btn"
 						style="padding: 5px 20px; width: 140px; margin-left: 10px;">
 						<i class="fas fa-pen"></i>手入力
@@ -136,7 +144,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${foodList != null}"
 													th:each="item: ${foodList}">
@@ -144,7 +153,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 日用品項目 -->
 												<tr class="outgo-sum" th:if="${sumComoddityList != null}"
@@ -153,7 +163,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${comoddityList != null}"
 													th:each="item: ${comoddityList}">
@@ -161,7 +172,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 趣味・娯楽項目 -->
 												<tr class="outgo-sum" th:if="${sumHobbyList != null}"
@@ -170,7 +182,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${hobbyList != null}"
 													th:each="item: ${hobbyList}">
@@ -178,7 +191,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 交際費項目 -->
 												<tr class="outgo-sum" th:if="${sumSocialExList != null}"
@@ -187,7 +201,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${socialExList != null}"
 													th:each="item: ${socialExList}">
@@ -195,7 +210,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 交通費項目 -->
 												<tr class="outgo-sum" th:if="${sumTransportList != null}"
@@ -204,7 +220,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${transportList != null}"
 													th:each="item: ${transportList}">
@@ -212,7 +229,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 衣服・美容項目 -->
 												<tr class="outgo-sum" th:if="${sumFasshonList != null}"
@@ -221,7 +239,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${fasshonList != null}"
 													th:each="item: ${fasshonList}">
@@ -229,7 +248,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 自動車項目 -->
 												<tr class="outgo-sum" th:if="${sumCarList != null}"
@@ -238,7 +258,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${carList != null}"
 													th:each="item: ${carList}">
@@ -246,7 +267,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 健康・医療項目 -->
 												<tr class="outgo-sum" th:if="${sumHealthList != null}"
@@ -255,7 +277,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${healthList != null}"
 													th:each="item: ${healthList}">
@@ -263,7 +286,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 教養・教育項目 -->
 												<tr class="outgo-sum" th:if="${sumLiberalList != null}"
@@ -272,7 +296,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${liberalList != null}"
 													th:each="item: ${liberalList}">
@@ -280,7 +305,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 特別な支出項目 -->
 												<tr class="outgo-sum" th:if="${sumSpecialExList != null}"
@@ -289,7 +315,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${specialExList != null}"
 													th:each="item: ${specialExList}">
@@ -297,7 +324,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 水道・光熱費項目 -->
 												<tr class="outgo-sum" th:if="${sumUnilList != null}"
@@ -306,7 +334,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${unilList != null}"
 													th:each="item: ${unilList}">
@@ -314,16 +343,19 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 通信費項目 -->
-												<tr class="outgo-sum" th:if="${sumCommunicationList != null}"
+												<tr class="outgo-sum"
+													th:if="${sumCommunicationList != null}"
 													th:each="list: ${sumCommunicationList}">
 													<td class="outgo-name"
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${communicationList != null}"
 													th:each="item: ${communicationList}">
@@ -331,7 +363,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 住宅項目 -->
 												<tr class="outgo-sum" th:if="${sumHouseList != null}"
@@ -340,7 +373,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${houseList != null}"
 													th:each="item: ${houseList}">
@@ -348,7 +382,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- その他項目 -->
 												<tr class="outgo-sum" th:if="${sumOtherList != null}"
@@ -357,7 +392,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${otherList != null}"
 													th:each="item: ${otherList}">
@@ -365,7 +401,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<!-- 未分類項目 -->
 												<tr class="outgo-sum" th:if="${sumUnsortList != null}"
@@ -374,7 +411,8 @@
 														th:text="${list.category.categoryCode} + ' 合計'"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(list.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${list.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 												<tr class="outgo" th:if="${unsortList != null}"
 													th:each="item: ${unsortList}">
@@ -382,7 +420,8 @@
 														th:text="${item.category.subCategoryName}"></td>
 													<td class="outgo-number"
 														th:text="${#numbers.formatInteger(item.payment, 3, 'COMMA')} + '円'"></td>
-													<td class="outgo-number-decimal" th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
+													<td class="outgo-number-decimal"
+														th:data-decimal="${item.payment} / ${categoryPayTotal} * 100"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -390,9 +429,24 @@
 								</tr>
 							</tbody>
 						</table>
-						<div class="detail-pie-chart"
-							style="width: 450px; height: 500px; vertical-align: middle; display: table-cell;">
-							<canvas id="detailPie"></canvas>
+						<div class="pie-field" th:if="${monthlySumHousehold != null}">
+							<div class="detail-pie-chart"
+								style="width: 450px; height: 500px; vertical-align: middle; display: table-cell;">
+								<canvas id="detailPie">
+							</canvas>
+							</div>
+							<div class="detail-pie-chart"
+								style="width: 450px; height: 500px; vertical-align: middle; display: table-cell;">
+								<canvas id="detailPieSec"></canvas>
+								<div style="text-align: right; margin: 15px 25px 15px 0;">
+									<a class="pull-right more-link" th:href="@{/household/detail}">
+										<i class="fas fa-arrow-circle-right"></i>支出詳細へ
+									</a>
+								</div>
+							</div>
+						</div>
+						<div th:if="${monthlySumHousehold == null}">
+							<b>家計簿が見つかりませんでした</b>
 							<div style="text-align: right; margin: 15px 25px 15px 0;">
 								<a class="pull-right more-link" th:href="@{/household/detail}">
 									<i class="fas fa-arrow-circle-right"></i>支出詳細へ
@@ -405,8 +459,12 @@
 		</div>
 		<div th:replace="~{layout/householdFooter::householdFooter}"></div>
 	</div>
+	<script th:src="@{/js/household/detailPaymentChart.js}"></script>
 	<script th:inline="javascript">
 		const startDate = /*[[${startDate}]]*/"startDate";
+		const monthlyCategoryList = /*[[${monthlyCategorySumLPayList}]]*/"monthlyCategorySumPayList";
+		const monthlyCategoryPayList = /*[[${monthlyCategoryPayList}]]*/"monthlyCategoryPayList";
+		const categoryPayTotal = /*[[${categoryPayTotal}]]*/"categoryPayTotal";
 		drawDetailDate();
 		inputDate();
 		tabMenu();
@@ -415,6 +473,8 @@
 		getAnchorValue();
 		getDetailAnchorValueSec();
 		decimalFormat();
+		detailPieChart();
+		detailPieChartSec();
 	</script>
 	<script th:src="@{/js/household/inputCalendar.js}"></script>
 	<script th:src="@{/js/household/inputCalendarSec.js}"></script>

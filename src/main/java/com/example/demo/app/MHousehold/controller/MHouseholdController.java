@@ -286,6 +286,10 @@ public class MHouseholdController {
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
 		model.addAttribute("startDate", condition.getStartDate());
+		
+		// カテゴリー別支出内訳リストをModelに登録
+		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
+		model.addAttribute("monthlyCategoryPayList", monthlyCategoryPayList);
 
 		// カテゴリーの合計支出をModelに登録
 		model.addAttribute("categoryPayTotal", categoryPayTotal);
@@ -372,6 +376,10 @@ public class MHouseholdController {
 		model.addAttribute("startDate", formStartDate);
 		// 月次家計簿集計をModelに登録
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
+		
+		// カテゴリー別支出内訳リストをModelに登録
+		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
+		model.addAttribute("monthlyCategoryPayList", monthlyCategoryPayList);
 
 		// カテゴリーの合計支出をModelに登録
 		model.addAttribute("categoryPayTotal", categoryPayTotal);
