@@ -116,6 +116,53 @@
  			order by mh.active_date desc;
  	</select>
  	
+ 	<!-- カテゴリー別支出集計リスト取得 -->
+ 	<select id="getMonthlyHouseholdCategorySumList" resultMap="BaseResultMap">
+ 		<![CDATA[
+ 			select
+ 					mh.household_id,
+ 					mh.user_id,
+ 					sum(mh.payment) as payment,
+ 					mh.category_id,
+ 					tc.category_code as category_category_code,
+ 					tc.subcategory_name as category_subcategory_name
+ 				from
+ 					M_HOUSEHOLD mh inner join T_CATEGORY tc
+ 						on mh.category_id = tc.category_id
+ 				where
+ 					mh.user_id = #{userId, jdbcType=INTEGER}
+ 					and mh.payment > 0
+ 					and mh.active_date between #{startDate} and #{endDate}
+ 				group by
+ 					category_category_code
+ 				order by
+ 					mh.category_id
+ 		]]>
+ 	</select>
+ 	
+ 	<!-- カテゴリー別支出内訳リスト取得 -->
+ 	<select id="getMonthlyHouseholdCategoryList" resultMap="BaseResultMap">
+ 		<![CDATA[
+ 			select
+	 				mh.household_id,
+ 					mh.user_id,
+ 					mh.payment,
+ 					mh.active_date,
+ 					mh.category_id,
+ 					tc.category_code as category_category_code,
+ 					tc.subcategory_name as category_subcategory_name
+ 				from
+ 					M_HOUSEHOLD mh inner join T_CATEGORY tc
+ 						on mh.category_id = tc.category_id
+ 				where
+ 					mh.user_id = #{userId, jdbcType=INTEGER}
+ 					and mh.payment > 0
+ 					and mh.active_date between #{startDate} and #{endDate}
+ 				order by
+ 					mh.category_id
+ 		]]>
+ 	</select>
+ 	
  	<!-- 家計簿更新処理 -->
  	<update id="updateMHousehold">
  		update

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>HouseHold</title>
+</head>
+<body>
+	<h1 th:text="${status} + '' + ${error}"></h1>
+	<p>ページが存在しません</p>
+	<p>トップペーに戻ってください</p>
+	<a th:href="@{/household/index}">
+		<button type="submit">トップページに戻る</button>
+	</a>
+</body>
+</html>

@@ -1585,8 +1585,75 @@ footer {
 	color: #4572A7;
 }
 
+/**以下からhousehold/detailChart.html*/
+.heading-radius-box {
+    border-radius: 3px;
+    font-size: 115%;
+    font-weight: bold;
+    background-color: #f6f6f6;
+    padding: 7px;
+    margin-bottom: 15px;
+}
 
-/**以下から編集画面*/
+.cashflow-summary {
+	display: flex;
+}
+
+.table {
+    background-color: #fff;
+    width: 70%;
+}
+
+.table.table-out {
+    margin-top: 30px;
+    border-radius: 0px;
+    font-size: 100%;
+    font-weight: normal;
+    line-height: 130%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    border: none;
+}
+
+.table-out th {
+    font-size: 90%;
+    font-weight: bold;
+    line-height: 130%;
+    text-align: center;
+    background-color: #eee;
+    padding: 10px 10px;
+}
+
+.table-bordered {
+	border: 1px solid #ddd;
+    border-collapse: separate;
+    border-left: 0;
+    border-radius: 4px;
+}
+
+.table-bordered th {
+	border: 1px solid #ddd;
+    border-collapse: separate;
+    border-left: 0;
+}
+
+.outgo td {
+    padding: 6px;
+    border: 1px solid #ddd;
+}
+
+.outgo-sum {
+    background-color: #ffe9d6;
+    font-weight: bold;
+}
+
+.pie-field {
+	display: flex;
+	flex-direction: column;
+}
+
+
+/**以下からhousehold/edit.html*/
 .edit-title {
 	font-size: 125%;
     font-weight: bold;

@@ -1,3 +1,5 @@
+// モーダルウィンドウ用(収入)のカレンダー描画処理
+
 const secondText = document.querySelector('.text-and-icon-second');
 secondText.addEventListener('click', function() {
 	// 曜日を配列に格納する

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,7 +211,120 @@ public class MHouseholdService {
 		log.trace("{}", "月次家計簿リスト検索処理が完了しました");
 
 		return monthlySearchHouseholdList;
+	}
 
+	/**
+	 * カテゴリー別支出内訳集計リスト取得処理
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> getMonthlySumCategoryPayment(MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "カテゴリー別支出内訳集計リスト取得処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		// 検索条件を設定する
+		conditionSetting(condition, userId);
+
+		// カテゴリー別支出内訳集計リストを取得
+		val monthlySumCategoryPayList = repository.monthlySumGetHouseholdCategoryList(condition);
+
+		// カテゴリーコードを設定する
+		settingCategoryCode(monthlySumCategoryPayList);
+
+		log.trace("{}", "カテゴリー別支出内訳集計リスト取得処理が完了しました");
+
+		return monthlySumCategoryPayList;
+	}
+	
+	/**
+	 * カテゴリー別支出内訳集計リスト検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> searchMonthlySumCategoryPayment(DetailHouseholdConditionForm form, MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "カテゴリー別支出内訳集計リスト検索処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+
+		// カテゴリー別支出内訳リストを取得
+		val monthlySumCategoryPayList = repository.monthlySumGetHouseholdCategoryList(condition);
+		
+		// カテゴリーコードを設定する
+		settingCategoryCode(monthlySumCategoryPayList);
+
+		log.trace("{}", "カテゴリー別支出内訳集計リスト検索処理が完了しました");
+
+		return monthlySumCategoryPayList;
+	}
+
+	/**
+	 * 月次カテゴリー別支出内訳リスト取得処理
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> getMonthlyCategoryPayment(MHouseholdCondition condition,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次カテゴリー別支出内訳リスト取得処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+		// 検索条件を設定する
+		conditionSetting(condition, userId);
+
+		// カテゴリー別支出内訳リストを取得
+		val monthlyCategoryPayList = repository.monthlyGetHouseholdCategoryList(condition);
+
+		log.trace("{}", "月次カテゴリー別支出内訳リスト取得処理が完了しました");
+
+		return monthlyCategoryPayList;
+	}
+	
+	/**
+	 * 月次カテゴリー別支出内訳リスト検索処理
+	 * 
+	 * @param form 家計簿詳細検索条件フォーム
+	 * @param condition 家計簿検索条件
+	 * @param loginUser ログインユーザー
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> searchMonthlyCategoryPayment(DetailHouseholdConditionForm form,
+			MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser) {
+
+		log.trace("{}", "月次カテゴリー別支出内訳リスト検索処理を開始します");
+
+		// ユーザーIDの取得
+		val userId = loginUser.getUser().getUserId();
+
+		// フォームを検索条件にコピー
+		BeanUtils.copyProperties(form, condition);
+		// 検索条件にユーザーIDを設定
+		condition.setUserId(userId);
+
+		// カテゴリー別支出内訳リストを取得
+		val monthlyCategoryPayList = repository.monthlyGetHouseholdCategoryList(condition);
+
+		log.trace("{}", "月次カテゴリー別支出内訳リスト検索処理が完了しました");
+
+		return monthlyCategoryPayList;
 	}
 
 	/**
@@ -451,5 +565,214 @@ public class MHouseholdService {
 				break;
 			}
 		});
+	}
+
+	/**
+	 * 家計簿マスタリストから食費項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 食費リスト
+	 */
+	public List<MHousehold> filterFoodCategory(List<MHousehold> householdList) {
+		val foodList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("1") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.FOOD_EXPENSE))
+				.collect(Collectors.toList());
+
+		return foodList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから日用品項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 日用品リスト
+	 */
+	public List<MHousehold> filterCommodityCategory(List<MHousehold> householdList) {
+		val comodityList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("2") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.COMMODITY))
+				.collect(Collectors.toList());
+
+		return comodityList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから趣味・娯楽項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 趣味・娯楽リスト
+	 */
+	public List<MHousehold> filterHobbyCategory(List<MHousehold> householdList) {
+		val hobbyList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("3") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.HOBBIES))
+				.collect(Collectors.toList());
+
+		return hobbyList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから交際費項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 交際費リスト
+	 */
+	public List<MHousehold> filterSocialExpenceCategory(List<MHousehold> householdList) {
+		val socialExList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("4") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.SOCIAL_EXPENSE))
+				.collect(Collectors.toList());
+
+		return socialExList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから交通費項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 交通費リスト
+	 */
+	public List<MHousehold> filterTransportCategory(List<MHousehold> householdList) {
+		val transportList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("5") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.TRANSPORTATION_EXPENSE))
+				.collect(Collectors.toList());
+
+		return transportList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから衣服・美容項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 衣服・美容リスト
+	 */
+	public List<MHousehold> filterFasshonCategory(List<MHousehold> householdList) {
+		val fasshonList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("6") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.FASSHON))
+				.collect(Collectors.toList());
+
+		return fasshonList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから自動車項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 自動車リスト
+	 */
+	public List<MHousehold> filterCarCategory(List<MHousehold> householdList) {
+		val carList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("7") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.CAR))
+				.collect(Collectors.toList());
+
+		return carList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから健康・医療項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 健康・医療リスト
+	 */
+	public List<MHousehold> filterHealthCategory(List<MHousehold> householdList) {
+		val healthList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("8") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.HEALTH_CARE))
+				.collect(Collectors.toList());
+
+		return healthList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから教養・教育項目を抽出する処理
+	 * @param householdList 家計簿マスタリスト
+	 * @return 教養・教育リスト
+	 */
+	public List<MHousehold> filterLiberalCategory(List<MHousehold> householdList) {
+		val liberalList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("9") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.LIBERAL_ARTS))
+				.collect(Collectors.toList());
+
+		return liberalList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから特別な支出項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 特別な支出リスト
+	 */
+	public List<MHousehold> filterSpecialExpenceCategory(List<MHousehold> householdList) {
+		val specialExList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("10") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.SPECIAL_EXPENSE))
+				.collect(Collectors.toList());
+
+		return specialExList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから水道・光熱費項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 水道・光熱費リスト
+	 */
+	public List<MHousehold> filterUtilitiesCategory(List<MHousehold> householdList) {
+		val utilityList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("11") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.UTILITIES_BILLS))
+				.collect(Collectors.toList());
+
+		return utilityList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから通信費項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 通信費リスト
+	 */
+	public List<MHousehold> filterCommunicationCostCategory(List<MHousehold> householdList) {
+		val communicationCostList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("12") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.COMMUNICATION_COST))
+				.collect(Collectors.toList());
+
+		return communicationCostList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから住宅項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 住宅リスト
+	 */
+	public List<MHousehold> filterHouseCostCategory(List<MHousehold> householdList) {
+		val houseCostList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("13") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.HOUSEING_COST))
+				.collect(Collectors.toList());
+
+		return houseCostList;
+	}
+	
+	/**
+	 * 家計簿マスタリストからその他項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return その他リスト
+	 */
+	public List<MHousehold> filterOthersCategory(List<MHousehold> householdList) {
+		val otherList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("14") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.OTHERS_COST))
+				.collect(Collectors.toList());
+
+		return otherList;
+	}
+	
+	/**
+	 * 家計簿マスタリストから未分類項目を抽出する処理
+	 * 
+	 * @param householdList 家計簿マスタリスト
+	 * @return 未分類リスト
+	 */
+	public List<MHousehold> filterUnsortedCategory(List<MHousehold> householdList) {
+		val unsortedList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("15") ||
+				list.getCategory().getCategoryCode().equals(CategoryConstants.UNSORTED))
+				.collect(Collectors.toList());
+
+		return unsortedList;
 	}
 }

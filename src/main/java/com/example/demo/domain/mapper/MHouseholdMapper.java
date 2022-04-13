@@ -46,6 +46,22 @@ public interface MHouseholdMapper {
 	public List<MHousehold> monthlyHouseholdList(MHouseholdCondition condition);
 	
 	/**
+	 * 月次カテゴリー別支出集計リスト取得
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> getMonthlyHouseholdCategorySumList(MHouseholdCondition condition);
+	
+	/**
+	 * 月次カテゴリー別支出内訳リスト取得
+	 * 
+	 * @param condition 家計簿検索条件
+	 * @return 家計簿マスタリスト
+	 */
+	public List<MHousehold> getMonthlyHouseholdCategoryList(MHouseholdCondition condition);
+	
+	/**
 	 * 家計簿更新処理
 	 * 
 	 * @param householdId 家計簿ID

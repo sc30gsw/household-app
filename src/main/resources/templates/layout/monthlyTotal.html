@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="col-custome-content-body" th:fragment="monthlyTotalTable">
+		<!-- 月次収支合計表 -->
+		<table cellpadding="10px" class="monthly-total-detail-table"
+			title="当月の合計金額です">
+			<thead>
+				<tr>
+					<th>当月収入</th>
+					<th></th>
+					<th>当月支出</th>
+					<th></th>
+					<th>当月収支</th>
+				</tr>
+			</thead>
+			<tbody th:if="${monthlySumHousehold != null}">
+				<tr>
+					<td th:if="${monthlySumHousehold.deposit != 0}"
+						th:text="${#numbers.formatInteger(monthlySumHousehold.deposit, 3, 'COMMA')} + '円' "></td>
+					<td th:if="${monthlySumHousehold.deposit == 0}">0円</td>
+					<td>ー</td>
+					<td th:if="${monthlySumHousehold.payment != 0}"
+						th:text="${#numbers.formatInteger(monthlySumHousehold.payment, 3, 'COMMA')} + '円'"></td>
+					<td th:if="${monthlySumHousehold.payment == 0}">0円</td>
+					<td>＝</td>
+					<td
+						th:if="${monthlyHouseholdCalculated < 0 && monthlyHouseholdCalculated != 0}"
+						class="minus-color"
+						th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+					<td
+						th:if="${monthlyHouseholdCalculated > 0 && monthlyHouseholdCalculated != 0}"
+						class="plus-color"
+						th:text="${#numbers.formatInteger(monthlyHouseholdCalculated, 3, 'COMMA')} + '円'"></td>
+					<td th:if="${monthlyHouseholdCalculated == 0}">0円</td>
+				</tr>
+			</tbody>
+			<tbody th:if="${monthlySumHousehold == null}">
+				<tr>
+					<td>当月の家計簿が登録されていません。</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
