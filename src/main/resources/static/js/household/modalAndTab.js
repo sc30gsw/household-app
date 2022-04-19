@@ -34,44 +34,24 @@ function tabMenu() {
 
 // 該当箇所をクリックしたときにモーダルウィンドウを表示する処理
 document.addEventListener('click', function(e) {
-	// <body>タグ部を取得
-	const detailBody = document.getElementById('detail-body');
-	// <header>タグ部を取得
-	const header = document.querySelector('.header');
-	// コンテンツ部の要素を取得
-	const container = document.querySelector('.container-large');
-	// <footer>タグ部を取得
-	const footer = document.querySelector('.footer-contents-container');
+	// モーダルマスク要素の取得
+	const mask = document.getElementById('mask');
 	// モーダルウィンドウの要素を取得
 	const modal = document.getElementById('detail-modal');
 	
 	// 「手入力」ボタンまたはカレンダー内の「ペン」アイコンをクリックした場合
 	if(e.target.closest('.cf-new-btn') || e.target.closest('.detail-cal-icon-link')){
-		// <body>タグ内の背景色を変更
-		detailBody.style.backgroundColor = "rgba(0,0,0,0.5)";
-		// <header>の透明度を変更
-		header.style.opacity = "0.1";
-		// コンテンツ部の透明度を変更
-		container.style.opacity = "0.1";
-		// <footer>部の透明度の変更
-		footer.style.opacity = "0.1";
+		// マスク要素のクラスを除去
+		mask.classList.remove('mask-hidden');
 		// モーダルウィンドウからフェードアウトのアニメーションを除去する
 		modal.classList.remove('modal-fade-out');
 		// モーダルウィンドウを表示する
 		modal.style.display = "block";
 		
 		// <header>部、コンテンツ部、<footer>部、モーダルウィンドウの「閉じる(×)」ボタンをクリックした場合
-	} else if(e.target.closest('.header') || e.target.closest('.container-large') 
-		|| e.target.closest('.footer-contents-container') || e.target.closest('.modal-close')) {
-			
-		// <doby>タグ内の背景色をもとに戻す
-		detailBody.style.backgroundColor = "#fff";
-		// <header>の透明度をもとに戻す
-		header.style.opacity = "1";
-		// コンテンツ部の透明度をもとに戻す
-		container.style.opacity = "1";
-		// <footer>の透明度をもとに戻す
-		footer.style.opacity = "1";
+	} else if(e.target.closest('#mask') || e.target.closest('.modal-close')) {
+		// マスク要素にクラスを付与
+		mask.classList.add('mask-hidden');
 		// モーダルウィンドウにクラス属性を追加
 		modal.classList.add('modal-fade-out');
 		// モーダルウィンドウを非表示にする(フェードアウトのアニメーションを付与)
