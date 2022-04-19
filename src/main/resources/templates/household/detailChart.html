@@ -32,9 +32,10 @@
 <script th:src="@{/js/household/categoryDetailSec.js}"></script>
 <script th:src="@{/js/household/decimal.js}"></script>
 </head>
-<body id="detail-body">
+<body>
 	<div class="wrapper" id="wrap">
 		<!-- モーダルウィンドウセクション -->
+		<div id="mask" class="mask-hidden"></div>
 		<div th:replace="~{/layout/modal::modal}"></div>
 		<header class="header">
 			<!-- メインヘッダー呼び出し -->
