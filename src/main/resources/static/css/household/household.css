@@ -618,6 +618,10 @@ li {
 	border-radius: 5px;
 }
 
+.flashMessageBlock {
+	display: none;
+}
+
 @keyframes fadeOut {
 	from { 
 		opacity:0.8;
