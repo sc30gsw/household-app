@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>HouseHold</title>
 <!-- bootstarpのcss読み込み -->
 <link rel="stylesheet"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 <!-- css読み込み -->
-<link rel="stylesheet" th:href="@{/css/household/household.css}">
+<link rel="stylesheet" th:href="@{/css/household/household.css}" />
 <!-- bootstrapのjs読み込み -->
 <script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"></script>
 <script
@@ -25,6 +25,7 @@
 	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <!-- jsの読み込み -->
 <script th:src="@{/js/household/index.js}"></script>
+<script th:src="@{/js/household/asyncEasyForm.js}"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -79,13 +80,11 @@
 							<!-- 当月の収支合計円グラフ -->
 							<div th:if="${deposit != null && payment != null}"
 								class="pie-size">
-								<canvas id="assetPie">
-								</canvas>
+								<canvas id="assetPie"> </canvas>
 							</div>
 							<div th:if="${deposit == null && payment == null}"
 								class="pie-size-default">
-								<canvas id="assetPieDefault">
-								</canvas>
+								<canvas id="assetPieDefault"> </canvas>
 							</div>
 						</section>
 					</section>
@@ -95,7 +94,7 @@
 							<h2 class="heading-normal">カンタン入力</h2>
 							<div class="manual-payment-entry">
 								<form th:action="@{/household/payment}" th:object="${form}"
-									method="post">
+									method="post" id="easyHouseholdForm">
 									<!-- カテゴリーのドロップダウンメニュー -->
 									<div class="category-contents">
 										<div th:replace="~{layout/categoryList::categoryList}"></div>
@@ -106,32 +105,30 @@
 										</div>
 									</div>
 									<div class="right-column">
-										<input type="hidden" class="category-input" th:field="*{categoryId}"
-											th:errorclass="is-invalid"> <input type="text"
-											class="payment-amount" placeholder="金額を入力してください"
-											th:field="*{payment}" th:errorclass="is-invalid"> <span
-											class="payment-unit">円</span>
-										<div class="invalid-feedback" th:errors="*{payment}"></div>
+										<input type="hidden" class="category-input"
+											th:field="*{categoryId}" th:errorclass="is-invalid" />
+										<input type="text" class="payment-amount"
+											placeholder="金額を入力してください" th:field="*{payment}" />
+										<span class="payment-unit">円</span>
 									</div>
+									<div id="paymentInvalid" style="color: red"></div>
 									<input type="hidden" id="cal-date-input"
-										th:field="*{activeDate}">
+										th:field="*{activeDate}" />
 									<div class="input-date">
 										<span class="text-and-icon" id="cal-text"
-											data-date-format="yyyy/mm/dd">
-											日付 <span id="date-span"></span><i
-												class="icon-calendar fas fa-calendar-alt"></i>
-										<!-- カレンダー描画部 -->
-										<div id="calendar" class="draw-cal dropdown-menu"></div>
+											data-date-format="yyyy/mm/dd"> 日付 <span
+											id="date-span"></span><i
+											class="icon-calendar fas fa-calendar-alt"></i> <!-- カレンダー描画部 -->
+											<div id="calendar" class="draw-cal dropdown-menu"></div>
 										</span>
-										<div style="margin-bottom: 10px;"></div>
+										<div style="margin-bottom: 10px"></div>
 									</div>
 									<div class="left-column">
 										<input type="text" class="align-left"
-											placeholder="内容を入力してください(任意)" th:field="*{note}">
+											placeholder="内容を入力してください(任意)" th:field="*{note}" />
 									</div>
 									<div class="submit-box">
-										<input type="submit" name="commit" value="保存する"> <span
-											class="easy-flash-message" th:text="${message}"></span>
+										<input type="submit" id="submitBtn" name="commit" value="保存する" />
 									</div>
 								</form>
 							</div>
@@ -152,11 +149,13 @@
 											<div class="recent-transactions-date"
 												th:text="${#dates.format(item.activeDate, 'yyyy/MM/dd')}"></div>
 											<div class="recent-transactions-category"
-												th:text="${item.category.categoryCode} + '＞' + ${item.category.subCategoryName}">未分類＞未分類</div>
+												th:text="${item.category.categoryCode} + '＞' + ${item.category.subCategoryName}">
+												未分類＞未分類</div>
 											<div class="recent-transactions-content"
 												th:text="${item.note}"></div>
 											<div th:if="${item.note == null || item.note == ''}"
-												class="recent-trancastions-content">備考はありません</div>
+												class="recent-trancastions-content">
+												備考はありません</div>
 										</div>
 										<div th:if="${item.payment != null && item.payment > 0}"
 											class="recent-transactions-amount"
@@ -172,8 +171,8 @@
 								</div>
 							</section>
 							<div th:text="${latestFormatDeposit}"></div>
-							<a class="pull-right more-link" th:href="@{/household/detail}"> <i
-								class="fas fa-arrow-circle-right"></i>履歴の詳細を見る
+							<a class="pull-right more-link" th:href="@{/household/detail}">
+								<i class="fas fa-arrow-circle-right"></i>履歴の詳細を見る
 							</a>
 						</div>
 					</div>
@@ -224,8 +223,8 @@
 									</tr>
 								</tbody>
 							</table>
-							<a class="pull-right more-link" th:href="@{/household/detail}"> <i
-								class="fas fa-arrow-circle-right"></i>詳細(家計簿)を見る
+							<a class="pull-right more-link" th:href="@{/household/detail}">
+								<i class="fas fa-arrow-circle-right"></i>詳細(家計簿)を見る
 							</a>
 						</div>
 					</div>

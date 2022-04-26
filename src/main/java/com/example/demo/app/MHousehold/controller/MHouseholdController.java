@@ -109,42 +109,6 @@ public class MHouseholdController {
 	}
 
 	/**
-	 * ホーム画面でカンタン入力処理を行う処理
-	 * 
-	 * @param form カンタン入力フォーム
-	 * @param result
-	 * @param condition 家計簿検索条件
-	 * @param loginUser ログインユーザー
-	 * @param model
-	 * @param redirectAttributes
-	 * @return household/index
-	 */
-	@PostMapping("/payment")
-	public String postPayment(@ModelAttribute("form") @Validated EasyHouseholdForm form, BindingResult result,
-			MHouseholdCondition condition, @AuthenticationPrincipal LoginUser loginUser, Model model,
-			RedirectAttributes redirectAttributes) {
-
-		log.info("バリデーションチェック開始");
-		// 入力チェック
-		if (result.hasErrors()) {
-			// false:ホーム画面に遷移
-			return getIndex(form, model, condition, loginUser);
-		}
-		log.info("バリデーションチェックが完了しました");
-
-		// 家計簿カンタン入力処理の呼び出し
-		log.trace("{}", "家計簿カンタン入力処理の呼び出しを開始します");
-		service.easyInputMHousehold(form, loginUser);
-		log.info(form.toString());
-		log.trace("{}", "家計簿カンタン入力処理の呼び出しが完了しました");
-
-		// フラッシュメッセージをリダイレクト先(/index)に渡す
-		redirectAttributes.addFlashAttribute("message", "投稿に成功しました");
-
-		return "redirect:/household/index";
-	}
-
-	/**
 	 *  家計簿詳細画面に遷移する処理
 	 *  
 	 * @param form 家計簿詳細検索条件フォーム 
@@ -430,11 +394,12 @@ public class MHouseholdController {
 	 * @param result
 	 * @param loginUser ログインユーザー
 	 * @return household/detail
+	 * @throws Exception 
 	 */
 	@PostMapping("/modalPayment")
 	public String postModalPaymentHousehold(
 			@ModelAttribute("easyHouseholdForm") @Validated EasyHouseholdForm easyHouseholdForm, BindingResult result,
-			@AuthenticationPrincipal LoginUser loginUser) {
+			@AuthenticationPrincipal LoginUser loginUser) throws Exception {
 
 		log.info("{}", "バリデーションを開始します");
 		if (result.hasErrors()) {
