@@ -44,7 +44,7 @@ public class MHouseholdService {
 	 * 
 	 * @param form 家計簿カンタン入力用フォーム
 	 */
-	public void easyInputMHousehold(EasyHouseholdForm form, @AuthenticationPrincipal LoginUser loginUser) {
+	public void easyInputMHousehold(EasyHouseholdForm form, @AuthenticationPrincipal LoginUser loginUser) throws Exception {
 		log.trace("{}", "家計簿カンタン入力処理を開始します");
 
 		MHousehold household = new MHousehold();
@@ -58,6 +58,11 @@ public class MHouseholdService {
 
 		// フォームの値を数値に変換して設定
 		household.setPayment(Integer.parseInt(form.getPayment()));
+
+		// 支出金額が0以下の場合
+		if (0 >= household.getPayment()) {
+			throw new BusinessException("金額の登録時にエラーが発生しました");
+		}
 
 		// 出金日がnullの場合、今日の日付を設定する
 		if (household.getActiveDate() == null) {
@@ -240,7 +245,7 @@ public class MHouseholdService {
 
 		return monthlySumCategoryPayList;
 	}
-	
+
 	/**
 	 * カテゴリー別支出内訳集計リスト検索処理
 	 * 
@@ -249,7 +254,8 @@ public class MHouseholdService {
 	 * @param loginUser ログインユーザー
 	 * @return 家計簿マスタリスト
 	 */
-	public List<MHousehold> searchMonthlySumCategoryPayment(DetailHouseholdConditionForm form, MHouseholdCondition condition,
+	public List<MHousehold> searchMonthlySumCategoryPayment(DetailHouseholdConditionForm form,
+			MHouseholdCondition condition,
 			@AuthenticationPrincipal LoginUser loginUser) {
 
 		log.trace("{}", "カテゴリー別支出内訳集計リスト検索処理を開始します");
@@ -264,7 +270,7 @@ public class MHouseholdService {
 
 		// カテゴリー別支出内訳リストを取得
 		val monthlySumCategoryPayList = repository.monthlySumGetHouseholdCategoryList(condition);
-		
+
 		// カテゴリーコードを設定する
 		settingCategoryCode(monthlySumCategoryPayList);
 
@@ -297,7 +303,7 @@ public class MHouseholdService {
 
 		return monthlyCategoryPayList;
 	}
-	
+
 	/**
 	 * 月次カテゴリー別支出内訳リスト検索処理
 	 * 
@@ -580,7 +586,7 @@ public class MHouseholdService {
 
 		return foodList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから日用品項目を抽出する処理
 	 * 
@@ -594,7 +600,7 @@ public class MHouseholdService {
 
 		return comodityList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから趣味・娯楽項目を抽出する処理
 	 * 
@@ -608,7 +614,7 @@ public class MHouseholdService {
 
 		return hobbyList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから交際費項目を抽出する処理
 	 * 
@@ -622,7 +628,7 @@ public class MHouseholdService {
 
 		return socialExList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから交通費項目を抽出する処理
 	 * 
@@ -636,7 +642,7 @@ public class MHouseholdService {
 
 		return transportList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから衣服・美容項目を抽出する処理
 	 * 
@@ -650,7 +656,7 @@ public class MHouseholdService {
 
 		return fasshonList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから自動車項目を抽出する処理
 	 * 
@@ -664,7 +670,7 @@ public class MHouseholdService {
 
 		return carList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから健康・医療項目を抽出する処理
 	 * 
@@ -678,7 +684,7 @@ public class MHouseholdService {
 
 		return healthList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから教養・教育項目を抽出する処理
 	 * @param householdList 家計簿マスタリスト
@@ -691,7 +697,7 @@ public class MHouseholdService {
 
 		return liberalList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから特別な支出項目を抽出する処理
 	 * 
@@ -705,7 +711,7 @@ public class MHouseholdService {
 
 		return specialExList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから水道・光熱費項目を抽出する処理
 	 * 
@@ -719,7 +725,7 @@ public class MHouseholdService {
 
 		return utilityList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから通信費項目を抽出する処理
 	 * 
@@ -727,13 +733,14 @@ public class MHouseholdService {
 	 * @return 通信費リスト
 	 */
 	public List<MHousehold> filterCommunicationCostCategory(List<MHousehold> householdList) {
-		val communicationCostList = householdList.stream().filter(list -> list.getCategory().getCategoryCode().equals("12") ||
-				list.getCategory().getCategoryCode().equals(CategoryConstants.COMMUNICATION_COST))
+		val communicationCostList = householdList.stream()
+				.filter(list -> list.getCategory().getCategoryCode().equals("12") ||
+						list.getCategory().getCategoryCode().equals(CategoryConstants.COMMUNICATION_COST))
 				.collect(Collectors.toList());
 
 		return communicationCostList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから住宅項目を抽出する処理
 	 * 
@@ -747,7 +754,7 @@ public class MHouseholdService {
 
 		return houseCostList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストからその他項目を抽出する処理
 	 * 
@@ -761,7 +768,7 @@ public class MHouseholdService {
 
 		return otherList;
 	}
-	
+
 	/**
 	 * 家計簿マスタリストから未分類項目を抽出する処理
 	 * 
