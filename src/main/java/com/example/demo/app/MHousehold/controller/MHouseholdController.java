@@ -197,6 +197,17 @@ public class MHouseholdController {
 		val monthlyHouseholdList = service.getSearchMonthlyHouseholdList(form, condition, loginUser);
 		log.trace("{}", "月次家計簿リスト検索処理の呼び出しが完了しました");
 
+		// カテゴリーコードとサブカテゴリー名のリストを作成
+		List<String> categoryCodeList = new ArrayList<>();
+		List<String> subCategoryNameList = new ArrayList<>();
+
+		// 月次家計簿からカテゴリーコードとサブカテゴリーコードを取得し、上記リストに追加
+		createCategoryList(monthlyHouseholdList, categoryCodeList, subCategoryNameList);
+
+		// カテゴリーコードとサブカテゴリー名のリストから重複を除外
+		List<String> distinctCategoryCode = categoryCodeList.stream().distinct().collect(Collectors.toList());
+		List<String> distinctSubCategoryName = subCategoryNameList.stream().distinct().collect(Collectors.toList());
+
 		// 家計簿詳細検索条件フォームをModelに登録
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
@@ -205,6 +216,10 @@ public class MHouseholdController {
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
 		// 月次家計簿リストをModelに登録
 		model.addAttribute("householdList", monthlyHouseholdList);
+		// 重複を除いたカテゴリーコードをModelに登録
+		model.addAttribute("categoryCodeList", distinctCategoryCode);
+		// 重複を除いたサブカテゴリー名をModelに登録
+		model.addAttribute("subCategoryNameList", distinctSubCategoryName);
 
 		return "household/householdDetail";
 	}
@@ -250,7 +265,7 @@ public class MHouseholdController {
 		model.addAttribute("form", form);
 		// 月の初日をModelに登録
 		model.addAttribute("startDate", condition.getStartDate());
-		
+
 		// カテゴリー別支出内訳集計リストをModelに登録
 		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
 		// カテボリー別支出内訳リストをModelに登録
@@ -341,7 +356,7 @@ public class MHouseholdController {
 		model.addAttribute("startDate", formStartDate);
 		// 月次家計簿集計をModelに登録
 		model.addAttribute("monthlySumHousehold", monthlySumHousehold);
-		
+
 		// カテゴリー別支出内訳集計リストをModelに登録
 		model.addAttribute("monthlyCategorySumLPayList", monthlyCategorySumPayList);
 		// カテゴリー別支出内訳リストをModelに登録
@@ -528,6 +543,16 @@ public class MHouseholdController {
 			// 詳細画面にリダイレクトする
 			return "redirect:/household/detail";
 		}
+		// カテゴリーコードとサブカテゴリー名のリストを作成
+		List<String> categoryCodeList = new ArrayList<>();
+		List<String> subCategoryNameList = new ArrayList<>();
+
+		// 月次家計簿からカテゴリーコードとサブカテゴリーコードを取得し、上記リストに追加
+		createCategoryList(monthlyHouseholdList, categoryCodeList, subCategoryNameList);
+
+		// カテゴリーコードとサブカテゴリー名のリストから重複を除外
+		List<String> distinctCategoryCode = categoryCodeList.stream().distinct().collect(Collectors.toList());
+		List<String> distinctSubCategoryName = subCategoryNameList.stream().distinct().collect(Collectors.toList());
 
 		// フォームをModelに登録
 		model.addAttribute("form", form);
@@ -541,6 +566,10 @@ public class MHouseholdController {
 		model.addAttribute("monthlySumHousehold", monthlyHouseholdList);
 		// 月次家計簿リストをModelに登録
 		model.addAttribute("householdList", monthlyHouseholdList);
+		// 重複を除いたカテゴリーコードをModelに登録
+		model.addAttribute("categoryCodeList", distinctCategoryCode);
+		// 重複を除いたサブカテゴリー名をModelに登録
+		model.addAttribute("subCategoryNameList", distinctSubCategoryName);
 
 		return "household/edit";
 	}
